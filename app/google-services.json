@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "328601921856",
+    "project_id": "jewello",
+    "storage_bucket": "jewello.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328601921856:android:c4b32ea01c9fbc79b832a5",
+        "android_client_info": {
+          "package_name": "com.s3enterprises.jewellowholesale"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "328601921856-vu1v4d5k2t2son4p8o5vuj5qj7u84id4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWsNFgYo-PXBiGoiMtKjQseq1Bdb6d1Z8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "328601921856-vu1v4d5k2t2son4p8o5vuj5qj7u84id4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

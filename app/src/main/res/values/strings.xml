@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Jewello Wholesale</string>
+    <string name="reset">reset</string>
+    <string name="settings">settings</string>
+    <string name="send_pending">Send to pending</string>
+    <string name="view_pending">View pending</string>
+    <string name="add_new">Add new</string>
+    <string name="add_party">Add Party</string>
+    <string name="please_fill">Please fill all fields</string>
+</resources>
