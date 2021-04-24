@@ -16,16 +16,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.InverseMethod
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.util.*
 
 object Utils {
 
+    private val sUseEmulators = BuildConfig.DEBUG
+    val FIRESTORE by lazy { Firebase.firestore }
     private val DATE_FORMAT = SimpleDateFormat("EEE, dd MMM yyyy HH:mm", Locale.US)
     private val DATE_FORMAT_FOR_HEADING = SimpleDateFormat("dd MMM yyyy", Locale.US)
 
+
     var printerName = ""
-    var bussinessName = ""
 
     data class RatePreferences(val goldRate: Int, val silverRate: Int)
 

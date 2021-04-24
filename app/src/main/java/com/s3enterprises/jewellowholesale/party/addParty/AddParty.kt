@@ -18,7 +18,6 @@ class AddParty : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddPartyBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_party)
