@@ -7,4 +7,6 @@
     <string name="add_new">Add new</string>
     <string name="add_party">Add Party</string>
     <string name="please_fill">Please fill all fields</string>
+    <string name="item_name">Item Name</string>
+    <string name="purity_rate">Purity Rate (%)</string>
 </resources>

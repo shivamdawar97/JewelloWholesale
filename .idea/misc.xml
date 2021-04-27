@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/drawable/ic_person_add.xml" value="0.25625" />
         <entry key="app/src/main/res/drawable/ic_refresh.xml" value="0.25625" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.25625" />
+        <entry key="app/src/main/res/layout/activity_add_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_add_party.xml" value="0.24010416666666667" />
         <entry key="app/src/main/res/layout/activity_billing.xml" value="0.24010416666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24010416666666667" />

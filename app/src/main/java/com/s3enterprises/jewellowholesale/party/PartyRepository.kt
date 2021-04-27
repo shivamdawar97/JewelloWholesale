@@ -32,7 +32,7 @@ object PartyRepository {
             }.addOnFailureListener {
                 throw it
             }
-        }
+        } else continuation.resume(parties!!)
     }
 
 

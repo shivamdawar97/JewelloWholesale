@@ -35,8 +35,7 @@ object ItemsRepository {
             }.addOnFailureListener {
                 throw it
             }
-
-        }
+        }else continuation.resume(items!!)
     }
 
 
