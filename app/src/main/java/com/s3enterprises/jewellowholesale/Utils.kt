@@ -48,7 +48,6 @@ object Utils {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 listener.invoke(tab!!)
             }
-
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
 
@@ -56,7 +55,7 @@ object Utils {
     }
 
     fun EditText.getTextToFloat() = this.text.toString().let {
-        if (it.isNotBlank()) it.toFloat() else 0f
+        stringToFloat(it)
     }
 
     fun EditText.getTextToInt() = this.text.toString().let {
@@ -96,12 +95,7 @@ object Utils {
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    @InverseMethod("stringToFloat")
-    @JvmStatic
-    fun floatToString(context: Context, value: Float) = value.toString()
-
-    @JvmStatic
-    fun stringToFloat(context: Context, value: String) = value.toFloat()
+    fun stringToFloat(value: String) = if (value.isNotBlank()) value.toFloat() else 0f
 
     @InverseMethod("stringToLong")
     @JvmStatic

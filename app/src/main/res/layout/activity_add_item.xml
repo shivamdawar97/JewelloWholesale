@@ -6,7 +6,14 @@
     <data>
         <variable name="isUpdate" type="Boolean" />
         <variable name="isLoading" type="Boolean" />
+        <variable
+            name="itemName"
+            type="String" />
+        <variable
+            name="rate"
+            type="Float" />
         <import type="android.view.View"/>
+        <import type="com.s3enterprises.jewellowholesale.Converter"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,6 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
+                    android:text="@={itemName}"
                     android:background="@android:color/transparent"
                     />
 
@@ -43,9 +51,10 @@
                 android:hint="@string/purity_rate">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/rate_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:background="@android:color/transparent" />
 
             </com.google.android.material.textfield.TextInputLayout>

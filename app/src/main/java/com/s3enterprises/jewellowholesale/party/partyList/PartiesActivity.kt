@@ -12,9 +12,7 @@ import com.s3enterprises.jewellowholesale.databinding.ActivityPartiesBinding
 import com.s3enterprises.jewellowholesale.party.PartyRepository
 import com.s3enterprises.jewellowholesale.party.addParty.AddParty
 import com.s3enterprises.jewellowholesale.Utils.onTextChanged
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class PartiesActivity : AppCompatActivity() {
 
