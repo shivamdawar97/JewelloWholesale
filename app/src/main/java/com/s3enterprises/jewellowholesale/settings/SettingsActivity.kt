@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.databinding.ActivitySettingsBinding
+import com.s3enterprises.jewellowholesale.items.itemsList.ItemsActivity
 import com.s3enterprises.jewellowholesale.party.partyList.PartiesActivity
 
 class SettingsActivity : AppCompatActivity() {
@@ -27,9 +28,9 @@ class SettingsActivity : AppCompatActivity() {
         binding.listview.adapter = ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, list)
         binding.listview.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             when(position){
-                0 -> startActivity(Intent(this,PartiesActivity::class.java))
+                0 ->startActivity(Intent(this,PartiesActivity::class.java))
                 1-> {}
-                2->{}
+                2->startActivity(Intent(this,ItemsActivity::class.java))
                 3->{}
 
             }

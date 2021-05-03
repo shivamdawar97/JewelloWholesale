@@ -39,6 +39,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:text="@={itemName}"
+                    android:enabled="@{!isLoading}"
                     android:background="@android:color/transparent"
                     />
 
@@ -55,6 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
+                    android:enabled="@{!isLoading}"
                     android:background="@android:color/transparent" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -67,13 +69,13 @@
                 />
 
             <Button
+                android:id="@+id/add_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{isUpdate?`Update Item`:`Add Item`}"
                 tools:text="Add Item"
                 android:visibility="@{isLoading?View.GONE:View.VISIBLE}"
                 android:layout_marginTop="20dp"
-                android:onClick="addItem"
                 />
 
         </LinearLayout>

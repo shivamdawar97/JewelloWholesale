@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.s3enterprises.jewellowholesale.R
+import com.s3enterprises.jewellowholesale.Utils.onTextChanged
 import com.s3enterprises.jewellowholesale.databinding.ActivityItemsBinding
 import com.s3enterprises.jewellowholesale.items.ItemsRepository
 import com.s3enterprises.jewellowholesale.items.addItem.AddItem
@@ -21,13 +23,21 @@ class ItemsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_items)
         setUpRecyclerView()
+        binding.swipeToRefresh.setOnRefreshListener {
+            binding.swipeToRefresh.isRefreshing = false
+            setUpRecyclerView(hardReload = true)
+        }
     }
 
-    private fun setUpRecyclerView() = lifecycleScope.launch {
+    private fun setUpRecyclerView(hardReload:Boolean=false) = lifecycleScope.launch {
         binding.isLoading = true
-        val parties = ItemsRepository.getItems()
+        val items = ItemsRepository.getItems(hardReload)
         binding.isLoading = false
-
+        binding.itemRecycler.adapter = ItemsAdapter(items)
+        binding.itemRecycler.layoutManager = LinearLayoutManager(this@ItemsActivity)
+        binding.searchField.onTextChanged {
+            (binding.itemRecycler.adapter as ItemsAdapter).filter.filter(it)
+        }
     }
 
     fun addItem(v: View){

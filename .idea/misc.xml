@@ -9,10 +9,11 @@
         <entry key="app/src/main/res/drawable/ic_product.xml" value="0.2557291666666667" />
         <entry key="app/src/main/res/drawable/ic_refresh.xml" value="0.25625" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.25625" />
+        <entry key="app/src/main/res/layout-land/activity_billing.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_add_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_add_party.xml" value="0.24010416666666667" />
         <entry key="app/src/main/res/layout/activity_billing.xml" value="0.24010416666666667" />
-        <entry key="app/src/main/res/layout/activity_items.xml" value="0.23958333333333334" />
+        <entry key="app/src/main/res/layout/activity_items.xml" value="0.18795180722891566" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24010416666666667" />
         <entry key="app/src/main/res/layout/activity_parties.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.24010416666666667" />

@@ -21,8 +21,8 @@ object ItemsRepository {
 
     }
 
-    suspend fun getItems() = suspendCoroutine<List<Item>> { continuation ->
-        if(items==null){
+    suspend fun getItems(hardReload:Boolean=false) = suspendCoroutine<List<Item>> { continuation ->
+        if(items==null || hardReload){
             val newItems = ArrayList<Item>()
             itemsCollection.get().addOnSuccessListener {
                 it.documents.forEach { doc ->

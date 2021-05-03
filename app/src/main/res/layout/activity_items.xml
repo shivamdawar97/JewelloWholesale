@@ -44,7 +44,6 @@
                 />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/search_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:srcCompat="@drawable/ic_search"
@@ -64,14 +63,21 @@
             android:visibility="@{isLoading?View.VISIBLE:View.GONE}"
             />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/item_recycler"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_to_refresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
             app:layout_constraintTop_toBottomOf="@id/search_box"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/item_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
@@ -85,7 +91,6 @@
             android:contentDescription="@string/add_new"
             android:backgroundTint="@color/purple_500"
             />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
