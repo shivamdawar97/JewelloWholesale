@@ -9,4 +9,10 @@
     <string name="please_fill">Please fill all fields</string>
     <string name="item_name">Item Name</string>
     <string name="purity_rate">Purity Rate (%)</string>
+    <string name="bill_estimation_app">Jewellery Wholesale Bill Estimation Application</string>
+    <string name="edit_name">Business Name</string>
+    <string name="setup_warning">* You can change it later</string>
+    <string name="edit_number">Phone Number</string>
+    <string name="get_started">Get Started</string>
+    <string name="login">LogIN</string>
 </resources>

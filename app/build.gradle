@@ -48,6 +48,7 @@ dependencies {
     //firebase
     implementation platform('com.google.firebase:firebase-bom:27.0.0')
     implementation 'com.google.firebase:firebase-firestore-ktx:22.1.2'
+    implementation 'com.google.firebase:firebase-auth-ktx:20.0.4'
 
 
     //ViewModel and LiveData

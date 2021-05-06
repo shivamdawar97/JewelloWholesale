@@ -13,6 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JewelloWholesale">
         <activity
+            android:name=".authentication.LoginActivity"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+            android:exported="true" />
+        <activity
             android:name=".items.itemsList.ItemsActivity"
             android:exported="true" />
         <activity
