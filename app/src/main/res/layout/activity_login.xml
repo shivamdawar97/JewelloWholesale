@@ -6,8 +6,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="isLogin" type="Boolean" />
         <import type="android.view.View"/>
+        <variable
+            name="viewModel"
+            type="com.s3enterprises.jewellowholesale.authentication.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -56,7 +58,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="@{isLogin?View.GONE:View.VISIBLE}"
+                    android:visibility="@{viewModel.isLogin||viewModel.isOTP?View.GONE:View.VISIBLE}"
                     tools:visibility="gone"
                     >
 
@@ -137,12 +139,12 @@
                     </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="@{isLogin?View.VISIBLE:View.GONE}"
+                    android:visibility="@{viewModel.isLogin?View.VISIBLE:View.GONE}"
+                    tools:visibility="gone"
                     >
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -186,19 +188,82 @@
                             />
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="20dp"
+                    android:visibility="@{viewModel.isOTP?View.VISIBLE:View.GONE}"
+                    >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/enter_otp"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:textSize="22sp"
+                        android:fontFamily="serif"
+                        android:textStyle="bold"
+                        android:textColor="@color/purple_500"
+                        />
+
+                    <com.s3enterprises.jewellowholesale.customViews.OTPView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:cursorVisible="false"
+                        android:digits="1234567890"
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:textIsSelectable="false"
+                        android:textSize="20sp"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Resend OTP"
+                        android:textColor="@color/purple_500"
+                        android:textStyle="bold"
+                        android:padding="5dp"
+                        />
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        app:cardCornerRadius="3dp"
+                        android:layout_marginTop="20dp"
+                        app:cardElevation="3dp"
+                        >
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/submit"
+                            android:textColor="@color/white"
+                            android:background="@color/purple_700"
+                            android:clickable="true"
+                            android:focusable="true"
+                            />
+                    </androidx.cardview.widget.CardView>
+
+
+                </LinearLayout>
+
             </FrameLayout>
 
             <TextView
                 android:id="@+id/change_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{isLogin?`Create a new account`:`Already have an account, Login`}"
+                android:text="@{viewModel.isLogin?`Create a new account`:`Already have an account, Login`}"
                 tools:text="Already have an account, Login"
                 android:textAlignment="center"
                 android:textColor="@color/gray"
                 android:textSize="18sp"
                 android:padding="10dp"
-                android:checked="@{isLogin}"
                 />
         </LinearLayout>
 

@@ -15,4 +15,6 @@
     <string name="edit_number">Phone Number</string>
     <string name="get_started">Get Started</string>
     <string name="login">LogIN</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="submit">Submit</string>
 </resources>
