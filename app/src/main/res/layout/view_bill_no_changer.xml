@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_height="42dp"
+        android:layout_width="62dp"
+        android:tint="@android:color/black"
+        app:srcCompat="@drawable/ic_arrow_left"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        />
+
+    <EditText
+        android:id="@+id/bill_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="8"
+        tools:text="new_bill_no"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/large"
+        />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_height="42dp"
+        android:layout_width="62dp"
+        android:tint="@android:color/black"
+        app:srcCompat="@drawable/ic_arrow_right"
+        android:layout_gravity="center"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_height="42dp"
+        android:layout_width="62dp"
+        android:tint="@android:color/black"
+        app:srcCompat="@drawable/ic_fast_forward"
+        android:layout_gravity="center"
+        />
+
+</LinearLayout>

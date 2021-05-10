@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <data>
+        <variable
+            name="model"
+            type="com.s3enterprises.jewellowholesale.billing.BillingViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        >
+
+        <com.s3enterprises.jewellowholesale.customViews.BillNoChangerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name_field"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/customer_name"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/customer_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:inputType="textPersonName"
+                    tools:text="Pankaj Dhama"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/number_field"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/edit_number"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    tools:text="089878786"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/items_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Total"
+                android:textColor="@color/purple_700"
+                android:textSize="@dimen/large"
+                />
+
+            <TextView
+                android:id="@+id/gross"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                tools:text="Gross"
+                android:textColor="@color/purple_700"
+                android:textSize="@dimen/large"
+                android:text="@{model.grossWeight}"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/purple_700"
+                tools:text="Pure"
+                android:textSize="@dimen/large"
+                android:textStyle="bold"
+                android:text="@{model.fineWeight}"
+                />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            >
+
+            <TextView
+                android:id="@+id/label_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total_amount"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/medium"
+                android:layout_marginTop="10dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/label_1"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="32323"
+                android:layout_marginStart="10dp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:textSize="@dimen/large"
+                android:layout_marginTop="10dp"
+                android:text="@{model.totalAmount}"
+                />
+
+            <TextView
+                android:id="@+id/label_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/label_1"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/gold_rcv"
+                android:textSize="@dimen/medium"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="14dp"
+                />
+
+            <LinearLayout
+                android:id="@+id/container_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/label_2"
+                android:orientation="horizontal"
+                >
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="4"
+                    android:inputType="numberDecimal|numberSigned"
+                    tools:text="20.732"
+                    android:textStyle="bold"
+                    android:text="@={model.goldWeight}"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="X"
+                    android:textSize="@dimen/large"
+                    android:textColor="@android:color/black"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="3"
+                    android:inputType="numberDecimal"
+                    tools:text="99.50"
+                    android:text="@={model.goldPurity}"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%"
+                    android:textSize="@dimen/large"
+                    android:textColor="@android:color/black"
+                    android:layout_marginEnd="5dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="="
+                    android:textSize="@dimen/large"
+                    android:textColor="@android:color/black"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="8dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="20.732"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/large"
+                    android:text="@{model.goldFine}"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/label_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/container_1"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/cash_rcv"
+                android:textSize="@dimen/medium"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="14dp"
+                />
+
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="5"
+                android:inputType="number"
+                tools:text="2000000"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/label_3"
+                app:layout_constraintTop_toBottomOf="@id/container_1"
+                android:layout_marginStart="10dp"
+                android:text="@={model.cashReceived}"
+                />
+
+            <TextView
+                android:id="@+id/label_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/due_gold"
+                app:layout_constraintTop_toBottomOf="@id/label_3"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/medium"
+                android:layout_marginTop="11dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="10.70"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/large"
+                app:layout_constraintStart_toEndOf="@id/label_4"
+                app:layout_constraintTop_toBottomOf="@id/label_3"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:text="@{model.dueFineGold}"
+                />
+
+            <TextView
+                android:id="@+id/label_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/due_cash"
+                app:layout_constraintTop_toBottomOf="@id/label_4"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/medium"
+                android:layout_marginTop="11dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="10700"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/large"
+                app:layout_constraintStart_toEndOf="@id/label_5"
+                app:layout_constraintTop_toBottomOf="@id/label_4"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:text="@{model.dueCash}"
+                />
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+</layout>

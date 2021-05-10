@@ -23,13 +23,14 @@ import java.util.*
 
 object Utils {
 
-    private val sUseEmulators = BuildConfig.DEBUG
-    val FIRESTORE by lazy { Firebase.firestore }
+    val FIRESTORE by lazy { Firebase.firestore
+        .collection("business_username")
+        .document("data")
+    }
     private val DATE_FORMAT = SimpleDateFormat("EEE, dd MMM yyyy HH:mm", Locale.US)
     private val DATE_FORMAT_FOR_HEADING = SimpleDateFormat("dd MMM yyyy", Locale.US)
-
-
     var printerName = ""
+    val bhav = 58320
 
     data class RatePreferences(val goldRate: Int, val silverRate: Int)
 
@@ -68,6 +69,8 @@ object Utils {
 
     fun Float.toMannerString() = if(this == 0f) "" else this.toString()
     fun Int.toMannerString() = if(this == 0) "" else this.toString()
+
+    fun Float.roundOff(place:Int) = "%.${place}f".format(this).toFloat()
 
     fun <T> AppCompatActivity.startActivity(cls: Class<T>) =
         this.startActivity(Intent(this, cls))

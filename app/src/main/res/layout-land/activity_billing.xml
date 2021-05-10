@@ -6,10 +6,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     >
 
+    <data>
+        <variable
+            name="model"
+            type="com.s3enterprises.jewellowholesale.billing.BillingViewModel" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".billing.BillingActivity">
+        tools:context=".billing.BillingActivity"
+        android:focusableInTouchMode="false"
+        >
 
         <ListView
             android:id="@+id/items_list"
@@ -23,19 +31,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1.2"
             >
-
-            <LinearLayout
+            <com.s3enterprises.jewellowholesale.customViews.BillingPanelView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-
-
-
-
-            </LinearLayout>
-
-
+                />
         </ScrollView>
 
         <LinearLayout

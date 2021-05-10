@@ -6,12 +6,13 @@
         <entry key="../../../../layout/custom_preview.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/border_primary.xml" value="0.25625" />
         <entry key="app/src/main/res/drawable/card_party.xml" value="0.24479166666666666" />
+        <entry key="app/src/main/res/drawable/ic_arrow_left.xml" value="0.2671875" />
         <entry key="app/src/main/res/drawable/ic_bussiness.xml" value="0.2671875" />
         <entry key="app/src/main/res/drawable/ic_person_add.xml" value="0.25625" />
         <entry key="app/src/main/res/drawable/ic_product.xml" value="0.2557291666666667" />
         <entry key="app/src/main/res/drawable/ic_refresh.xml" value="0.25625" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.25625" />
-        <entry key="app/src/main/res/layout-land/activity_billing.xml" value="0.25" />
+        <entry key="app/src/main/res/layout-land/activity_billing.xml" value="0.35885416666666664" />
         <entry key="app/src/main/res/layout/activity_add_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_add_party.xml" value="0.24010416666666667" />
         <entry key="app/src/main/res/layout/activity_billing.xml" value="0.24010416666666667" />
@@ -23,6 +24,8 @@
         <entry key="app/src/main/res/layout/card_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/card_party.xml" value="0.22864583333333333" />
         <entry key="app/src/main/res/layout/dialog_otp.xml" value="0.25104166666666666" />
+        <entry key="app/src/main/res/layout/view_bill_no_changer.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/view_billing_panel.xml" value="0.25" />
         <entry key="app/src/main/res/menu/billing_options_menu.xml" value="0.24010416666666667" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2671875" />
       </map>

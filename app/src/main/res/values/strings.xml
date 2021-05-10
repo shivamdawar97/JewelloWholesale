@@ -17,4 +17,10 @@
     <string name="login">LogIN</string>
     <string name="enter_otp">Enter OTP</string>
     <string name="submit">Submit</string>
+    <string name="customer_name">Customer Name</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="gold_rcv">Gold Received</string>
+    <string name="cash_rcv">Cash Received</string>
+    <string name="due_gold">Due Gold</string>
+    <string name="due_cash">Due Amount</string>
 </resources>
