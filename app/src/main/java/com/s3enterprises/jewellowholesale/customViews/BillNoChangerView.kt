@@ -22,8 +22,6 @@ class BillNoChangerView: LinearLayout {
     private fun inflateLayout(context: Context) {
         inflate(context, R.layout.view_bill_no_changer,this)
 
-
-
     }
 
 }

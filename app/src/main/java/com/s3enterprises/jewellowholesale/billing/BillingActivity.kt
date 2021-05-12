@@ -5,9 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.s3enterprises.jewellowholesale.R
+import com.s3enterprises.jewellowholesale.customViews.BillItemCardView
+import com.s3enterprises.jewellowholesale.database.models.BillItem
 import com.s3enterprises.jewellowholesale.database.models.Item
 import com.s3enterprises.jewellowholesale.database.models.Party
 import com.s3enterprises.jewellowholesale.databinding.ActivityBillingBinding
@@ -19,19 +24,33 @@ import kotlinx.coroutines.launch
 class BillingActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityBillingBinding
-    private lateinit var items : List<Item>
-    private lateinit var parties : List<Party>
+    private val viewModel by viewModels<BillingViewModel>()
+    private lateinit var itemsContainer:LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          binding = DataBindingUtil.setContentView(this,R.layout.activity_billing)
+         itemsContainer = findViewById(R.id.items_container)
          initializeSetup()
+         binding.billingPanel.setViewModel(viewModel)
 
     }
 
-    private fun initializeSetup() = lifecycleScope.launch{
-        items = ItemsRepository.getItems()
-        parties = PartyRepository.getParties()
+    private fun initializeSetup() = with(binding){
+        isItemsListVisible = false
+
+        viewModel.itemNamesList.observeForever { items ->
+            itemsList.adapter =
+                ArrayAdapter(this@BillingActivity,android.R.layout.simple_expandable_list_item_1,items)
+        }
+
+        itemsList.setOnItemClickListener { _, _, pos,_ ->
+            val i = viewModel.items[pos]
+            val billItem = BillItem(i.iId,i.name,rate = i.rate)
+            val view = BillItemCardView(this@BillingActivity,billItem)
+            itemsContainer.addView(view)
+        }
+
 
     }
 

@@ -33,6 +33,7 @@
             android:exported="true" />
         <activity
             android:name=".billing.BillingActivity"
+            android:windowSoftInputMode="stateHidden"
             android:exported="true" />
         <activity
             android:name=".MainActivity"

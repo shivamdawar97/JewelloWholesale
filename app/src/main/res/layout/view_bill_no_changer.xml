@@ -20,10 +20,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="8"
-        tools:text="new_bill_no"
         android:gravity="center"
         android:textColor="@android:color/black"
         android:textSize="@dimen/large"
+        android:hint="@string/new_bill"
         />
 
     <androidx.appcompat.widget.AppCompatImageView

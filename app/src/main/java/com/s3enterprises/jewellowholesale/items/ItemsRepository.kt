@@ -38,5 +38,6 @@ object ItemsRepository {
         }else continuation.resume(items!!)
     }
 
+    fun getSavedItems() = items
 
 }
