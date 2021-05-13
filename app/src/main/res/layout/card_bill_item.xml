@@ -14,12 +14,11 @@
         android:textSize="@dimen/large"
         />
 
-    <EditText
+    <com.s3enterprises.jewellowholesale.customViews.FloatEditText
         android:id="@+id/item_weight"
         android:layout_width="0dp"
         android:layout_weight=".8"
         android:layout_height="wrap_content"
-        android:inputType="numberSigned|numberDecimal"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -28,12 +27,11 @@
         android:textSize="@dimen/large"
         android:textColor="@android:color/black"
         />
-    <EditText
+    <com.s3enterprises.jewellowholesale.customViews.FloatEditText
         android:id="@+id/item_rate"
         android:layout_width="0dp"
         android:layout_weight=".8"
         android:layout_height="wrap_content"
-        android:inputType="numberSigned|numberDecimal"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -62,7 +60,7 @@
         android:textSize="26sp"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
-        android:scaleX="1.5"
+        android:scaleX="1.4"
         android:textColor="@android:color/holo_red_dark"
         />
 </LinearLayout>

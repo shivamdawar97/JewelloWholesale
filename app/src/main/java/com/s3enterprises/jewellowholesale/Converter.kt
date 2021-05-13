@@ -1,6 +1,5 @@
 package com.s3enterprises.jewellowholesale
 
-import android.widget.EditText
 import androidx.databinding.InverseMethod
 
 object Converter {

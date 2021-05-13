@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
@@ -18,7 +19,10 @@ import com.s3enterprises.jewellowholesale.database.models.Party
 import com.s3enterprises.jewellowholesale.databinding.ActivityBillingBinding
 import com.s3enterprises.jewellowholesale.items.ItemsRepository
 import com.s3enterprises.jewellowholesale.party.PartyRepository
+import com.s3enterprises.jewellowholesale.rx.RxBus
+import com.s3enterprises.jewellowholesale.rx.RxEvent
 import com.s3enterprises.jewellowholesale.settings.SettingsActivity
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 
 class BillingActivity : AppCompatActivity() {
@@ -26,14 +30,27 @@ class BillingActivity : AppCompatActivity() {
     private lateinit var binding : ActivityBillingBinding
     private val viewModel by viewModels<BillingViewModel>()
     private lateinit var itemsContainer:LinearLayout
+    private lateinit var rxBillItemValuesChanged: Disposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          binding = DataBindingUtil.setContentView(this,R.layout.activity_billing)
+         binding.lifecycleOwner = this
+         binding.model = viewModel
          itemsContainer = findViewById(R.id.items_container)
          initializeSetup()
          binding.billingPanel.setViewModel(viewModel)
+    }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.billItemList.forEach {
+            val view = BillItemCardView(this@BillingActivity,it)
+            itemsContainer.addView(view)
+        }
+        rxBillItemValuesChanged =  RxBus.listen(RxEvent.EventBillItemChanged::class.java)!!.subscribe {
+            viewModel.calculate()
+        }
     }
 
     private fun initializeSetup() = with(binding){
@@ -47,6 +64,7 @@ class BillingActivity : AppCompatActivity() {
         itemsList.setOnItemClickListener { _, _, pos,_ ->
             val i = viewModel.items[pos]
             val billItem = BillItem(i.iId,i.name,rate = i.rate)
+            viewModel.billItemList.add(billItem)
             val view = BillItemCardView(this@BillingActivity,billItem)
             itemsContainer.addView(view)
         }
@@ -61,11 +79,19 @@ class BillingActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
-            R.id.reset -> {}
+            R.id.reset -> {
+                itemsContainer.removeAllViews()
+                viewModel.clearAll()
+            }
             R.id.settings -> startActivity(Intent(this,SettingsActivity::class.java))
             R.id.send_pending -> {}
             R.id.view_pending -> {}
         }
         return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        rxBillItemValuesChanged.dispose()
     }
 }

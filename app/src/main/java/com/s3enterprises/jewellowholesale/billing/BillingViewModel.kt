@@ -60,4 +60,11 @@ class BillingViewModel:ViewModel() {
         dueCash.value = dueAmount.toString()
 
     }
+
+    fun clearAll() {
+        billItemList.clear()
+        calculate()
+        goldPurity.value = 99.50.toString()
+    }
+
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import com.s3enterprises.jewellowholesale.billing.BillingActivity
 import com.s3enterprises.jewellowholesale.billing.BillingViewModel
 import com.s3enterprises.jewellowholesale.databinding.ViewBillingPanelBinding
 
@@ -26,7 +27,7 @@ class BillingPanelView: LinearLayout {
     private fun inflateLayout(context: Context) {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = ViewBillingPanelBinding.inflate(inflater,this,true)
-
+        binding.lifecycleOwner = context as BillingActivity
     }
 
     fun setViewModel(viewModel:BillingViewModel){

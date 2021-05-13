@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
@@ -30,9 +32,8 @@ object Utils {
     private val DATE_FORMAT = SimpleDateFormat("EEE, dd MMM yyyy HH:mm", Locale.US)
     private val DATE_FORMAT_FOR_HEADING = SimpleDateFormat("dd MMM yyyy", Locale.US)
     var printerName = ""
-    val bhav = 58320
-
-    data class RatePreferences(val goldRate: Int, val silverRate: Int)
+    val bhav = 5832
+    var INPUT_CONNECTION: InputConnection? =null
 
     fun TextView.onTextChanged(listener: (CharSequence) -> Unit) {
         this.addTextChangedListener(object : TextWatcher {
@@ -44,19 +45,12 @@ object Utils {
         })
     }
 
-    fun TabLayout.onTabSelected(listener: (TabLayout.Tab) -> Unit) {
-        this.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                listener.invoke(tab!!)
-            }
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
 
-        })
-    }
-
-    fun EditText.getTextToFloat() = this.text.toString().let {
-        stringToFloat(it)
+    fun EditText.setOwnFocusListener() {
+        val ic = onCreateInputConnection(EditorInfo())
+        setOnFocusChangeListener { _, b ->
+            INPUT_CONNECTION = if(b) ic else null
+        }
     }
 
     fun EditText.getTextToInt() = this.text.toString().let {
@@ -98,7 +92,7 @@ object Utils {
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    fun stringToFloat(value: String) = if (value.isNotBlank()) value.toFloat() else 0f
+    fun stringToFloat(value: String) = if (value.isNullOrBlank()) 0f else value.toFloat()
 
     @InverseMethod("stringToLong")
     @JvmStatic
