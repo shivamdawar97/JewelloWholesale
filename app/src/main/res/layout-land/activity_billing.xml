@@ -46,6 +46,11 @@
             android:layout_gravity="center"
             android:orientation="vertical"
             >
+
+            <com.s3enterprises.jewellowholesale.customViews.BhavView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         <com.s3enterprises.jewellowholesale.customViews.NumericKeypadView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

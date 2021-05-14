@@ -32,7 +32,7 @@ object Utils {
     private val DATE_FORMAT = SimpleDateFormat("EEE, dd MMM yyyy HH:mm", Locale.US)
     private val DATE_FORMAT_FOR_HEADING = SimpleDateFormat("dd MMM yyyy", Locale.US)
     var printerName = ""
-    val bhav = 5832
+    var bhav = 5832
     var INPUT_CONNECTION: InputConnection? =null
 
     fun TextView.onTextChanged(listener: (CharSequence) -> Unit) {
@@ -47,6 +47,7 @@ object Utils {
 
 
     fun EditText.setOwnFocusListener() {
+        showSoftInputOnFocus = false
         val ic = onCreateInputConnection(EditorInfo())
         setOnFocusChangeListener { _, b ->
             INPUT_CONNECTION = if(b) ic else null

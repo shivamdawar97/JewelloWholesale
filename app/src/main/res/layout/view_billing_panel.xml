@@ -37,7 +37,7 @@
                 android:layout_margin="2dp"
                 >
 
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
                     android:id="@+id/customer_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -170,7 +170,7 @@
                 android:orientation="horizontal"
                 >
 
-                <EditText
+                <com.s3enterprises.jewellowholesale.customViews.FloatEditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="4"
@@ -190,7 +190,7 @@
                     android:layout_marginEnd="5dp"
                     />
 
-                <EditText
+                <com.s3enterprises.jewellowholesale.customViews.FloatEditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="3"
@@ -242,7 +242,7 @@
                 />
 
 
-            <EditText
+            <com.s3enterprises.jewellowholesale.customViews.FloatEditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="5"

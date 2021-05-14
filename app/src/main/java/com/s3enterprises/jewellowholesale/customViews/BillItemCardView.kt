@@ -1,6 +1,7 @@
 package com.s3enterprises.jewellowholesale.customViews
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -35,6 +36,12 @@ class BillItemCardView(context: Context,private val item:BillItem):LinearLayout(
                 calculate()
             }
         }
+
+        findViewById<TextView>(R.id.item_remove).setOnClickListener {
+            RxBus.publish(RxEvent.EventBillItemRemoved(item.iId!!))
+            (parent as ViewGroup).removeView(this)
+        }
+
     }
 
     private fun calculate() {

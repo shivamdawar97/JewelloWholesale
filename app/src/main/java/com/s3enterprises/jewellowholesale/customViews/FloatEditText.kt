@@ -11,7 +11,10 @@ class FloatEditText:AppCompatEditText {
     val floatValue:Float
     get() = getFloat()
 
-    constructor(context: Context) : super(context) { initiateSetup() }
+    constructor(context: Context) : super(context) {
+        inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL + InputType.TYPE_NUMBER_FLAG_SIGNED
+        initiateSetup()
+    }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) { initiateSetup() }
 
@@ -21,8 +24,6 @@ class FloatEditText:AppCompatEditText {
 
     private fun initiateSetup() {
        setOwnFocusListener()
-        inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL + InputType.TYPE_NUMBER_FLAG_SIGNED
-        showSoftInputOnFocus = false
     }
 
     private fun getFloat():Float{

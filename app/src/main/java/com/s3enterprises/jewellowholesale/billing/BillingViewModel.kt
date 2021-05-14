@@ -16,7 +16,7 @@ class BillingViewModel:ViewModel() {
 
     val items:List<Item>
     get() = ItemsRepository.getSavedItems()!!
-    val billItemList = ArrayList<BillItem>()
+    var billItemList = ArrayList<BillItem>()
     val itemNamesList = MutableLiveData<List<String>>()
     val party = MutableLiveData<Party>()
     val grossWeight = MutableLiveData<String>().apply { value = "0.0" }
@@ -47,13 +47,13 @@ class BillingViewModel:ViewModel() {
         val rcdFine = goldWt * goldPr/100
         val cashRvd = if(cashReceived.value.isNullOrBlank()) 0 else cashReceived.value!!.toInt()
 
-        val goldOfCashRvd = cashRvd / bhav
+        val goldOfCashRvd = if(bhav<1) 0 else cashRvd / bhav
         val totalGoldRvd = rcdFine + goldOfCashRvd
         val dueGold = fine - totalGoldRvd
         val dueAmount = (dueGold * bhav).toInt()
 
-        grossWeight.value =  gross.toString()
-        fineWeight.value = fine.toString()
+        grossWeight.value =  gross.roundOff(3).toString()
+        fineWeight.value = fine.roundOff(3).toString()
         totalAmount.value = tAmount.toString()
         goldFine.value = rcdFine.roundOff(3).toString()
         dueFineGold.value = dueGold.roundOff(3).toString()
@@ -64,6 +64,8 @@ class BillingViewModel:ViewModel() {
     fun clearAll() {
         billItemList.clear()
         calculate()
+        goldWeight.value = "0.0"
+        cashReceived.value = "0"
         goldPurity.value = 99.50.toString()
     }
 

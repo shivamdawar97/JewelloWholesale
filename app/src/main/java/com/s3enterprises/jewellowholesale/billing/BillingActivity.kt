@@ -31,15 +31,30 @@ class BillingActivity : AppCompatActivity() {
     private val viewModel by viewModels<BillingViewModel>()
     private lateinit var itemsContainer:LinearLayout
     private lateinit var rxBillItemValuesChanged: Disposable
+    private lateinit var rxBillItemRemoved: Disposable
+    private lateinit var rxBhavChanged: Disposable
+    private var listenChangeEvents = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-         binding = DataBindingUtil.setContentView(this,R.layout.activity_billing)
-         binding.lifecycleOwner = this
-         binding.model = viewModel
-         itemsContainer = findViewById(R.id.items_container)
-         initializeSetup()
-         binding.billingPanel.setViewModel(viewModel)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_billing)
+
+        itemsContainer = findViewById(R.id.items_container)
+        initializeSetup()
+
+        rxBillItemValuesChanged =  RxBus.listen(RxEvent.EventBillItemChanged::class.java)!!.subscribe {
+             if(listenChangeEvents) viewModel.calculate()
+        }
+
+        rxBhavChanged =  RxBus.listen(RxEvent.BhavUpdated::class.java)!!.subscribe {
+             viewModel.calculate()
+        }
+
+        rxBillItemRemoved =  RxBus.listen(RxEvent.EventBillItemRemoved::class.java)!!.subscribe { event ->
+            viewModel.billItemList = viewModel.billItemList.filter { it.iId!= event.id } as ArrayList<BillItem>
+            viewModel.calculate()
+        }
+
     }
 
     override fun onStart() {
@@ -48,12 +63,13 @@ class BillingActivity : AppCompatActivity() {
             val view = BillItemCardView(this@BillingActivity,it)
             itemsContainer.addView(view)
         }
-        rxBillItemValuesChanged =  RxBus.listen(RxEvent.EventBillItemChanged::class.java)!!.subscribe {
-            viewModel.calculate()
-        }
+        listenChangeEvents = true
     }
 
     private fun initializeSetup() = with(binding){
+        lifecycleOwner = this@BillingActivity
+        model = viewModel
+        billingPanel.setViewModel(viewModel)
         isItemsListVisible = false
 
         viewModel.itemNamesList.observeForever { items ->
@@ -93,5 +109,7 @@ class BillingActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         rxBillItemValuesChanged.dispose()
+        rxBhavChanged.dispose()
+        rxBillItemRemoved.dispose()
     }
 }
