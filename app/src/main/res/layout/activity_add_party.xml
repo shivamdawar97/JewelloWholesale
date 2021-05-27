@@ -6,6 +6,9 @@
     <data>
         <import type="android.view.View"/>
         <variable
+            name="isUpdate"
+            type="Boolean" />
+        <variable
             name="partyName"
             type="String" />
         <variable
@@ -23,6 +26,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
         tools:context=".party.addParty.AddParty">
 
         <LinearLayout
@@ -44,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:maxLength="20"
-                    android:enabled="@{!isLoading}"
+                    android:enabled="@{isUpdate?false:!isLoading}"
                     android:text="@={partyName}"
                     android:background="@android:color/transparent"
                     />
@@ -88,9 +92,20 @@
                 android:id="@+id/add_party"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/add_party"
+                android:text="@{!isUpdate?@string/add_party:@string/update_party}"
                 android:layout_marginTop="20dp"
                 android:visibility="@{isLoading?View.GONE:View.VISIBLE}"
+                tools:text="Add Party"
+                />
+
+            <Button
+                android:id="@+id/delete_party"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/delete_party"
+                android:layout_marginTop="20dp"
+                android:visibility="@{isLoading? View.GONE : isUpdate?View.VISIBLE:View.GONE}"
+                android:backgroundTint="@android:color/holo_red_dark"
                 />
 
             <ProgressBar

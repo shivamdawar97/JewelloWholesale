@@ -7,6 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btn_previous"
         android:layout_height="42dp"
         android:layout_width="62dp"
         android:tint="@android:color/black"
@@ -15,7 +16,7 @@
         android:scaleY="1.5"
         />
 
-    <EditText
+    <TextView
         android:id="@+id/bill_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,9 +25,11 @@
         android:textColor="@android:color/black"
         android:textSize="@dimen/large"
         android:hint="@string/new_bill"
+        tools:text="New Bill"
         />
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btn_next"
         android:layout_height="42dp"
         android:layout_width="62dp"
         android:tint="@android:color/black"
@@ -36,12 +39,5 @@
         android:scaleY="1.5"
         />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:layout_height="42dp"
-        android:layout_width="62dp"
-        android:tint="@android:color/black"
-        app:srcCompat="@drawable/ic_fast_forward"
-        android:layout_gravity="center"
-        />
 
 </LinearLayout>

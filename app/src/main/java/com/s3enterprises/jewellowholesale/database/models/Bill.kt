@@ -1,7 +1,8 @@
 package com.s3enterprises.jewellowholesale.database.models
 
 data class Bill(
-    var bilNo:Int=0,
+    var billNo:Int=0,
+    val device:Int=1,
     val date:Long =0,
     val partyId:String="N/A",
     val partyName:String="N/A",
@@ -9,6 +10,7 @@ data class Bill(
     val items:String="N/A",
     val gross:Float=0f,
     val fine:Float=0f,
+    val bhav:Int=0,
     val tAmount:Int=0,
     val goldReceived:Float=0f,
     val receivedRate:Float=0f,

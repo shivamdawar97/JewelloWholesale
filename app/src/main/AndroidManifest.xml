@@ -13,9 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JewelloWholesale">
         <activity
-            android:name=".authentication.LoginActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+            android:name=".party.editParty.EditParty"
             android:exported="true" />
+        <activity
+            android:name=".authentication.LoginActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
             android:name=".items.itemsList.ItemsActivity"
             android:exported="true" />
@@ -33,8 +36,8 @@
             android:exported="true" />
         <activity
             android:name=".billing.BillingActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

@@ -1,5 +1,6 @@
 package com.s3enterprises.jewellowholesale.party.partyList
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.database.models.Party
+import com.s3enterprises.jewellowholesale.party.addParty.AddParty
 
 class PartiesAdapter(private val parties: List<Party>) :
     RecyclerView.Adapter<PartiesAdapter.ViewHolder>(), Filterable
@@ -17,17 +19,15 @@ class PartiesAdapter(private val parties: List<Party>) :
     private var filteredParties = parties
 
     class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        private val idView = view.findViewById<TextView>(R.id.party_id)!!
         private val nameView = view.findViewById<TextView>(R.id.party_name)!!
         private val numberView = view.findViewById<TextView>(R.id.party_number)!!
         fun populateCard(party: Party) = with(party){
-            idView.text = pId.toString()
             nameView.text = name
             numberView.text = phoneNumber
             view.setOnClickListener {
-                /*val intent = Intent(view.context, UpdateCustomerActivity::class.java)
-                intent.putExtra("customer",customer)
-                view.context.startActivity(intent)*/
+                val intent = Intent(view.context, AddParty::class.java)
+                intent.putExtra("party",party)
+                view.context.startActivity(intent)
             }
         }
     }

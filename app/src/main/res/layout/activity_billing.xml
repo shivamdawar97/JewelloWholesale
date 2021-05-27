@@ -7,6 +7,9 @@
     <data>
         <variable name="isItemsListVisible" type="Boolean" />
         <import type="android.view.View"/>
+        <variable
+            name="model"
+            type="com.s3enterprises.jewellowholesale.billing.BillingViewModel" />
     </data>
 
 
@@ -27,11 +30,50 @@
         <ListView
             android:id="@+id/items_list"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/buttons_layout"
             android:visibility="@{isItemsListVisible?View.VISIBLE:View.GONE}"
             />
+
+        <LinearLayout
+            android:id="@+id/buttons_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+            <Button
+                android:id="@+id/btn_calculate"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/calculate"
+                android:layout_marginStart="20dp"
+                android:backgroundTint="@color/off_black"
+                android:onClick="@{()->model.calculate()}"
+                />
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/save"
+                android:enabled="@{!model.isloading}"
+                android:layout_marginStart="20dp"
+                />
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="3dp"
+                android:visibility="@{model.isloading?View.VISIBLE:View.INVISIBLE}"
+                />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

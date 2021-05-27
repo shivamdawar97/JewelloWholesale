@@ -15,28 +15,9 @@
         >
 
         <TextView
-            android:id="@+id/id_label"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="wrap_content"
-            android:text="Id :"
-            android:textColor="@android:color/black"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/party_id"
-            app:layout_constraintStart_toEndOf="@id/id_label"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="wrap_content"
-            android:textColor="@android:color/black"
-            tools:text="97182y392"
-            android:textStyle="bold"
-            android:layout_height="wrap_content"/>
-
-        <TextView
             android:id="@+id/party_name"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/id_label"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Surya kumar yadav"
             android:layout_width="wrap_content"
             android:textSize="20sp"

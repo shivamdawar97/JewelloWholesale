@@ -21,20 +21,21 @@ class PartiesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_parties)
-
+        binding.isLoading = true
         setUpRecyclerView()
 
     }
 
     private fun setUpRecyclerView() = lifecycleScope.launch {
-        binding.isLoading = true
-        val parties = PartyRepository.getParties()
-        binding.isLoading = false
-        binding.partyRecycler.adapter = PartiesAdapter(parties)
-        binding.partyRecycler.layoutManager = LinearLayoutManager(this@PartiesActivity)
-        binding.searchField.onTextChanged {
-            (binding.partyRecycler.adapter as PartiesAdapter).filter.filter(it)
+        PartyRepository.parties.observeForever { parties ->
+            binding.isLoading = false
+            binding.partyRecycler.adapter = PartiesAdapter(parties!!)
+            binding.partyRecycler.layoutManager = LinearLayoutManager(this@PartiesActivity)
+            binding.searchField.onTextChanged {
+                (binding.partyRecycler.adapter as PartiesAdapter).filter.filter(it)
+            }
         }
+        PartyRepository.loadParties()
     }
 
     fun addParty(v: View){

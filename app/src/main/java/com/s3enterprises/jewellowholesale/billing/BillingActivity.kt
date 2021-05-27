@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.s3enterprises.jewellowholesale.R
@@ -38,7 +39,7 @@ class BillingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_billing)
-
+        binding.model = viewModel
         itemsContainer = findViewById(R.id.items_container)
         initializeSetup()
 
@@ -72,17 +73,50 @@ class BillingActivity : AppCompatActivity() {
         billingPanel.setViewModel(viewModel)
         isItemsListVisible = false
 
-        viewModel.itemNamesList.observeForever { items ->
-            itemsList.adapter =
-                ArrayAdapter(this@BillingActivity,android.R.layout.simple_expandable_list_item_1,items)
-        }
-
         itemsList.setOnItemClickListener { _, _, pos,_ ->
             val i = viewModel.items[pos]
             val billItem = BillItem(i.iId,i.name,rate = i.rate)
             viewModel.billItemList.add(billItem)
             val view = BillItemCardView(this@BillingActivity,billItem)
             itemsContainer.addView(view)
+        }
+
+        btnSave.setOnClickListener {
+            if(viewModel.party.value==null){
+                AlertDialog.Builder(this@BillingActivity)
+                    .setTitle("Party not defined")
+                    .setMessage("Party name is not provided, Continue as unknown")
+                    .setPositiveButton("Yes"){
+                        di,_ ->
+                        di.dismiss()
+                        viewModel.findParty("unknown")
+                        viewModel.saveBill()
+                    }
+                    .setNegativeButton("Cancel"){ di,_->
+                        di.dismiss()
+                    }
+                    .show()
+            }else viewModel.saveBill()
+        }
+
+        viewModel.itemNamesList.observeForever { items ->
+            itemsList.adapter =
+                ArrayAdapter(this@BillingActivity,android.R.layout.simple_expandable_list_item_1,items)
+        }
+        viewModel.parties.observeForever {
+            billingPanel.setPartiesAdapter(it)
+        }
+
+        viewModel.lastSavedBill.observeForever { bill ->
+            Toast.makeText(this@BillingActivity,"Bill Saved: ${bill.billNo}",Toast.LENGTH_LONG).show()
+        }
+
+        billingPanel.billChanger.setBillNo(0)
+        billingPanel.billChanger.setOnPreviousListener{
+            viewModel.getPreviousBill()
+        }
+        billingPanel.billChanger.setOnNextListener{
+
         }
 
 
@@ -98,6 +132,7 @@ class BillingActivity : AppCompatActivity() {
             R.id.reset -> {
                 itemsContainer.removeAllViews()
                 viewModel.clearAll()
+                binding.billingPanel.clear()
             }
             R.id.settings -> startActivity(Intent(this,SettingsActivity::class.java))
             R.id.send_pending -> {}

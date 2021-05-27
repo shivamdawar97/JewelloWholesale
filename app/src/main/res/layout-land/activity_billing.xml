@@ -7,6 +7,7 @@
     >
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="model"
             type="com.s3enterprises.jewellowholesale.billing.BillingViewModel" />
@@ -29,7 +30,7 @@
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1.2"
+            android:layout_weight="1"
             >
             <com.s3enterprises.jewellowholesale.customViews.BillingPanelView
                 android:id="@+id/billing_panel"
@@ -38,7 +39,7 @@
                 />
         </ScrollView>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/buttons_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -48,14 +49,55 @@
             >
 
             <com.s3enterprises.jewellowholesale.customViews.BhavView
+                android:id="@+id/bhav_view"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <com.s3enterprises.jewellowholesale.customViews.NumericKeypadView
+                android:id="@+id/keyboard_view"
+                app:layout_constraintTop_toBottomOf="@id/bhav_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-        <com.s3enterprises.jewellowholesale.customViews.NumericKeypadView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/btn_calculate"
+                android:layout_width="150dp"
+                android:layout_height="60dp"
+                android:text="@string/calculate"
+                app:layout_constraintTop_toBottomOf="@id/keyboard_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/btn_save"
+                android:layout_marginStart="20dp"
+                android:backgroundTint="@color/off_black"
+                android:onClick="@{()->model.calculate()}"
+                />
 
-        </LinearLayout>
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/save"
+                android:enabled="@{!model.isloading}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_calculate"
+                android:layout_marginStart="20dp"
+                />
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/btn_save"
+                app:layout_constraintTop_toBottomOf="@id/btn_calculate"
+                app:layout_constraintBottom_toBottomOf="@id/btn_save"
+                android:visibility="@{model.isloading?View.VISIBLE:View.INVISIBLE}"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 

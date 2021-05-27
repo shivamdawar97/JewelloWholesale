@@ -7,7 +7,7 @@ import kotlin.coroutines.suspendCoroutine
 
 object ItemsRepository {
 
-    private val itemsCollection = FIRESTORE.collection("items")
+    private val itemsCollection = FIRESTORE.document("data").collection("items")
     private var items:List<Item>? = null
 
     suspend fun insert(item:Item) = suspendCoroutine<Item> { continuation ->

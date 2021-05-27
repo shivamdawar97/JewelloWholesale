@@ -45,7 +45,7 @@ class ItemsAdapter(private val items:List<Item>) :
                 }
                 filteredList
             }
-            return FilterResults().also{ it.values = filteredItems }
+            return FilterResults().apply{ values = filteredItems }
         }
 
         override fun publishResults(p0: CharSequence?, results: FilterResults?) {

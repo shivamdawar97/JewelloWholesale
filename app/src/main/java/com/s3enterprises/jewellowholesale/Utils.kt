@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,13 +28,22 @@ object Utils {
 
     val FIRESTORE by lazy { Firebase.firestore
         .collection("business_username")
-        .document("data")
+    }
+    val KEY_VALUES by lazy {
+        Firebase.firestore
+            .collection("business_username").document("key_values")
     }
     private val DATE_FORMAT = SimpleDateFormat("EEE, dd MMM yyyy HH:mm", Locale.US)
     private val DATE_FORMAT_FOR_HEADING = SimpleDateFormat("dd MMM yyyy", Locale.US)
-    var printerName = ""
+    private var printerName = ""
     var bhav = 5832
     var INPUT_CONNECTION: InputConnection? =null
+
+    object CurrentDate{
+        private val date = Date()
+        val year = DateFormat.format("yyyy", date) as String
+        val month = DateFormat.format("MMM", date) as String
+    }
 
     fun TextView.onTextChanged(listener: (CharSequence) -> Unit) {
         this.addTextChangedListener(object : TextWatcher {
@@ -94,6 +104,7 @@ object Utils {
     }
 
     fun stringToFloat(value: String) = if (value.isNullOrBlank()) 0f else value.toFloat()
+    fun stringToInt(value: String) = if (value.isBlank()) 0 else value.toInt()
 
     @InverseMethod("stringToLong")
     @JvmStatic
