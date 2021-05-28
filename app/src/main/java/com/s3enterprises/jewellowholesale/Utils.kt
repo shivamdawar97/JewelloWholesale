@@ -55,15 +55,6 @@ object Utils {
         })
     }
 
-
-    fun EditText.setOwnFocusListener() {
-        showSoftInputOnFocus = false
-        val ic = onCreateInputConnection(EditorInfo())
-        setOnFocusChangeListener { _, b ->
-            INPUT_CONNECTION = if(b) ic else null
-        }
-    }
-
     fun EditText.getTextToInt() = this.text.toString().let {
         if (it.isNotBlank()) it.toInt() else 0
     }

@@ -11,20 +11,14 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.lifecycleScope
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.customViews.BillItemCardView
 import com.s3enterprises.jewellowholesale.database.models.BillItem
-import com.s3enterprises.jewellowholesale.database.models.Item
-import com.s3enterprises.jewellowholesale.database.models.Party
 import com.s3enterprises.jewellowholesale.databinding.ActivityBillingBinding
-import com.s3enterprises.jewellowholesale.items.ItemsRepository
-import com.s3enterprises.jewellowholesale.party.PartyRepository
 import com.s3enterprises.jewellowholesale.rx.RxBus
 import com.s3enterprises.jewellowholesale.rx.RxEvent
 import com.s3enterprises.jewellowholesale.settings.SettingsActivity
 import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.launch
 
 class BillingActivity : AppCompatActivity() {
 
@@ -111,14 +105,22 @@ class BillingActivity : AppCompatActivity() {
             Toast.makeText(this@BillingActivity,"Bill Saved: ${bill.billNo}",Toast.LENGTH_LONG).show()
         }
 
-        billingPanel.billChanger.setBillNo(0)
-        billingPanel.billChanger.setOnPreviousListener{
-            viewModel.getPreviousBill()
-        }
-        billingPanel.billChanger.setOnNextListener{
-
+        viewModel.billNo.observeForever {
+            billingPanel.setBillNo(it)
         }
 
+        viewModel.party.observeForever {
+            if(viewModel.billNo.value!=0) {
+                billingPanel.setPartyName(it.name)
+                itemsContainer.removeAllViews()
+                listenChangeEvents = false
+                viewModel.billItemList.forEach { billItem ->
+                    val view = BillItemCardView(this@BillingActivity,billItem)
+                    itemsContainer.addView(view)
+                }
+                listenChangeEvents = true
+            }
+        }
 
     }
 

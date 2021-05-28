@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.s3enterprises.jewellowholesale.Utils
-import com.s3enterprises.jewellowholesale.Utils.bhav
 import com.s3enterprises.jewellowholesale.Utils.roundOff
 import com.s3enterprises.jewellowholesale.Utils.stringToFloat
 import com.s3enterprises.jewellowholesale.Utils.stringToInt
@@ -23,13 +22,15 @@ import kotlin.collections.ArrayList
 
 class BillingViewModel:ViewModel() {
 
-    private var billNo = 0
+    val billNo = MutableLiveData<Int>().apply { value = 0 }
     val lastSavedBill = MutableLiveData<Bill>()
     val items:List<Item>
     get() = ItemsRepository.getSavedItems()!!
     val parties: LiveData<List<Party>>
     get() = PartyRepository.parties
     val isloading = MutableLiveData<Boolean>().apply { value = false }
+    val isBillLoading = MutableLiveData<Boolean>().apply { value = false }
+    val isBillNotFound = MutableLiveData<Boolean>().apply { value = false }
     var billItemList = ArrayList<BillItem>()
     val itemNamesList = MutableLiveData<List<String>>()
     val party = MutableLiveData<Party>()
@@ -42,6 +43,8 @@ class BillingViewModel:ViewModel() {
     val cashReceived = MutableLiveData<String>().apply { value = "0" }
     val dueFineGold = MutableLiveData<String>().apply { value = "0.0" }
     val dueCash = MutableLiveData<String>().apply { value = "0" }
+    val goldBhav = MutableLiveData<String>().apply { value = "0" }
+    private var previousBill:Bill? = null
 
     init {
         viewModelScope.launch {
@@ -56,6 +59,7 @@ class BillingViewModel:ViewModel() {
             gross+=it.weight
             fine+=it.fine
         }
+        val bhav = stringToInt(goldBhav.value!!)
         val tAmount = (fine * bhav).toInt()
         val goldWt = stringToFloat(goldWeight.value!!)
         val goldPr = stringToFloat(goldPurity.value!!)
@@ -77,6 +81,8 @@ class BillingViewModel:ViewModel() {
     }
 
     fun clearAll() {
+        billNo.value = 0
+        isBillNotFound.value = false
         billItemList.clear()
         goldWeight.value = "0.0"
         cashReceived.value = "0"
@@ -90,11 +96,17 @@ class BillingViewModel:ViewModel() {
 
     fun saveBill(){
         if(party.value==null) return
-        viewModelScope.launch {
+        if(billNo.value == 0) viewModelScope.launch {
             isloading.value = true
             BillRepository.checkForSalesDoc()
             BillRepository.checkForPartyDoc(party.value!!.name)
             lastSavedBill.value = BillRepository.insert(generateBill())
+            isloading.value = false
+        }
+        else if(!isBillNotFound.value!!) viewModelScope.launch {
+            isloading.value = true
+            previousBill = BillRepository.update(generateBill(),previousBill!!)
+            lastSavedBill.value = previousBill
             isloading.value = false
         }
     }
@@ -107,7 +119,7 @@ class BillingViewModel:ViewModel() {
         items = Converters().fromList(billItemList),
         gross =  stringToFloat(grossWeight.value!!) ,
         fine = stringToFloat(fineWeight.value!!),
-        bhav = bhav,
+        bhav = stringToInt(goldBhav.value!!),
         tAmount = stringToInt(totalAmount.value!!),
         goldReceived = stringToFloat(goldWeight.value!!),
         receivedRate = stringToFloat(goldPurity.value!!),
@@ -118,43 +130,55 @@ class BillingViewModel:ViewModel() {
     )
 
     fun getPreviousBill() {
-        if(billNo==0)
+        if(billNo.value==0)
             Utils.KEY_VALUES.addSnapshotListener { value, error ->
-                if(error!=null && value!=null)
-                viewModelScope.launch {
-                    billNo = value["bill_counter"].toString().toInt()
-                    val bill = BillRepository.getBill(billNo)
-                    setUpBill(bill)
+                if(error==null && value!=null)
+                {
+                    billNo.value = value["bill_counter"].toString().toInt()
+                    getBill()
                 }
-
             }
-        else viewModelScope.launch {
-            billNo -=1;
-            val bill = BillRepository.getBill(billNo)
-            setUpBill(bill)
+        else {
+            billNo.value = billNo.value!!.minus(1)
+            getBill()
         }
     }
 
     fun getNextBill(){
-        viewModelScope.launch {
-            billNo +=1;
-            val bill = BillRepository.getBill(billNo)
-            setUpBill(bill)
+        Utils.KEY_VALUES.addSnapshotListener { value, error ->
+            if(error==null && value!=null && billNo.value != value["bill_counter"].toString().toInt())
+            {
+                billNo.value = billNo.value!!.plus(1)
+                getBill()
+            }
+
         }
     }
 
-    fun getBill(billNo:Int) = viewModelScope.launch{
-        val bill = if(billNo == lastSavedBill.value?.billNo) lastSavedBill.value
-            else BillRepository.getBill(billNo)
-        setUpBill(bill)
+    private fun getBill() = viewModelScope.launch {
+        isBillLoading.value = true
+        previousBill = if(billNo.value!! == lastSavedBill.value?.billNo) lastSavedBill.value
+            else BillRepository.getBill(billNo.value!!)
+        if(previousBill!=null)
+        setUpBill()
+        else isBillNotFound.value = true
+        isBillLoading.value = false
     }
 
-    private fun setUpBill(bill: Bill?) {
-        if(bill!=null){
-            findParty(bill.partyName)
-            billItemList = Converters().fromString(bill.items)  as ArrayList<BillItem>
-
-        }
+    private fun setUpBill() = previousBill?.let {
+        billItemList = Converters().fromString(it.items)  as ArrayList<BillItem>
+        isBillNotFound.value = false
+        findParty(it.partyName)
+        goldBhav.value = it.bhav.toString()
+        cashReceived.value = it.cashReceived.toString()
+        goldWeight.value = it.goldReceived.toString()
+        goldPurity.value = it.receivedRate.toString()
+        grossWeight.value = it.gross.toString()
+        fineWeight.value = it.fine.toString()
+        totalAmount.value = it.tAmount.toString()
+        goldFine.value = it.goldReceivedFine.toString()
+        dueFineGold.value = it.dueGold.toString()
+        dueCash.value = it.dueAmount.toString()
     }
 
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.widget.AutoCompleteTextView
 import android.widget.LinearLayout
 import com.s3enterprises.jewellowholesale.R
+import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.Utils.onTextChanged
 import com.s3enterprises.jewellowholesale.billing.AutoCompleteAdapter
 import com.s3enterprises.jewellowholesale.billing.BillingActivity
@@ -17,8 +18,6 @@ class BillingPanelView: LinearLayout {
 
     private lateinit var binding : ViewBillingPanelBinding
     private val autoCompleteTextView by lazy { (binding.nameField.editText as AutoCompleteTextView) }
-    val billChanger: BillNoChangerView
-    get() = binding.billChanger
 
     constructor(context: Context) : super(context) {
         inflateLayout(context)
@@ -36,9 +35,24 @@ class BillingPanelView: LinearLayout {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = ViewBillingPanelBinding.inflate(inflater,this,true)
         binding.lifecycleOwner = context as BillingActivity
+
+        setUpPanel()
+
+    }
+
+    private fun setUpPanel() = with(binding) {
         autoCompleteTextView.onTextChanged {
-            binding.model!!.findParty(it.toString())
+            if(model!!.billNo.value==0) model!!.findParty(it.toString())
+            if(model!!.party.value!=null) Utils.hideKeyboard(autoCompleteTextView)
         }
+
+        billChanger.setOnPreviousListener{
+            model!!.getPreviousBill()
+        }
+        billChanger.setOnNextListener{
+            model!!.getNextBill()
+        }
+
     }
 
     fun setViewModel(viewModel:BillingViewModel){
@@ -50,12 +64,20 @@ class BillingPanelView: LinearLayout {
         autoCompleteTextView.setAdapter(adapter)
     }
 
-    fun setPartyError() {
-
+    fun setBillNo(billNo:Int) {
+        autoCompleteTextView.isEnabled = billNo == 0
+        binding.billChanger.setBillNo(billNo)
     }
 
     fun clear() {
         autoCompleteTextView.setText("")
+    }
+
+    fun setPartyName(name: String) {
+        if(!binding.model!!.isBillNotFound.value!!){
+            autoCompleteTextView.setText(name)
+            autoCompleteTextView.dismissDropDown()
+        }
     }
 
 }

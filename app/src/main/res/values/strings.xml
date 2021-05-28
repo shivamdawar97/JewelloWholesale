@@ -30,4 +30,6 @@
     <string name="party_name">Party Name</string>
     <string name="delete_party">Delete Party</string>
     <string name="party_name_or">Party name or number</string>
+    <string name="bhav">Bhav</string>
+    <string name="bill_not_found">Bill Not Found</string>
 </resources>

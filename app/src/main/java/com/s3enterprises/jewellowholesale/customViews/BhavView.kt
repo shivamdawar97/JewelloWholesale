@@ -9,7 +9,6 @@ import androidx.appcompat.widget.AppCompatImageView
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.Utils.bhav
 import com.s3enterprises.jewellowholesale.Utils.getTextToInt
-import com.s3enterprises.jewellowholesale.Utils.setOwnFocusListener
 import com.s3enterprises.jewellowholesale.rx.RxBus
 import com.s3enterprises.jewellowholesale.rx.RxEvent
 

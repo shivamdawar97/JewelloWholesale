@@ -2,6 +2,7 @@ package com.s3enterprises.jewellowholesale.bills
 
 import com.s3enterprises.jewellowholesale.Utils
 import android.text.format.DateFormat
+import android.util.Log
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
@@ -38,9 +39,10 @@ object BillRepository {
             val partySaleRef = SalesRepository.partySalesDoc
 
             Firebase.firestore.runBatch { batch ->
+                val totalCashReceived = bill.cashReceived.toDouble() + bill.dueAmount
                 batch.set(billRef,bill)
                 batch.update(saleRef,"gold",FieldValue.increment(bill.goldReceivedFine.toDouble()))
-                batch.update(saleRef,"cash",FieldValue.increment(bill.cashReceived.toDouble()))
+                batch.update(saleRef,"cash",FieldValue.increment(totalCashReceived))
                 batch.update(saleRef,"total",FieldValue.increment(bill.tAmount.toDouble()))
                 batch.update(partySaleRef,bill.partyName,FieldValue.increment(bill.tAmount.toDouble()))
 
@@ -50,6 +52,33 @@ object BillRepository {
             }.addOnFailureListener {
                     throw it
             }
+        }.addOnFailureListener {
+            throw it
+        }
+    }
+
+    suspend fun update(newBill:Bill,oldBill:Bill) = suspendCoroutine<Bill>{ cont ->
+
+        val billRef = billsCollection.document(oldBill.billNo.toString())
+        val saleRef = SalesRepository.currentMonthSale
+        val partySaleRef = SalesRepository.partySalesDoc
+
+        val goldDiff = newBill.goldReceivedFine - oldBill.goldReceivedFine
+        val cashDiff = newBill.cashReceived + newBill.dueAmount - (oldBill.cashReceived + oldBill.dueAmount)
+        val totalDiff = newBill.tAmount - oldBill.tAmount
+
+        Log.i("UPDATING_VALUES","Gold :$goldDiff \n Cash: $cashDiff \n Total: $totalDiff")
+
+        Firebase.firestore.runBatch { batch ->
+            batch.set(billRef,newBill)
+            batch.update(saleRef,"gold",FieldValue.increment(goldDiff.toDouble()))
+            batch.update(saleRef,"cash",FieldValue.increment(cashDiff.toDouble()))
+            batch.update(saleRef,"total",FieldValue.increment(totalDiff.toDouble()))
+            batch.update(partySaleRef,newBill.partyName,FieldValue.increment(totalDiff.toDouble()))
+
+        }.addOnSuccessListener {
+            newBill.billNo = oldBill.billNo
+            cont.resume(newBill)
         }.addOnFailureListener {
             throw it
         }
@@ -88,6 +117,6 @@ object BillRepository {
                 val bill = it.toObject(Bill::class.java)
                 cont.resume(bill)
             } else cont.resume(null)
-        }
+        }.addOnFailureListener { throw it }
     }
 }
