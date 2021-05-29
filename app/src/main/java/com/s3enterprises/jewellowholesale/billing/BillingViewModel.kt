@@ -46,6 +46,7 @@ class BillingViewModel:ViewModel() {
     private var previousBill:Bill? = null
 
     init {
+        BillRepository.checkForCounter()
         PartyRepository.loadParties()
         ItemsRepository.loadItems()
     }
@@ -92,6 +93,7 @@ class BillingViewModel:ViewModel() {
     }
 
     fun saveBill(){ // Or update bill
+        calculate()
         if(party.value==null) return
         if(billNo.value == 0) viewModelScope.launch {
             isloading.value = true
@@ -99,7 +101,9 @@ class BillingViewModel:ViewModel() {
             BillRepository.checkForPartyDoc(party.value!!.name)
             lastSavedBill.value = BillRepository.insert(generateBill())
             previousBill = lastSavedBill.value
+            billNo.value = previousBill!!.billNo
             isloading.value = false
+
         }
         else if(!isBillNotFound.value!!) viewModelScope.launch {
             isloading.value = true
@@ -108,6 +112,11 @@ class BillingViewModel:ViewModel() {
             isloading.value = false
         }
     }
+
+    fun print(){
+
+    }
+
 
     private fun generateBill() = Bill(
         date = Date().time,

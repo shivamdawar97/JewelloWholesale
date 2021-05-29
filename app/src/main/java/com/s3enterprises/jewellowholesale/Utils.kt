@@ -95,7 +95,7 @@ object Utils {
     }
 
     fun stringToFloat(value: String) = if (value.isNullOrBlank()) 0f else value.toFloat()
-    fun stringToInt(value: String) = if (value.isBlank()) 0 else value.toInt()
+    fun stringToInt(value: String?) = if (value.isNullOrBlank()) 0 else value.toInt()
 
     @InverseMethod("stringToLong")
     @JvmStatic

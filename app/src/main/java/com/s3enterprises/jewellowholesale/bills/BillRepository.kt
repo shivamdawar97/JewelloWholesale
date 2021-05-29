@@ -28,6 +28,13 @@ object BillRepository {
         FIRESTORE.document("bills").collection(year)
     }
 
+    fun checkForCounter() = billsCollection.get().addOnSuccessListener {
+            if(it.documents.size == 0) Firebase.firestore.runTransaction { transition ->
+                transition.update(Utils.KEY_VALUES,"bill_counter",0)
+            }
+    }
+
+
     suspend fun insert(bill:Bill) = suspendCoroutine<Bill> { cont ->
         Firebase.firestore.runTransaction { transition ->
             val snap = transition.get(Utils.KEY_VALUES)

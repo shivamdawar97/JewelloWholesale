@@ -79,6 +79,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/btn_save"
                 app:layout_constraintStart_toEndOf="@id/btn_calculate"
                 android:text="@string/print"
+                android:onClick="@{()->model.print()}"
                 android:visibility="@{model.billNo!=0?View.VISIBLE:View.INVISIBLE}"
                 />
 

@@ -33,7 +33,7 @@ class BillingActivity : AppCompatActivity() {
     private lateinit var rxBillItemValuesChanged: Disposable
     private lateinit var rxBillItemRemoved: Disposable
     private lateinit var rxBhavChanged: Disposable
-    private var listenChangeEvents = false
+    private var listenChangeEvents = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,15 +55,6 @@ class BillingActivity : AppCompatActivity() {
             viewModel.calculate()
         }
 
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.billItemList.forEach {
-            val view = BillItemCardView(this@BillingActivity,it)
-            itemsContainer.addView(view)
-        }
-        listenChangeEvents = true
     }
 
     private fun initializeSetup() = with(binding){

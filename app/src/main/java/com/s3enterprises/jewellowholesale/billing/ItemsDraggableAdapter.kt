@@ -12,7 +12,8 @@ import java.util.*
 
 class ItemsDraggableAdapter(private val list:List<Item>,private val onSelected:(Item)->Unit) : RecyclerView.Adapter<ItemsDraggableAdapter.ViewHolder>() {
 
-    val simpleCallback = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP and ItemTouchHelper.DOWN,0){
+    val simpleCallback = object: ItemTouchHelper.SimpleCallback(
+        ItemTouchHelper.UP.or(ItemTouchHelper.DOWN),ItemTouchHelper.LEFT.or(ItemTouchHelper.RIGHT)){
         override fun onMove(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
@@ -22,7 +23,7 @@ class ItemsDraggableAdapter(private val list:List<Item>,private val onSelected:(
             val toPosition = target.adapterPosition
             Collections.swap(list,fromPosition,toPosition)
             notifyItemMoved(fromPosition,toPosition)
-            return false
+            return true
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
