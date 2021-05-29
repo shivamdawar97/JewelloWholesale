@@ -11,6 +11,9 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.customViews.BillItemCardView
 import com.s3enterprises.jewellowholesale.database.models.BillItem
@@ -19,6 +22,8 @@ import com.s3enterprises.jewellowholesale.rx.RxBus
 import com.s3enterprises.jewellowholesale.rx.RxEvent
 import com.s3enterprises.jewellowholesale.settings.SettingsActivity
 import io.reactivex.disposables.Disposable
+import java.util.*
+import kotlin.collections.ArrayList
 
 class BillingActivity : AppCompatActivity() {
 
@@ -67,13 +72,7 @@ class BillingActivity : AppCompatActivity() {
         billingPanel.setViewModel(viewModel)
         isItemsListVisible = false
 
-        itemsList.setOnItemClickListener { _, _, pos,_ ->
-            val i = viewModel.items[pos]
-            val billItem = BillItem(i.iId,i.name,rate = i.rate)
-            viewModel.billItemList.add(billItem)
-            val view = BillItemCardView(this@BillingActivity,billItem)
-            itemsContainer.addView(view)
-        }
+        itemsList.layoutManager = LinearLayoutManager(this@BillingActivity)
 
         btnSave.setOnClickListener {
             if(viewModel.party.value==null){
@@ -93,10 +92,18 @@ class BillingActivity : AppCompatActivity() {
             }else viewModel.saveBill()
         }
 
-        viewModel.itemNamesList.observeForever { items ->
-            itemsList.adapter =
-                ArrayAdapter(this@BillingActivity,android.R.layout.simple_expandable_list_item_1,items)
+        viewModel.items.observeForever { items ->
+            val adapter = ItemsDraggableAdapter(items!!){ i ->
+                val billItem = BillItem(i.iId,i.name,rate = i.rate)
+                viewModel.billItemList.add(billItem)
+                val view = BillItemCardView(this@BillingActivity,billItem)
+                itemsContainer.addView(view)
+            }
+            itemsList.adapter = adapter
+            val touchHelper = ItemTouchHelper(adapter.simpleCallback)
+            touchHelper.attachToRecyclerView(itemsList)
         }
+
         viewModel.parties.observeForever {
             billingPanel.setPartiesAdapter(it)
         }

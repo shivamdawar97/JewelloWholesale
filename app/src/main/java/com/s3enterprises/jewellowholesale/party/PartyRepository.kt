@@ -51,8 +51,6 @@ object PartyRepository {
         }
     }
 
-    fun getSavedParties() = _parties.value
-
     suspend fun update(party: Party) = suspendCoroutine<Void?> { continuation ->
         val doc = partyCollection.document(party.name)
         val map = mapOf(

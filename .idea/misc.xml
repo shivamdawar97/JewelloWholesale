@@ -4,28 +4,36 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.1" />
+        <entry key="../../Android/Sdk/platforms/android-30/data/res/layout/simple_expandable_list_item_1.xml" value="0.15855263157894736" />
         <entry key="app/src/main/res/drawable/border_primary.xml" value="0.25625" />
         <entry key="app/src/main/res/drawable/card_party.xml" value="0.24479166666666666" />
         <entry key="app/src/main/res/drawable/ic_arrow_left.xml" value="0.2671875" />
         <entry key="app/src/main/res/drawable/ic_bussiness.xml" value="0.2671875" />
+        <entry key="app/src/main/res/drawable/ic_chevron_left.xml" value="0.15460526315789475" />
+        <entry key="app/src/main/res/drawable/ic_chevron_right.xml" value="0.15460526315789475" />
         <entry key="app/src/main/res/drawable/ic_edit.xml" value="0.3671875" />
         <entry key="app/src/main/res/drawable/ic_person_add.xml" value="0.25625" />
         <entry key="app/src/main/res/drawable/ic_product.xml" value="0.2557291666666667" />
         <entry key="app/src/main/res/drawable/ic_refresh.xml" value="0.25625" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.25625" />
         <entry key="app/src/main/res/layout-land/activity_billing.xml" value="0.15" />
+        <entry key="app/src/main/res/layout-land/ic_chevron_left.xml" value="0.29863945578231293" />
         <entry key="app/src/main/res/layout/activity_add_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_add_party.xml" value="0.24010416666666667" />
         <entry key="app/src/main/res/layout/activity_billing.xml" value="0.17" />
+        <entry key="app/src/main/res/layout/activity_bills.xml" value="0.22512820512820514" />
         <entry key="app/src/main/res/layout/activity_edit_party.xml" value="0.17358490566037735" />
         <entry key="app/src/main/res/layout/activity_items.xml" value="0.18795180722891566" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24010416666666667" />
         <entry key="app/src/main/res/layout/activity_parties.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_print.xml" value="0.15855263157894736" />
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.24010416666666667" />
         <entry key="app/src/main/res/layout/card_bill_item.xml" value="0.25104166666666666" />
+        <entry key="app/src/main/res/layout/card_bill_record.xml" value="0.21721496169445698" />
         <entry key="app/src/main/res/layout/card_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/card_party.xml" value="0.22864583333333333" />
+        <entry key="app/src/main/res/layout/card_selection_list.xml" value="0.15855263157894736" />
         <entry key="app/src/main/res/layout/dialog_otp.xml" value="0.25104166666666666" />
         <entry key="app/src/main/res/layout/list_item.xml" value="0.15164473684210528" />
         <entry key="app/src/main/res/layout/numeric_keypad_view.xml" value="0.25" />

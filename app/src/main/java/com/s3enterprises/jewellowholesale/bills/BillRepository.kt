@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -114,9 +115,26 @@ object BillRepository {
     suspend fun getBill(billNo: Int) =  suspendCoroutine<Bill?> { cont ->
         billsCollection.document(billNo.toString()).get().addOnSuccessListener {
             if(it.exists()){
-                val bill = it.toObject(Bill::class.java)
+                val bill = it.toObject(Bill::class.java)!!
+                bill.tAmount = it["tamount"].toString().toInt()
                 cont.resume(bill)
             } else cont.resume(null)
         }.addOnFailureListener { throw it }
+    }
+
+    suspend fun getBills(dayStart:Long,dayEnd:Long) = suspendCoroutine<List<Bill>>{ cont ->
+        billsCollection.whereGreaterThan("date",dayStart).whereLessThan("date",dayEnd)
+            .get().addOnSuccessListener {
+            val list = ArrayList<Bill>()
+            it.documents.forEach { doc ->
+                val bill = doc.toObject(Bill::class.java)!!
+                bill.billNo = doc.id.toInt()
+                bill.tAmount = doc["tamount"].toString().toInt()
+                list.add(bill)
+            }
+            cont.resume(list)
+        }.addOnFailureListener {
+            throw it
+        }
     }
 }

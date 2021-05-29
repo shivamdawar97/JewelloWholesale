@@ -13,6 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JewelloWholesale">
         <activity
+            android:name=".print.PrintActivity"
+            android:exported="true" />
+        <activity
+            android:name=".bills.BillsActivity"
+            android:exported="true" />
+        <activity
             android:name=".party.editParty.EditParty"
             android:exported="true" />
         <activity

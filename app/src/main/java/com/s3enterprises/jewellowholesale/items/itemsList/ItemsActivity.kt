@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.Utils.onTextChanged
+import com.s3enterprises.jewellowholesale.database.models.Item
 import com.s3enterprises.jewellowholesale.databinding.ActivityItemsBinding
 import com.s3enterprises.jewellowholesale.items.ItemsRepository
 import com.s3enterprises.jewellowholesale.items.addItem.AddItem
@@ -22,21 +23,27 @@ class ItemsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_items)
-        setUpRecyclerView()
+
         binding.swipeToRefresh.setOnRefreshListener {
+            binding.isLoading = true
             binding.swipeToRefresh.isRefreshing = false
-            setUpRecyclerView(hardReload = true)
+            ItemsRepository.loadItems(true)
         }
+        setUpRecyclerView()
     }
 
-    private fun setUpRecyclerView(hardReload:Boolean=false) = lifecycleScope.launch {
-        binding.isLoading = true
-        val items = ItemsRepository.getItems(hardReload)
-        binding.isLoading = false
-        binding.itemRecycler.adapter = ItemsAdapter(items)
-        binding.itemRecycler.layoutManager = LinearLayoutManager(this@ItemsActivity)
-        binding.searchField.onTextChanged {
-            (binding.itemRecycler.adapter as ItemsAdapter).filter.filter(it)
+    private fun setUpRecyclerView() = with(binding){
+        isLoading = true
+        ItemsRepository.loadItems()
+        itemRecycler.layoutManager = LinearLayoutManager(this@ItemsActivity)
+
+        searchField.onTextChanged {
+            (itemRecycler.adapter as ItemsAdapter).filter.filter(it)
+        }
+
+        ItemsRepository.items.observeForever {
+            isLoading = false
+            itemRecycler.adapter = ItemsAdapter(it!!)
         }
     }
 

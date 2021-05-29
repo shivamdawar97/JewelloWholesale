@@ -1,5 +1,7 @@
 package com.s3enterprises.jewellowholesale.database.models
 
+import java.io.Serializable
+
 data class Bill(
     var billNo:Int=0,
     val device:Int=1,
@@ -11,11 +13,11 @@ data class Bill(
     val gross:Float=0f,
     val fine:Float=0f,
     val bhav:Int=0,
-    val tAmount:Int=0,
+    var tAmount:Int=0,
     val goldReceived:Float=0f,
     val receivedRate:Float=0f,
     val goldReceivedFine:Float=0f,
     val cashReceived:Int=0,
     val dueGold:Float=0f,
     val dueAmount:Int=0
-)
+):Serializable

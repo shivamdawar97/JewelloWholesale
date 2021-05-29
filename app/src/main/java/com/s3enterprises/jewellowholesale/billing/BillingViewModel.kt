@@ -24,15 +24,14 @@ class BillingViewModel:ViewModel() {
 
     val billNo = MutableLiveData<Int>().apply { value = 0 }
     val lastSavedBill = MutableLiveData<Bill>()
-    val items:List<Item>
-    get() = ItemsRepository.getSavedItems()!!
+    val items:LiveData<List<Item>>
+    get() = ItemsRepository.items
     val parties: LiveData<List<Party>>
     get() = PartyRepository.parties
     val isloading = MutableLiveData<Boolean>().apply { value = false }
     val isBillLoading = MutableLiveData<Boolean>().apply { value = false }
     val isBillNotFound = MutableLiveData<Boolean>().apply { value = false }
     var billItemList = ArrayList<BillItem>()
-    val itemNamesList = MutableLiveData<List<String>>()
     val party = MutableLiveData<Party>()
     val grossWeight = MutableLiveData<String>().apply { value = "0.0" }
     val fineWeight = MutableLiveData<String>().apply { value = "0.0" }
@@ -47,10 +46,8 @@ class BillingViewModel:ViewModel() {
     private var previousBill:Bill? = null
 
     init {
-        viewModelScope.launch {
-            PartyRepository.loadParties()
-            itemNamesList.value = ItemsRepository.getItems().map { it.name }
-        }
+        PartyRepository.loadParties()
+        ItemsRepository.loadItems()
     }
 
     fun calculate(){
@@ -94,13 +91,14 @@ class BillingViewModel:ViewModel() {
         party.value = parties.value?.find { it.name == typedName }
     }
 
-    fun saveBill(){
+    fun saveBill(){ // Or update bill
         if(party.value==null) return
         if(billNo.value == 0) viewModelScope.launch {
             isloading.value = true
             BillRepository.checkForSalesDoc()
             BillRepository.checkForPartyDoc(party.value!!.name)
             lastSavedBill.value = BillRepository.insert(generateBill())
+            previousBill = lastSavedBill.value
             isloading.value = false
         }
         else if(!isBillNotFound.value!!) viewModelScope.launch {
