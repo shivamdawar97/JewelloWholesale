@@ -26,7 +26,7 @@ class PartiesActivity : AppCompatActivity() {
 
     }
 
-    private fun setUpRecyclerView() = lifecycleScope.launch {
+    private fun setUpRecyclerView()  {
         PartyRepository.parties.observeForever { parties ->
             binding.isLoading = false
             binding.partyRecycler.adapter = PartiesAdapter(parties!!)

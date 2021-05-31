@@ -15,7 +15,7 @@ object PartyRepository {
     val parties:LiveData<List<Party>>
     get() = _parties
 
-    suspend fun insert(party:Party) = suspendCoroutine<Void?> { continuation ->
+    suspend fun insert(party:Party) = suspendCoroutine<Unit> { continuation ->
         val doc = partyCollection.document(party.name)
         val map = mapOf(
                 "from" to party.from,
@@ -28,7 +28,7 @@ object PartyRepository {
                 .addOnSuccessListener {
                     val value = _parties.value ?: emptyList()
                     _parties.value = value + listOf(party)
-                    continuation.resume(null)
+                    continuation.resume(Unit)
                 }
                 .addOnFailureListener { throw it }
         }

@@ -16,11 +16,13 @@ object ItemsRepository {
     val items: LiveData<List<Item>>
         get() = _items
 
-    suspend fun insert(item:Item) = suspendCoroutine<Item> { continuation ->
+    suspend fun insert(item:Item) = suspendCoroutine<Unit> { continuation ->
 
         itemsCollection.add(item).addOnSuccessListener { doc->
             item.iId = doc.id
-            continuation.resume(item)
+            val value = _items.value?: emptyList()
+            _items.value = value + listOf(item)
+            continuation.resume(Unit)
         }.addOnFailureListener {
             throw it
         }
@@ -40,6 +42,15 @@ object ItemsRepository {
             }.addOnFailureListener {
                 throw it
             }
+        }
+    }
+
+    suspend fun update(item:Item) = suspendCoroutine<Unit> { cont ->
+        val doc = itemsCollection.document(item.iId!!)
+        doc.set(item).addOnSuccessListener {
+            cont.resume(Unit)
+        }.addOnFailureListener {
+            throw it
         }
     }
 

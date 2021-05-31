@@ -46,18 +46,17 @@ class AddItem : AppCompatActivity() {
 
     private fun setUpClickListener() = with(binding){
         binding.addItem.setOnClickListener {
-            if(itemName.isNullOrBlank() || rate.isNaN())
+            if(itemName.isNullOrBlank() || rate!!.isNaN())
                 Toast.makeText(this@AddItem,"Please fill all fields",Toast.LENGTH_LONG).show()
             else lifecycleScope.launch {
                 isLoading = true
-                if(isUpdate) {
+                if(!isUpdate!!) {
                     item = Item(name = itemName!!,rate = binding.rate!!)
                     ItemsRepository.insert(item)
                 }
                 else {
                     item.name = itemName!!
                     item.rate = rate!!
-                    
                 }
                 isLoading = false
                 Toast.makeText(this@AddItem,"Item Added ${item.name}",Toast.LENGTH_LONG).show()
