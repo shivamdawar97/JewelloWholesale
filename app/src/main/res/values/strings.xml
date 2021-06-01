@@ -33,4 +33,7 @@
     <string name="bhav">Bhav</string>
     <string name="bill_not_found">Bill Not Found</string>
     <string name="print">Print</string>
+    <string name="today_sale">Today\'s Sale</string>
+    <string name="month_wise">Month Wise</string>
+    <string name="party_wise">View Party Wise</string>
 </resources>

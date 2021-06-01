@@ -45,4 +45,8 @@ object SalesRepository {
         else cont.resume(Unit)
     }
 
+    suspend fun getTodaySale() = suspendCoroutine<Sale> {
+
+    }
+
 }

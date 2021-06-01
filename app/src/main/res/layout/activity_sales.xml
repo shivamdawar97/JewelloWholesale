@@ -1,9 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".sales.SalesActivity">
+    >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <data>
+        <variable
+            name="gold"
+            type="String" />
+        <variable
+            name="cash"
+            type="String" />
+        <variable
+            name="total"
+            type="String" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".sales.SalesActivity">
+
+                <TextView
+                    android:id="@+id/today_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/today_sale"
+                    android:textColor="@color/purple_700"
+                    android:textSize="22sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_margin="4dp"
+                    />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/gold_ic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:layout_constraintTop_toBottomOf="@id/today_label"
+                    app:srcCompat="@drawable/ic_gold"
+                    app:layout_constraintEnd_toStartOf="@id/cash_ic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="10dp"
+                    />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/cash_ic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:layout_constraintTop_toBottomOf="@id/today_label"
+                    app:srcCompat="@drawable/ic_cash"
+                    app:layout_constraintStart_toEndOf="@id/gold_ic"
+                    app:layout_constraintEnd_toStartOf="@id/total_ic"
+                    android:layout_marginTop="10dp"
+                    />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/total_ic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:layout_constraintTop_toBottomOf="@id/today_label"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@drawable/ic_total_sale"
+                    app:layout_constraintStart_toEndOf="@id/cash_ic"
+                    android:layout_marginTop="10dp"
+                    />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    app:layout_constraintTop_toBottomOf="@id/gold_ic"
+                    app:layout_constraintStart_toStartOf="@id/gold_ic"
+                    app:layout_constraintEnd_toEndOf="@id/gold_ic"
+                    android:layout_marginTop="4dp"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/medium"
+                    android:textColor="@color/black"
+                    tools:text="101.32"
+                    android:text="@{gold}"
+                    />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    app:layout_constraintTop_toBottomOf="@id/cash_ic"
+                    app:layout_constraintStart_toStartOf="@id/cash_ic"
+                    app:layout_constraintEnd_toEndOf="@id/cash_ic"
+                    android:layout_marginTop="4dp"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/medium"
+                    android:textColor="@color/black"
+                    tools:text="500"
+                    android:text="@{cash}"
+                    />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    app:layout_constraintTop_toBottomOf="@id/total_ic"
+                    app:layout_constraintStart_toStartOf="@id/total_ic"
+                    app:layout_constraintEnd_toEndOf="@id/total_ic"
+                    android:layout_marginTop="4dp"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/medium"
+                    android:textColor="@color/black"
+                    tools:text="1000000"
+                    android:text="@{total}"
+                    />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+            <TextView
+                android:id="@+id/month_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/month_wise"
+                android:textColor="@color/purple_700"
+                android:textSize="22sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_margin="4dp"
+                android:layout_marginTop="10dp"
+                />
+
+        <LinearLayout
+            android:id="@+id/month_wise_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"
+            />
+
+            <TextView
+                android:id="@+id/party_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/party_wise"
+                android:textColor="@color/purple_700"
+                android:textSize="22sp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_margin="4dp"
+                android:background="@color/off_white2"
+                app:drawableEndCompat="@drawable/ic_chevron_right" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+</layout>
