@@ -72,8 +72,9 @@ class BillingActivity : AppCompatActivity() {
                     val docDate = viewModel.previousBill!!.date
                     val calendar = Calendar.getInstance()
                     calendar.timeInMillis = docDate
-                    val billMonth = calendar.get(Calendar.MONTH)
-                    if(Utils.CurrentDate.monthAsInt != billMonth)
+                    val thisMonth = Utils.CurrentDate.monthAsInt.toInt()
+                    val billMonth = calendar.get(Calendar.MONTH) +1
+                    if(thisMonth != billMonth)
                         AlertDialog.Builder(this@BillingActivity)
                             .setTitle("Old month bill")
                             .setMessage("Bill of previous months are not allowed to be edit")

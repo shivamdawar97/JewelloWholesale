@@ -110,6 +110,7 @@ class BillingViewModel:ViewModel() {
         }
         else if(!isBillNotFound.value!!) viewModelScope.launch {
             isloading.value = true
+            SalesRepository.getTodaySaleRef()
             previousBill = BillRepository.update(generateBill(),previousBill!!)
             lastSavedBill.value = previousBill
             isloading.value = false

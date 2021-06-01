@@ -43,7 +43,7 @@ object Utils {
         private val date = Date()
         val year = DateFormat.format("yyyy", date) as String
         val month = DateFormat.format("MMM", date) as String
-        val monthAsInt = DateFormat.format("MM", date) as Int
+        val monthAsInt = DateFormat.format("MM", date) as String
         val day = DateFormat.format("dd", date) as String
     }
 

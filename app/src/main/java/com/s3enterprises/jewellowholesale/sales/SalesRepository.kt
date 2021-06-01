@@ -34,17 +34,15 @@ object SalesRepository {
                         "cash" to 0,
                         "total" to 0,
                         "date" to Date().time
-                    )).addOnFailureListener {
+                    )).addOnSuccessListener {
                         cont.resume(Unit)
+                    }.addOnFailureListener {
+                        throw it
                     }
                 } else cont.resume(Unit)
             }
         }
         else cont.resume(Unit)
-
     }
-
-
-
 
 }
