@@ -17,9 +17,9 @@ object ItemsRepository {
         get() = _items
 
     suspend fun insert(item:Item) = suspendCoroutine<Unit> { continuation ->
-
-        itemsCollection.add(item).addOnSuccessListener { doc->
-            item.iId = doc.id
+        val doc = itemsCollection.document()
+        item.iId = doc.id
+        doc.set(item).addOnSuccessListener {
             val value = _items.value?: emptyList()
             _items.value = value + listOf(item)
             continuation.resume(Unit)
@@ -48,6 +48,14 @@ object ItemsRepository {
     suspend fun update(item:Item) = suspendCoroutine<Unit> { cont ->
         val doc = itemsCollection.document(item.iId!!)
         doc.set(item).addOnSuccessListener {
+            _items.value?.forEachIndexed { i, _i ->
+                if(_i.iId == item.iId) {
+                    val newList = _items.value as ArrayList<Item>
+                    newList[i] = item
+                    _items.value = newList
+                    return@forEachIndexed
+                }
+            }
             cont.resume(Unit)
         }.addOnFailureListener {
             throw it

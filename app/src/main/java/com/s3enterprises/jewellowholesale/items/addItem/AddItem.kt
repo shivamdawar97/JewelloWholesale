@@ -29,13 +29,14 @@ class AddItem : AppCompatActivity() {
 
     private fun initializeSetup() = with(binding){
         isLoading = false; isUpdate = false
-        rate = 0f;
+        rate = 0f
         intent.extras?.let {
-            val i = it.get("party") as? Item
+            val i = it.get("item") as? Item
             if(i!=null){
                 item = i ;isUpdate = true
                 itemName = i.name
                 rate = i.rate
+                rateField.setText(rate.toString())
             }
         }
         rateField.onTextChanged {
@@ -57,6 +58,7 @@ class AddItem : AppCompatActivity() {
                 else {
                     item.name = itemName!!
                     item.rate = rate!!
+                    ItemsRepository.update(item)
                 }
                 isLoading = false
                 Toast.makeText(this@AddItem,"Item Added ${item.name}",Toast.LENGTH_LONG).show()

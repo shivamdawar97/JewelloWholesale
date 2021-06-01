@@ -28,31 +28,34 @@ object BillRepository {
         FIRESTORE.document("bills").collection(year)
     }
 
-    fun checkForCounter() = billsCollection.get().addOnSuccessListener {
-            if(it.documents.size == 0) Firebase.firestore.runTransaction { transition ->
-                transition.update(Utils.KEY_VALUES,"bill_counter",0)
-            }
-    }
-
-
     suspend fun insert(bill:Bill) = suspendCoroutine<Bill> { cont ->
         Firebase.firestore.runTransaction { transition ->
             val snap = transition.get(Utils.KEY_VALUES)
-            val billNo = snap.get("bill_counter",Int::class.java)!! +1
+            var billNo = snap.get("bill_counter",Int::class.java)!! +1
+            billNo = if(billNo>3000) 1 else billNo
             transition.update(Utils.KEY_VALUES,"bill_counter",billNo)
             billNo
         }.addOnSuccessListener { billNo ->
             val billRef = billsCollection.document(billNo.toString())
             val saleRef = SalesRepository.currentMonthSale
             val partySaleRef = SalesRepository.partySalesDoc
+            val partyRef = PartyRepository.partyRef(bill.partyName)
+            val todayRef = SalesRepository.todaySale!!
 
             Firebase.firestore.runBatch { batch ->
                 val totalCashReceived = bill.cashReceived.toDouble() + bill.dueAmount
                 batch.set(billRef,bill)
+
                 batch.update(saleRef,"gold",FieldValue.increment(bill.goldReceivedFine.toDouble()))
                 batch.update(saleRef,"cash",FieldValue.increment(totalCashReceived))
                 batch.update(saleRef,"total",FieldValue.increment(bill.tAmount.toDouble()))
+
+                batch.update(todayRef,"gold",FieldValue.increment(bill.goldReceivedFine.toDouble()))
+                batch.update(todayRef,"cash",FieldValue.increment(totalCashReceived))
+                batch.update(todayRef,"total",FieldValue.increment(bill.tAmount.toDouble()))
+
                 batch.update(partySaleRef,bill.partyName,FieldValue.increment(bill.tAmount.toDouble()))
+                batch.update(partyRef,"lastArrival",bill.date.toString())
 
             }.addOnSuccessListener {
                 bill.billNo = billNo

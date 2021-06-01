@@ -1,5 +1,6 @@
 package com.s3enterprises.jewellowholesale.items.itemsList
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.database.models.Item
+import com.s3enterprises.jewellowholesale.items.addItem.AddItem
 
 class ItemsAdapter(private val items:List<Item>) :
     RecyclerView.Adapter<ItemsAdapter.ViewHolder>(),Filterable
@@ -20,7 +22,9 @@ class ItemsAdapter(private val items:List<Item>) :
         fun populateCard(item: Item) {
             nameView.text = item.name
             view.setOnClickListener {
-
+                val i = Intent(view.context,AddItem::class.java)
+                i.putExtra("item",item)
+                view.context.startActivity(i)
             }
         }
     }

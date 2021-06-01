@@ -16,7 +16,9 @@ import com.s3enterprises.jewellowholesale.database.models.Item
 import com.s3enterprises.jewellowholesale.database.models.Party
 import com.s3enterprises.jewellowholesale.items.ItemsRepository
 import com.s3enterprises.jewellowholesale.party.PartyRepository
+import com.s3enterprises.jewellowholesale.sales.SalesRepository
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -43,10 +45,10 @@ class BillingViewModel:ViewModel() {
     val dueFineGold = MutableLiveData<String>().apply { value = "0.0" }
     val dueCash = MutableLiveData<String>().apply { value = "0" }
     val goldBhav = MutableLiveData<String>().apply { value = "0" }
-    private var previousBill:Bill? = null
+    var previousBill:Bill? = null
 
     init {
-        BillRepository.checkForCounter()
+
         PartyRepository.loadParties()
         ItemsRepository.loadItems()
     }
@@ -99,6 +101,7 @@ class BillingViewModel:ViewModel() {
             isloading.value = true
             BillRepository.checkForSalesDoc()
             BillRepository.checkForPartyDoc(party.value!!.name)
+            SalesRepository.getTodaySaleRef()
             lastSavedBill.value = BillRepository.insert(generateBill())
             previousBill = lastSavedBill.value
             billNo.value = previousBill!!.billNo

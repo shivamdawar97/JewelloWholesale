@@ -2,6 +2,7 @@ package com.s3enterprises.jewellowholesale.party
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.firestore.DocumentReference
 import com.s3enterprises.jewellowholesale.database.models.Party
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -51,7 +52,7 @@ object PartyRepository {
         }
     }
 
-    suspend fun update(party: Party) = suspendCoroutine<Void?> { continuation ->
+    suspend fun update(party: Party) = suspendCoroutine<Unit> { continuation ->
         val doc = partyCollection.document(party.name)
         val map = mapOf(
             "from" to party.from,
@@ -59,7 +60,17 @@ object PartyRepository {
             "phoneNumber" to party.phoneNumber
         )
         doc.set(map)
-            .addOnSuccessListener { continuation.resume(null) }
+            .addOnSuccessListener {
+                _parties.value?.forEachIndexed { i, p ->
+                    if(p.name == party.name) {
+                        val newList = _parties.value as ArrayList<Party>
+                        newList[i] = party
+                        _parties.value = newList
+                        return@forEachIndexed
+                    }
+                }
+                continuation.resume(Unit)
+            }
             .addOnFailureListener { throw it }
     }
 
@@ -74,6 +85,9 @@ object PartyRepository {
             }
             .addOnFailureListener { throw it }
     }
+
+    fun partyRef(partyName: String) =
+        partyCollection.document(partyName)
 
 
 }

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.s3enterprises.jewellowholesale.R
+import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.customViews.BillItemCardView
 import com.s3enterprises.jewellowholesale.database.models.BillItem
 import com.s3enterprises.jewellowholesale.databinding.ActivityBillingBinding
@@ -66,21 +67,40 @@ class BillingActivity : AppCompatActivity() {
         itemsList.layoutManager = LinearLayoutManager(this@BillingActivity)
 
         btnSave.setOnClickListener {
-            if(viewModel.party.value==null){
-                AlertDialog.Builder(this@BillingActivity)
-                    .setTitle("Party not defined")
-                    .setMessage("Party name is not provided, Continue as unknown")
-                    .setPositiveButton("Yes"){
-                        di,_ ->
-                        di.dismiss()
-                        viewModel.findParty("unknown")
-                        viewModel.saveBill()
-                    }
-                    .setNegativeButton("Cancel"){ di,_->
-                        di.dismiss()
-                    }
-                    .show()
-            }else viewModel.saveBill()
+            when {
+                viewModel.billNo.value!=0 -> {
+                    val docDate = viewModel.previousBill!!.date
+                    val calendar = Calendar.getInstance()
+                    calendar.timeInMillis = docDate
+                    val billMonth = calendar.get(Calendar.MONTH)
+                    if(Utils.CurrentDate.monthAsInt != billMonth)
+                        AlertDialog.Builder(this@BillingActivity)
+                            .setTitle("Old month bill")
+                            .setMessage("Bill of previous months are not allowed to be edit")
+                            .setPositiveButton("Ok"){
+                                    di,_ ->
+                                di.dismiss()
+                            }
+                            .show()
+                    else viewModel.saveBill()
+                }
+                viewModel.party.value==null -> {
+                    AlertDialog.Builder(this@BillingActivity)
+                        .setTitle("Party not defined")
+                        .setMessage("Party name is not provided, Continue as unknown")
+                        .setPositiveButton("Yes"){
+                                di,_ ->
+                            di.dismiss()
+                            viewModel.findParty("unknown")
+                            viewModel.saveBill()
+                        }
+                        .setNegativeButton("Cancel"){ di,_->
+                            di.dismiss()
+                        }
+                        .show()
+                }
+                else -> viewModel.saveBill()
+            }
         }
 
         viewModel.items.observeForever { items ->

@@ -11,6 +11,7 @@ import com.s3enterprises.jewellowholesale.bills.BillsActivity
 import com.s3enterprises.jewellowholesale.databinding.ActivitySettingsBinding
 import com.s3enterprises.jewellowholesale.items.itemsList.ItemsActivity
 import com.s3enterprises.jewellowholesale.party.partyList.PartiesActivity
+import com.s3enterprises.jewellowholesale.sales.SalesActivity
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -32,7 +33,7 @@ class SettingsActivity : AppCompatActivity() {
                 0 ->startActivity(Intent(this,PartiesActivity::class.java))
                 1-> startActivity(Intent(this,BillsActivity::class.java))
                 2->startActivity(Intent(this,ItemsActivity::class.java))
-                3->{}
+                3->startActivity(Intent(this,SalesActivity::class.java))
 
             }
         }

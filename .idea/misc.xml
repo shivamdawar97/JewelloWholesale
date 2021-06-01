@@ -18,7 +18,7 @@
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.25625" />
         <entry key="app/src/main/res/layout-land/activity_billing.xml" value="0.15" />
         <entry key="app/src/main/res/layout-land/ic_chevron_left.xml" value="0.29863945578231293" />
-        <entry key="app/src/main/res/layout/activity_add_item.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_add_item.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_add_party.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_billing.xml" value="0.17" />
         <entry key="app/src/main/res/layout/activity_bills.xml" value="0.22512820512820514" />
@@ -28,6 +28,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.24010416666666667" />
         <entry key="app/src/main/res/layout/activity_parties.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_print.xml" value="0.15855263157894736" />
+        <entry key="app/src/main/res/layout/activity_sales.xml" value="0.25104166666666666" />
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.24010416666666667" />
         <entry key="app/src/main/res/layout/card_bill_item.xml" value="0.25104166666666666" />
         <entry key="app/src/main/res/layout/card_bill_record.xml" value="0.21721496169445698" />
@@ -39,7 +40,7 @@
         <entry key="app/src/main/res/layout/numeric_keypad_view.xml" value="0.25" />
         <entry key="app/src/main/res/layout/view_bhav.xml" value="0.359375" />
         <entry key="app/src/main/res/layout/view_bill_no_changer.xml" value="0.23958333333333334" />
-        <entry key="app/src/main/res/layout/view_billing_panel.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/view_billing_panel.xml" value="0.18" />
         <entry key="app/src/main/res/menu/billing_options_menu.xml" value="0.24010416666666667" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2671875" />
       </map>
