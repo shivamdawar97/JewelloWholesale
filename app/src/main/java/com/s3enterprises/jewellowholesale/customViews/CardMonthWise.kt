@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.s3enterprises.jewellowholesale.R
+import com.s3enterprises.jewellowholesale.sales.Sale
 
 class CardMonthWise: LinearLayout {
 
@@ -29,11 +30,11 @@ class CardMonthWise: LinearLayout {
         inflate(context, R.layout.card_month_wise,this)
     }
 
-    fun setData(month:String,gold:String,cash:String,total:String){
-        this.month.text = month
-        this.gold.text = gold
-        this.cash.text = cash
-        this.total.text = total
+    fun setData(sale: Sale){
+        this.month.text = sale.name
+        this.gold.text = sale.gold
+        this.cash.text = sale.cash
+        this.total.text = sale.total
     }
 
 }

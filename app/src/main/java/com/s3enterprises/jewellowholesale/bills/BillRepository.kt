@@ -40,7 +40,7 @@ object BillRepository {
             val saleRef = SalesRepository.currentMonthSale
             val partySaleRef = SalesRepository.partySalesDoc
             val partyRef = PartyRepository.partyRef(bill.partyName)
-            val todayRef = SalesRepository.todaySale!!
+            val todayRef = SalesRepository.todaySaleRef!!
 
             Firebase.firestore.runBatch { batch ->
                 val totalCashReceived = bill.cashReceived.toDouble() + bill.dueAmount
@@ -93,7 +93,7 @@ object BillRepository {
             batch.update(partySaleRef,newBill.partyName,FieldValue.increment(totalDiff.toDouble()))
 
             if(billMonth == thisMonth) {
-                val todayRef = SalesRepository.todaySale!!
+                val todayRef = SalesRepository.todaySaleRef!!
                 batch.update(todayRef,"gold",FieldValue.increment(goldDiff.toDouble()))
                 batch.update(todayRef,"cash",FieldValue.increment(cashDiff.toDouble()))
                 batch.update(todayRef,"total",FieldValue.increment(totalDiff.toDouble()))
