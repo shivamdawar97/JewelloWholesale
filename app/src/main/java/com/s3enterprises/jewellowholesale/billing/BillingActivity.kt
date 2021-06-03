@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.Utils
+import com.s3enterprises.jewellowholesale.Utils.atEndOfDay
+import com.s3enterprises.jewellowholesale.Utils.atStartOfDay
 import com.s3enterprises.jewellowholesale.customViews.BillItemCardView
 import com.s3enterprises.jewellowholesale.database.models.BillItem
 import com.s3enterprises.jewellowholesale.databinding.ActivityBillingBinding
@@ -23,6 +25,7 @@ import com.s3enterprises.jewellowholesale.rx.RxBus
 import com.s3enterprises.jewellowholesale.rx.RxEvent
 import com.s3enterprises.jewellowholesale.settings.SettingsActivity
 import io.reactivex.disposables.Disposable
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -69,15 +72,16 @@ class BillingActivity : AppCompatActivity() {
         btnSave.setOnClickListener {
             when {
                 viewModel.billNo.value!=0 -> {
-                    val docDate = viewModel.previousBill!!.date
-                    val calendar = Calendar.getInstance()
-                    calendar.timeInMillis = docDate
-                    val thisMonth = Utils.CurrentDate.monthAsInt.toInt()
-                    val billMonth = calendar.get(Calendar.MONTH) +1
-                    if(thisMonth != billMonth)
+
+                    val billDate = viewModel.previousBill!!.date
+
+                    val thisDate = Date()
+                    val todayRange = atStartOfDay(thisDate).time..atEndOfDay(thisDate).time
+
+                    if(billDate in todayRange)
                         AlertDialog.Builder(this@BillingActivity)
-                            .setTitle("Old month bill")
-                            .setMessage("Bill of previous months are not allowed to be edit")
+                            .setTitle("Old date bill")
+                            .setMessage("Bill of previous date are not allowed to be edit")
                             .setPositiveButton("Ok"){
                                     di,_ ->
                                 di.dismiss()

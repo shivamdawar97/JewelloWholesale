@@ -26,7 +26,9 @@ class SalesActivity : AppCompatActivity() {
         SalesRepository.getCurrentYearSale().forEach { sale ->
             when(sale.name){
                 "party" -> {
-
+                    val partyCard = CardMonthWise(this@SalesActivity)
+                    partyCard.setPartyData(sale)
+                    binding.partyWiseContainer.addView(partyCard)
                 }
                 "today" -> {
                     binding.gold = sale.gold

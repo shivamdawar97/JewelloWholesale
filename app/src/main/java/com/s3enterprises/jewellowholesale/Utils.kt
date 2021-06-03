@@ -43,7 +43,7 @@ object Utils {
         private val date = Date()
         val year = DateFormat.format("yyyy", date) as String
         val month = DateFormat.format("MMM", date) as String
-        val monthAsInt = DateFormat.format("MM", date) as String
+        //val monthAsInt = DateFormat.format("MM", date) as String
         val day = DateFormat.format("dd", date) as String
     }
 
@@ -65,31 +65,10 @@ object Utils {
         if (it.isNotBlank()) it.toLong() else 0
     }
 
-    fun Float.toMannerString() = if(this == 0f) "" else this.toString()
-    fun Int.toMannerString() = if(this == 0) "" else this.toString()
-
     fun Float.roundOff(place:Int) = "%.${place}f".format(this).toFloat()
-
-    fun <T> AppCompatActivity.startActivity(cls: Class<T>) =
-        this.startActivity(Intent(this, cls))
-
-    fun Date.getFormattedDate() = DATE_FORMAT.format(this)
 
     @JvmStatic
     fun getDate(date: Date): String = DATE_FORMAT_FOR_HEADING.format(date)
-
-    @JvmStatic
-    fun getDateStringFromLong(date: Long): String = Date(date).getFormattedDate()
-
-    fun animationListener(listener: () -> Unit): Animation.AnimationListener {
-        return object : Animation.AnimationListener {
-            override fun onAnimationRepeat(animation: Animation?) {}
-            override fun onAnimationStart(animation: Animation?) {}
-            override fun onAnimationEnd(animation: Animation?) {
-                listener.invoke()
-            }
-        }
-    }
 
     fun hideKeyboard(view: View) {
         val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -99,18 +78,23 @@ object Utils {
     fun stringToFloat(value: String) = if (value.isNullOrBlank()) 0f else value.toFloat()
     fun stringToInt(value: String?) = if (value.isNullOrBlank()) 0 else value.toInt()
 
-    @InverseMethod("stringToLong")
-    @JvmStatic
-    fun longToString(value: Long) =
-        value.toString()
-
-    @JvmStatic
-    fun stringToLong(value: String) =
-        if (value.isNotBlank()) value.toString().toLong() else 0L
-
     fun updatePrinterName(name: String, sharedPreferences: SharedPreferences) {
         printerName = name
         sharedPreferences.edit().putString("printer_name", name).apply()
+    }
+
+    fun atEndOfDay(date: Date) = with(Calendar.getInstance()) {
+        time = date
+        set(Calendar.HOUR_OF_DAY, 23);set(Calendar.MINUTE, 59)
+        set(Calendar.SECOND, 59);set(Calendar.MILLISECOND, 999)
+        time
+    }
+
+    fun atStartOfDay(date: Date) = with(Calendar.getInstance()) {
+        time = date
+        set(Calendar.HOUR_OF_DAY, 0);set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0);set(Calendar.MILLISECOND, 0)
+        time
     }
 
     class GeneralViewHolder<T>(

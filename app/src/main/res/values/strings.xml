@@ -35,5 +35,8 @@
     <string name="print">Print</string>
     <string name="today_sale">Today\'s Sale</string>
     <string name="month_wise">Month Wise</string>
-    <string name="party_wise">View Party Wise</string>
+    <string name="party_wise">Party Wise</string>
+    <string name="gold">Gold</string>
+    <string name="cash">Cash</string>
+    <string name="total_sale">Total Sale</string>
 </resources>

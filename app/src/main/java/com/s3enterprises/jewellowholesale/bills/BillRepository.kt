@@ -78,13 +78,6 @@ object BillRepository {
         val cashDiff = newBill.cashReceived + newBill.dueAmount - (oldBill.cashReceived + oldBill.dueAmount)
         val totalDiff = newBill.tAmount - oldBill.tAmount
 
-        val docDate = oldBill.date
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = docDate
-        val thisMonth = Utils.CurrentDate.day.toInt()
-        val billMonth = calendar.get(Calendar.DATE)
-
-
         Firebase.firestore.runBatch { batch ->
             batch.set(billRef,newBill)
             batch.update(saleRef,"gold",FieldValue.increment(goldDiff.toDouble()))
@@ -92,12 +85,10 @@ object BillRepository {
             batch.update(saleRef,"total",FieldValue.increment(totalDiff.toDouble()))
             batch.update(partySaleRef,newBill.partyName,FieldValue.increment(totalDiff.toDouble()))
 
-            if(billMonth == thisMonth) {
-                val todayRef = SalesRepository.todaySaleRef!!
-                batch.update(todayRef,"gold",FieldValue.increment(goldDiff.toDouble()))
-                batch.update(todayRef,"cash",FieldValue.increment(cashDiff.toDouble()))
-                batch.update(todayRef,"total",FieldValue.increment(totalDiff.toDouble()))
-            }
+            val todayRef = SalesRepository.todaySaleRef!!
+            batch.update(todayRef,"gold",FieldValue.increment(goldDiff.toDouble()))
+            batch.update(todayRef,"cash",FieldValue.increment(cashDiff.toDouble()))
+            batch.update(todayRef,"total",FieldValue.increment(totalDiff.toDouble()))
 
         }.addOnSuccessListener {
             newBill.billNo = oldBill.billNo

@@ -17,26 +17,113 @@
             type="String" />
     </data>
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:context=".sales.SalesActivity"
+            android:layout_marginStart="30dp"
             >
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/gold_ic"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toStartOf="@id/cash_ic"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_gold" />
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/cash_ic"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toStartOf="@id/total_ic"
+                app:layout_constraintStart_toEndOf="@id/gold_ic"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_cash" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/total_ic"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/cash_ic"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_total_sale" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/gold"
+                android:textColor="@color/black"
+                android:textSize="@dimen/medium"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@id/gold_ic"
+                app:layout_constraintStart_toStartOf="@id/gold_ic"
+                app:layout_constraintTop_toBottomOf="@id/gold_ic" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/cash"
+                android:textColor="@color/black"
+                android:textSize="@dimen/medium"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@id/cash_ic"
+                app:layout_constraintStart_toStartOf="@id/cash_ic"
+                app:layout_constraintTop_toBottomOf="@id/cash_ic" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/total_sale"
+                android:textColor="@color/black"
+                android:textSize="@dimen/medium"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@id/total_ic"
+                app:layout_constraintStart_toStartOf="@id/total_ic"
+                app:layout_constraintTop_toBottomOf="@id/total_ic" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/header"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="10dp"
+            >
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".sales.SalesActivity">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
 
                 <TextView
                     android:id="@+id/today_label"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/today_sale"
                     android:textColor="@color/purple_700"
@@ -44,135 +131,106 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_margin="4dp"
+                    android:background="@color/off_white2"
                     />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/gold_ic"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    app:layout_constraintTop_toBottomOf="@id/today_label"
-                    app:srcCompat="@drawable/ic_gold"
-                    app:layout_constraintEnd_toStartOf="@id/cash_ic"
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        tools:text="100.21"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/medium"
+                        android:layout_weight="1"
+                        android:text="@{gold}"
+                        />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        tools:text="40010"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/medium"
+                        android:layout_weight="1"
+                        android:text="@{cash}"
+                        />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        tools:text="1000000"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/medium"
+                        android:layout_weight="1"
+                        android:text="@{total}"
+                        />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/month_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/month_wise"
+                    android:textColor="@color/purple_700"
+                    android:textSize="22sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="10dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_margin="4dp"
+                    android:background="@color/off_white2"
                     />
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/cash_ic"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    app:layout_constraintTop_toBottomOf="@id/today_label"
-                    app:srcCompat="@drawable/ic_cash"
-                    app:layout_constraintStart_toEndOf="@id/gold_ic"
-                    app:layout_constraintEnd_toStartOf="@id/total_ic"
+                <LinearLayout
+                    android:id="@+id/month_wise_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:padding="10dp"
                     />
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/total_ic"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    app:layout_constraintTop_toBottomOf="@id/today_label"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:srcCompat="@drawable/ic_total_sale"
-                    app:layout_constraintStart_toEndOf="@id/cash_ic"
-                    android:layout_marginTop="10dp"
-                    />
-
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/party_label"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@string/party_wise"
+                    android:textColor="@color/purple_700"
+                    android:textSize="22sp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     android:layout_margin="4dp"
-                    app:layout_constraintTop_toBottomOf="@id/gold_ic"
-                    app:layout_constraintStart_toStartOf="@id/gold_ic"
-                    app:layout_constraintEnd_toEndOf="@id/gold_ic"
-                    android:layout_marginTop="4dp"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/medium"
-                    android:textColor="@color/black"
-                    tools:text="101.32"
-                    android:text="@{gold}"
+                    android:background="@color/off_white2"
                     />
 
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/party_wise_container"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    app:layout_constraintTop_toBottomOf="@id/cash_ic"
-                    app:layout_constraintStart_toStartOf="@id/cash_ic"
-                    app:layout_constraintEnd_toEndOf="@id/cash_ic"
-                    android:layout_marginTop="4dp"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/medium"
-                    android:textColor="@color/black"
-                    tools:text="500"
-                    android:text="@{cash}"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:padding="10dp"
                     />
 
+            </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    app:layout_constraintTop_toBottomOf="@id/total_ic"
-                    app:layout_constraintStart_toStartOf="@id/total_ic"
-                    app:layout_constraintEnd_toEndOf="@id/total_ic"
-                    android:layout_marginTop="4dp"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/medium"
-                    android:textColor="@color/black"
-                    tools:text="1000000"
-                    android:text="@{total}"
-                    />
+        </ScrollView>
 
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:id="@+id/month_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/month_wise"
-                android:textColor="@color/purple_700"
-                android:textSize="22sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_margin="4dp"
-                android:layout_marginTop="10dp"
-                />
-
-        <LinearLayout
-            android:id="@+id/month_wise_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:padding="10dp"
-            />
-
-            <TextView
-                android:id="@+id/party_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/party_wise"
-                android:textColor="@color/purple_700"
-                android:textSize="22sp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_margin="4dp"
-                android:background="@color/off_white2"
-                app:drawableEndCompat="@drawable/ic_chevron_right" />
-
-
-        </LinearLayout>
-
-    </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

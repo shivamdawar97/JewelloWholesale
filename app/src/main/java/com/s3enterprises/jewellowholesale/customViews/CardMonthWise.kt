@@ -37,4 +37,9 @@ class CardMonthWise: LinearLayout {
         this.total.text = sale.total
     }
 
+    fun setPartyData(sale: Sale) {
+        this.month.text = sale.gold
+        this.total.text = sale.total
+    }
+
 }

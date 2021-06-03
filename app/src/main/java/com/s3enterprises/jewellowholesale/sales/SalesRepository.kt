@@ -2,6 +2,7 @@ package com.s3enterprises.jewellowholesale.sales
 
 import com.google.firebase.firestore.DocumentReference
 import com.s3enterprises.jewellowholesale.Utils
+import com.s3enterprises.jewellowholesale.Utils.roundOff
 import com.s3enterprises.jewellowholesale.database.models.Party
 import java.util.*
 import kotlin.collections.ArrayList
@@ -49,10 +50,14 @@ object SalesRepository {
             val list = ArrayList<Sale>()
             snap.documents.forEach { doc ->
                 if(doc.id != "parties") {
-                    val sale = Sale(doc.id,doc["gold"].toString(),doc["cash"].toString(),doc["total"].toString())
+                    val gold = doc["gold"].toString().toFloat().roundOff(3).toString()
+                    val cash = doc["cash"].toString().toFloat().toInt().toString()
+                    val total = doc["total"].toString().toFloat().toInt().toString()
+                    val sale = Sale(doc.id,gold,cash,total)
                     list.add(sale)
                 }else doc.data?.forEach { entry ->
-                    val sale = Sale("party",entry.key,"0",entry.value.toString())
+                    val total = entry.value.toString().toFloat().toInt().toString()
+                    val sale = Sale("party",entry.key,"0",total)
                     list.add(sale)
                 }
             }

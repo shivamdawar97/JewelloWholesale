@@ -4,6 +4,8 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.s3enterprises.jewellowholesale.Utils.atEndOfDay
+import com.s3enterprises.jewellowholesale.Utils.atStartOfDay
 import com.s3enterprises.jewellowholesale.database.models.Bill
 import kotlinx.coroutines.launch
 import java.util.*
@@ -16,14 +18,14 @@ class BillsViewModel:ViewModel() {
         addSource(date) {
             viewModelScope.launch {
                 isLoading.value = true
-                value = BillRepository.getBills(atStartOfDay(it).time, atEndOfDay(it).time)
+                value = BillRepository.getBills(atStartOfDay(it).time,atEndOfDay(it).time)
                 isLoading.value = false
             }
         }
     }
 
 
-    private fun atEndOfDay(date: Date) = with(Calendar.getInstance()) {
+  /*  private fun atEndOfDay(date: Date) = with(Calendar.getInstance()) {
         time = date
         set(Calendar.HOUR_OF_DAY, 23);set(Calendar.MINUTE, 59)
         set(Calendar.SECOND, 59);set(Calendar.MILLISECOND, 999)
@@ -35,7 +37,7 @@ class BillsViewModel:ViewModel() {
         set(Calendar.HOUR_OF_DAY, 0);set(Calendar.MINUTE, 0)
         set(Calendar.SECOND, 0);set(Calendar.MILLISECOND, 0)
         time
-    }
+    }*/
 
     fun goToPreviousDate() = with(Calendar.getInstance()) {
         time = date.value!!;add(Calendar.DATE, -1)
