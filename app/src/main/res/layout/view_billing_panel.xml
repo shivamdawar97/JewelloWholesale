@@ -8,6 +8,7 @@
             name="model"
             type="com.s3enterprises.jewellowholesale.billing.BillingViewModel" />
         <import type="android.view.View"/>
+        <import type="com.s3enterprises.jewellowholesale.Utils"/>
     </data>
 
     <LinearLayout
@@ -16,11 +17,31 @@
         android:orientation="vertical"
         >
 
-        <com.s3enterprises.jewellowholesale.customViews.BillNoChangerView
-            android:id="@+id/bill_changer"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
 
+            <com.s3enterprises.jewellowholesale.customViews.BillNoChangerView
+                android:id="@+id/bill_changer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                />
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                tools:text="Date"
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@{model.billNo==0?``:Utils.getDate(model.loadedBill.date)}"
+                />
+
+        </LinearLayout>
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -59,6 +80,18 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/add_party"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_add"
+                        android:tint="@color/purple_700"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:scaleX="1.4"
+                        android:scaleY="1.4"
+                        />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/name_field"

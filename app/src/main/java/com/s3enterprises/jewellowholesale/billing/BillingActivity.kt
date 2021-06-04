@@ -19,6 +19,7 @@ import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.Utils.atEndOfDay
 import com.s3enterprises.jewellowholesale.Utils.atStartOfDay
 import com.s3enterprises.jewellowholesale.customViews.BillItemCardView
+import com.s3enterprises.jewellowholesale.database.models.Bill
 import com.s3enterprises.jewellowholesale.database.models.BillItem
 import com.s3enterprises.jewellowholesale.databinding.ActivityBillingBinding
 import com.s3enterprises.jewellowholesale.rx.RxBus
@@ -37,6 +38,7 @@ class BillingActivity : AppCompatActivity() {
     private lateinit var rxBillItemValuesChanged: Disposable
     private lateinit var rxBillItemRemoved: Disposable
     private lateinit var rxBhavChanged: Disposable
+    private lateinit var rxOldBillSelected: Disposable
     private var listenChangeEvents = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +61,9 @@ class BillingActivity : AppCompatActivity() {
             viewModel.calculate()
         }
 
+        rxOldBillSelected = RxBus.listen(RxEvent.PreviousBillSelected::class.java)!!.subscribe{ event ->
+            viewModel.onOldBillSelected(event.bill)
+        }
     }
 
     private fun initializeSetup() = with(binding){
@@ -73,12 +78,12 @@ class BillingActivity : AppCompatActivity() {
             when {
                 viewModel.billNo.value!=0 -> {
 
-                    val billDate = viewModel.previousBill!!.date
+                    val billDate = viewModel.loadedBill.value!!.date
 
                     val thisDate = Date()
                     val todayRange = atStartOfDay(thisDate).time..atEndOfDay(thisDate).time
 
-                    if(billDate in todayRange)
+                    if(billDate !in todayRange)
                         AlertDialog.Builder(this@BillingActivity)
                             .setTitle("Old date bill")
                             .setMessage("Bill of previous date are not allowed to be edit")
@@ -124,10 +129,6 @@ class BillingActivity : AppCompatActivity() {
             billingPanel.setPartiesAdapter(it)
         }
 
-        viewModel.lastSavedBill.observeForever { bill ->
-            Toast.makeText(this@BillingActivity,"Bill Saved: ${bill.billNo}",Toast.LENGTH_LONG).show()
-        }
-
         viewModel.billNo.observeForever {
             billingPanel.setBillNo(it)
         }
@@ -171,5 +172,6 @@ class BillingActivity : AppCompatActivity() {
         rxBillItemValuesChanged.dispose()
         rxBhavChanged.dispose()
         rxBillItemRemoved.dispose()
+        rxOldBillSelected.dispose()
     }
 }

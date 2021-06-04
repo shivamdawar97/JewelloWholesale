@@ -1,6 +1,7 @@
 package com.s3enterprises.jewellowholesale.customViews
 
 import android.content.Context
+import android.content.Intent
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.AutoCompleteTextView
@@ -13,6 +14,7 @@ import com.s3enterprises.jewellowholesale.billing.BillingActivity
 import com.s3enterprises.jewellowholesale.billing.BillingViewModel
 import com.s3enterprises.jewellowholesale.database.models.Party
 import com.s3enterprises.jewellowholesale.databinding.ViewBillingPanelBinding
+import com.s3enterprises.jewellowholesale.party.addParty.AddParty
 
 class BillingPanelView: LinearLayout {
 
@@ -51,6 +53,10 @@ class BillingPanelView: LinearLayout {
         }
         billChanger.setOnNextListener{
             model!!.getNextBill()
+        }
+
+        binding.addParty.setOnClickListener {
+            context.startActivity(Intent(context,AddParty::class.java))
         }
 
     }

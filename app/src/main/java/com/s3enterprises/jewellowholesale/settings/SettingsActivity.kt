@@ -11,18 +11,24 @@ import com.s3enterprises.jewellowholesale.bills.BillsActivity
 import com.s3enterprises.jewellowholesale.databinding.ActivitySettingsBinding
 import com.s3enterprises.jewellowholesale.items.itemsList.ItemsActivity
 import com.s3enterprises.jewellowholesale.party.partyList.PartiesActivity
+import com.s3enterprises.jewellowholesale.rx.RxBus
+import com.s3enterprises.jewellowholesale.rx.RxEvent
 import com.s3enterprises.jewellowholesale.sales.SalesActivity
+import io.reactivex.disposables.Disposable
 
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
+    private lateinit var rxOldBillSelected: Disposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_settings)
 
         setUpListView()
-
+        rxOldBillSelected = RxBus.listen(RxEvent.PreviousBillSelected::class.java)!!.subscribe{ event ->
+           finish()
+        }
     }
 
     private fun setUpListView() {
@@ -37,5 +43,10 @@ class SettingsActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        rxOldBillSelected.dispose()
     }
 }

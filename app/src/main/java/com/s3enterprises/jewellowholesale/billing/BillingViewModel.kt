@@ -16,16 +16,16 @@ import com.s3enterprises.jewellowholesale.database.models.Item
 import com.s3enterprises.jewellowholesale.database.models.Party
 import com.s3enterprises.jewellowholesale.items.ItemsRepository
 import com.s3enterprises.jewellowholesale.party.PartyRepository
+import com.s3enterprises.jewellowholesale.rx.RxEvent
 import com.s3enterprises.jewellowholesale.sales.SalesRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
 import java.util.*
 import kotlin.collections.ArrayList
 
 class BillingViewModel:ViewModel() {
 
     val billNo = MutableLiveData<Int>().apply { value = 0 }
-    val lastSavedBill = MutableLiveData<Bill>()
+    val loadedBill = MutableLiveData<Bill>()
     val items:LiveData<List<Item>>
     get() = ItemsRepository.items
     val parties: LiveData<List<Party>>
@@ -45,7 +45,6 @@ class BillingViewModel:ViewModel() {
     val dueFineGold = MutableLiveData<String>().apply { value = "0.0" }
     val dueCash = MutableLiveData<String>().apply { value = "0" }
     val goldBhav = MutableLiveData<String>().apply { value = "0" }
-    var previousBill:Bill? = null
 
     init {
 
@@ -102,17 +101,15 @@ class BillingViewModel:ViewModel() {
             BillRepository.checkForSalesDoc()
             BillRepository.checkForPartyDoc(party.value!!.name)
             SalesRepository.getTodaySaleRef()
-            lastSavedBill.value = BillRepository.insert(generateBill())
-            previousBill = lastSavedBill.value
-            billNo.value = previousBill!!.billNo
+            loadedBill.value = BillRepository.insert(generateBill())
+            billNo.value = loadedBill.value!!.billNo
             isloading.value = false
 
         }
         else if(!isBillNotFound.value!!) viewModelScope.launch {
             isloading.value = true
             SalesRepository.getTodaySaleRef()
-            previousBill = BillRepository.update(generateBill(),previousBill!!)
-            lastSavedBill.value = previousBill
+            loadedBill.value = BillRepository.update(generateBill(),loadedBill.value!!)
             isloading.value = false
         }
     }
@@ -168,15 +165,15 @@ class BillingViewModel:ViewModel() {
 
     private fun getBill() = viewModelScope.launch {
         isBillLoading.value = true
-        previousBill = if(billNo.value!! == lastSavedBill.value?.billNo) lastSavedBill.value
-            else BillRepository.getBill(billNo.value!!)
-        if(previousBill!=null)
+        if(loadedBill.value == null || billNo.value!! != loadedBill.value!!.billNo)
+            loadedBill.value = BillRepository.getBill(billNo.value!!)
+        if(loadedBill.value!=null)
         setUpBill()
         else isBillNotFound.value = true
         isBillLoading.value = false
     }
 
-    private fun setUpBill() = previousBill?.let {
+    private fun setUpBill() = loadedBill.value?.let {
         billItemList = Converters().fromString(it.items)  as ArrayList<BillItem>
         isBillNotFound.value = false
         findParty(it.partyName)
@@ -190,6 +187,10 @@ class BillingViewModel:ViewModel() {
         goldFine.value = it.goldReceivedFine.toString()
         dueFineGold.value = it.dueGold.toString()
         dueCash.value = it.dueAmount.toString()
+    }
+
+    fun onOldBillSelected(bill: Bill) {
+        loadedBill.value = bill ; billNo.value = bill.billNo
     }
 
 }

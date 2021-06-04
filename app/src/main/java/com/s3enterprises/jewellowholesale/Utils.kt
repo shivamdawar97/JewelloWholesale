@@ -70,6 +70,9 @@ object Utils {
     @JvmStatic
     fun getDate(date: Date): String = DATE_FORMAT_FOR_HEADING.format(date)
 
+    @JvmStatic
+    fun getDate(date: Long): String = DATE_FORMAT.format(Date(date))
+
     fun hideKeyboard(view: View) {
         val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)

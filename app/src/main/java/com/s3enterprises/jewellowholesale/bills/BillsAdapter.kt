@@ -1,17 +1,15 @@
 package com.s3enterprises.jewellowholesale.bills
 
-
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.s3enterprises.jewellowholesale.R
+import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.database.models.Bill
-import com.s3enterprises.jewellowholesale.print.PrintActivity
-import java.util.*
+import com.s3enterprises.jewellowholesale.rx.RxBus
+import com.s3enterprises.jewellowholesale.rx.RxEvent
 
 class BillsAdapter(private val bills:List<Bill>) : RecyclerView.Adapter<BillsAdapter.ViewHolder>()  {
      inner class ViewHolder(private val mView: View): RecyclerView.ViewHolder(mView) {
@@ -25,10 +23,10 @@ class BillsAdapter(private val bills:List<Bill>) : RecyclerView.Adapter<BillsAda
              billNoView.text = billNo.toString()
              amount.text = "₹ $tAmount"
              partyNameView.text = partyName
-             dateView.text = Date(date).toString()
+             dateView.text = Utils.getDate(date)
              mView.setOnClickListener {
-                 val context = it.context
-                 context.startActivity(Intent(context, PrintActivity::class.java).putExtra("bill",bill))
+                 RxBus.publish(RxEvent.PreviousBillSelected(bill))
+                 (mView.context as BillsActivity).finish()
              }
          }
 
@@ -38,7 +36,7 @@ class BillsAdapter(private val bills:List<Bill>) : RecyclerView.Adapter<BillsAda
         holder.setData(bills[position])
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)=
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_bill_record,parent,false))
 
     override fun getItemCount() = bills.size
