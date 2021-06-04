@@ -1,6 +1,8 @@
 package com.s3enterprises.jewellowholesale.billing
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -22,6 +24,7 @@ import com.s3enterprises.jewellowholesale.customViews.BillItemCardView
 import com.s3enterprises.jewellowholesale.database.models.Bill
 import com.s3enterprises.jewellowholesale.database.models.BillItem
 import com.s3enterprises.jewellowholesale.databinding.ActivityBillingBinding
+import com.s3enterprises.jewellowholesale.print.JewelloBluetoothSocket
 import com.s3enterprises.jewellowholesale.rx.RxBus
 import com.s3enterprises.jewellowholesale.rx.RxEvent
 import com.s3enterprises.jewellowholesale.settings.SettingsActivity
@@ -40,6 +43,7 @@ class BillingActivity : AppCompatActivity() {
     private lateinit var rxBhavChanged: Disposable
     private lateinit var rxOldBillSelected: Disposable
     private var listenChangeEvents = true
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +51,7 @@ class BillingActivity : AppCompatActivity() {
         binding.model = viewModel
         itemsContainer = findViewById(R.id.items_container)
         initializeSetup()
-
+        preferences = getSharedPreferences("jewello_wholesale", Context.MODE_PRIVATE)
         rxBillItemValuesChanged =  RxBus.listen(RxEvent.EventBillItemChanged::class.java)!!.subscribe {
              if(listenChangeEvents) viewModel.calculate()
         }
@@ -92,7 +96,7 @@ class BillingActivity : AppCompatActivity() {
                                 di.dismiss()
                             }
                             .show()
-                    else viewModel.saveBill()
+                    else viewModel.saveBill().also { saveBhav() }
                 }
                 viewModel.party.value==null -> {
                     AlertDialog.Builder(this@BillingActivity)
@@ -102,14 +106,14 @@ class BillingActivity : AppCompatActivity() {
                                 di,_ ->
                             di.dismiss()
                             viewModel.findParty("unknown")
-                            viewModel.saveBill()
+                            viewModel.saveBill().also { saveBhav() }
                         }
                         .setNegativeButton("Cancel"){ di,_->
                             di.dismiss()
                         }
                         .show()
                 }
-                else -> viewModel.saveBill()
+                else -> viewModel.saveBill().also { saveBhav() }
             }
         }
 
@@ -146,6 +150,10 @@ class BillingActivity : AppCompatActivity() {
             }
         }
 
+        printBtn?.setOnClickListener {
+            val printBill = viewModel.generateBillPrint()
+            if(printBill!=null) JewelloBluetoothSocket.printData(printBill,this@BillingActivity)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -173,5 +181,10 @@ class BillingActivity : AppCompatActivity() {
         rxBhavChanged.dispose()
         rxBillItemRemoved.dispose()
         rxOldBillSelected.dispose()
+    }
+
+    private fun saveBhav(){
+        if(!viewModel.goldBhav.value.isNullOrBlank() &&  viewModel.goldBhav.value != "0")
+        preferences.edit().putString("printer_name",viewModel.goldBhav.value).apply()
     }
 }

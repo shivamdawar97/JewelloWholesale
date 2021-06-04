@@ -39,4 +39,6 @@
     <string name="gold">Gold</string>
     <string name="cash">Cash</string>
     <string name="total_sale">Total Sale</string>
+    <string name="printer_name">Printer Name: </string>
+    <string name="test_print">Test Print</string>
 </resources>

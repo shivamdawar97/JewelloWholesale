@@ -35,7 +35,7 @@ object Utils {
     }
     private val DATE_FORMAT = SimpleDateFormat("EEE, dd MMM yyyy HH:mm", Locale.US)
     private val DATE_FORMAT_FOR_HEADING = SimpleDateFormat("dd MMM yyyy", Locale.US)
-    private var printerName = ""
+    var printerName = ""
     var bhav = 5832
     var INPUT_CONNECTION: InputConnection? =null
 

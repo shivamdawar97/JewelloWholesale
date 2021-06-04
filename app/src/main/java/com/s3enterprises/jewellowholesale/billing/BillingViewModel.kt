@@ -16,9 +16,11 @@ import com.s3enterprises.jewellowholesale.database.models.Item
 import com.s3enterprises.jewellowholesale.database.models.Party
 import com.s3enterprises.jewellowholesale.items.ItemsRepository
 import com.s3enterprises.jewellowholesale.party.PartyRepository
+import com.s3enterprises.jewellowholesale.print.JewelloBluetoothSocket
 import com.s3enterprises.jewellowholesale.rx.RxEvent
 import com.s3enterprises.jewellowholesale.sales.SalesRepository
 import kotlinx.coroutines.launch
+import java.lang.StringBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -114,8 +116,26 @@ class BillingViewModel:ViewModel() {
         }
     }
 
-    fun print(){
-
+    fun generateBillPrint() = loadedBill.value?.let{
+        val stringBuilder = StringBuilder()
+            .append("\n Bill Estimation\n")
+            .append("Bill no: ${it.billNo} \tDate:${Utils.getDate(it.date)}")
+            .append("Party: ${it.partyName}\t Number: ${it.partyNumber}")
+            .append("\n----------------------------\n")
+            billItemList.forEach { i ->
+                stringBuilder.append("${i.name}\n")
+                    .append("${i.weight} * ${i.rate} = ${i.fine}")
+            }
+            stringBuilder.append("\n----------------------------\n")
+                .append("Gross:${it.gross}\t Pure(fine):${it.fine}")
+                .append("Bhav ${it.bhav}")
+                .append("Total Amount ${it.tAmount}")
+        if(it.goldReceived!=0f)
+            stringBuilder.append("Gold received\n ${it.goldReceived} * ${it.receivedRate} = ${it.goldReceivedFine}")
+        if(it.cashReceived!=0)
+            stringBuilder.append("Amount received: ${it.cashReceived}")
+        stringBuilder.append("Due Gold: ${it.dueGold}")
+        stringBuilder.append("Due Amount: ${it.dueAmount}").toString()
     }
 
 
@@ -191,6 +211,7 @@ class BillingViewModel:ViewModel() {
 
     fun onOldBillSelected(bill: Bill) {
         loadedBill.value = bill ; billNo.value = bill.billNo
+        setUpBill()
     }
 
 }

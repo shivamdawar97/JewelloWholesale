@@ -11,6 +11,7 @@ import com.s3enterprises.jewellowholesale.bills.BillsActivity
 import com.s3enterprises.jewellowholesale.databinding.ActivitySettingsBinding
 import com.s3enterprises.jewellowholesale.items.itemsList.ItemsActivity
 import com.s3enterprises.jewellowholesale.party.partyList.PartiesActivity
+import com.s3enterprises.jewellowholesale.print.PrintActivity
 import com.s3enterprises.jewellowholesale.rx.RxBus
 import com.s3enterprises.jewellowholesale.rx.RxEvent
 import com.s3enterprises.jewellowholesale.sales.SalesActivity
@@ -32,7 +33,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setUpListView() {
-        val list = arrayOf("Parties","Bills","items","sales")
+        val list = arrayOf("Parties","Bills","items","sales","Printer")
         binding.listview.adapter = ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, list)
         binding.listview.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             when(position){
@@ -40,7 +41,7 @@ class SettingsActivity : AppCompatActivity() {
                 1-> startActivity(Intent(this,BillsActivity::class.java))
                 2->startActivity(Intent(this,ItemsActivity::class.java))
                 3->startActivity(Intent(this,SalesActivity::class.java))
-
+                4->startActivity(Intent(this,PrintActivity::class.java))
             }
         }
     }
