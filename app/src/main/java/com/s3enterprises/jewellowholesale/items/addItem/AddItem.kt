@@ -23,6 +23,8 @@ class AddItem : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_add_item)
+        title = "Add Item"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         initializeSetup()
 
     }
@@ -66,5 +68,10 @@ class AddItem : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

@@ -25,15 +25,15 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_settings)
-
+        title = "Settings"
         setUpListView()
-        rxOldBillSelected = RxBus.listen(RxEvent.PreviousBillSelected::class.java)!!.subscribe{ event ->
+        rxOldBillSelected = RxBus.listen(RxEvent.PreviousBillSelected::class.java)!!.subscribe{
            finish()
         }
     }
 
     private fun setUpListView() {
-        val list = arrayOf("Parties","Bills","items","sales","Printer")
+        val list = arrayOf("Parties","Bills","Items","Sales","Printer")
         binding.listview.adapter = ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, list)
         binding.listview.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             when(position){

@@ -7,4 +7,5 @@ class RxEvent {
     data class EventBillItemRemoved(val id:String)
     class BhavUpdated
     class PreviousBillSelected(val bill: Bill)
+    class PendingBillSelected(val pending: Bill)
 }

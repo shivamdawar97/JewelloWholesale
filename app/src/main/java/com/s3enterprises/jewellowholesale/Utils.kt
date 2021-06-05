@@ -102,12 +102,12 @@ object Utils {
 
     class GeneralViewHolder<T>(
         private val mView: View,
-        private val onBind: (T, View) -> Unit
+        private val onBind: (T, View,Int) -> Unit
     ) : RecyclerView.ViewHolder(mView) {
-        fun populate(item: T) = onBind(item, mView)
+        fun populate(item: T,position:Int) = onBind(item, mView,position)
     }
 
-    fun <T> generatedAdapter(list: List<T>, resource: Int, onBind: (T, View) -> Unit) =
+    fun <T> generatedAdapter(list: List<T>, resource: Int, onBind: (T,View,Int) -> Unit) =
         object : RecyclerView.Adapter<GeneralViewHolder<T>>() {
 
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -116,7 +116,7 @@ object Utils {
                 )
 
             override fun onBindViewHolder(holder: GeneralViewHolder<T>, position: Int) =
-                holder.populate(list[position])
+                holder.populate(list[position],position)
 
             override fun getItemCount() = list.size
         }

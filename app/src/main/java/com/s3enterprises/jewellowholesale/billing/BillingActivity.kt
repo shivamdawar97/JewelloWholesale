@@ -13,22 +13,27 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.s3enterprises.jewellowholesale.Converter
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.Utils.atEndOfDay
 import com.s3enterprises.jewellowholesale.Utils.atStartOfDay
 import com.s3enterprises.jewellowholesale.customViews.BillItemCardView
+import com.s3enterprises.jewellowholesale.database.Converters
 import com.s3enterprises.jewellowholesale.database.models.Bill
 import com.s3enterprises.jewellowholesale.database.models.BillItem
 import com.s3enterprises.jewellowholesale.databinding.ActivityBillingBinding
+import com.s3enterprises.jewellowholesale.pendings.PendingsActivity
 import com.s3enterprises.jewellowholesale.print.JewelloBluetoothSocket
 import com.s3enterprises.jewellowholesale.rx.RxBus
 import com.s3enterprises.jewellowholesale.rx.RxEvent
 import com.s3enterprises.jewellowholesale.settings.SettingsActivity
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -42,6 +47,7 @@ class BillingActivity : AppCompatActivity() {
     private lateinit var rxBillItemRemoved: Disposable
     private lateinit var rxBhavChanged: Disposable
     private lateinit var rxOldBillSelected: Disposable
+    private lateinit var rxPendingillSelected: Disposable
     private var listenChangeEvents = true
     private lateinit var preferences: SharedPreferences
 
@@ -67,6 +73,10 @@ class BillingActivity : AppCompatActivity() {
 
         rxOldBillSelected = RxBus.listen(RxEvent.PreviousBillSelected::class.java)!!.subscribe{ event ->
             viewModel.onOldBillSelected(event.bill)
+        }
+
+        rxPendingillSelected = RxBus.listen(RxEvent.PendingBillSelected::class.java)!!.subscribe { event ->
+            viewModel.onOldBillSelected(event.pending)
         }
     }
 
@@ -152,7 +162,9 @@ class BillingActivity : AppCompatActivity() {
 
         printBtn?.setOnClickListener {
             val printBill = viewModel.generateBillPrint()
-            if(printBill!=null) JewelloBluetoothSocket.printData(printBill,this@BillingActivity)
+            if(printBill!=null) lifecycleScope.launch {
+                JewelloBluetoothSocket.printData(printBill,this@BillingActivity)
+            }
         }
     }
 
@@ -163,16 +175,27 @@ class BillingActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
-            R.id.reset -> {
-                itemsContainer.removeAllViews()
-                viewModel.clearAll()
-                binding.billingPanel.clear()
-            }
+            R.id.reset -> resetBill()
             R.id.settings -> startActivity(Intent(this,SettingsActivity::class.java))
-            R.id.send_pending -> {}
-            R.id.view_pending -> {}
+            R.id.send_pending -> {
+                val converter = Converters()
+                val listInString = preferences.getString("pending","")
+                val list = if(listInString.isNullOrBlank()) ArrayList() else converter.fromStringToBills(listInString)
+                val bill = viewModel.generateBill()
+                list?.add(bill)
+                val stringOfList = converter.fromListToString(list)
+                preferences.edit().putString("pending",stringOfList).apply()
+                resetBill()
+            }
+            R.id.view_pending -> startActivity(Intent(this,PendingsActivity::class.java))
         }
         return true
+    }
+
+    private fun resetBill(){
+        itemsContainer.removeAllViews()
+        viewModel.clearAll()
+        binding.billingPanel.clear()
     }
 
     override fun onDestroy() {

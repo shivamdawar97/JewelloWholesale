@@ -139,11 +139,11 @@ class BillingViewModel:ViewModel() {
     }
 
 
-    private fun generateBill() = Bill(
+    fun generateBill() = Bill(
         date = Date().time,
-        partyId = party.value!!.pId.toString(),
-        partyName = party.value!!.name,
-        partyNumber = party.value!!.phoneNumber,
+        partyId = if(party.value==null) "N/A" else party.value!!.pId.toString(),
+        partyName = if(party.value==null) "N/A" else party.value!!.name,
+        partyNumber = if(party.value==null) "N/A" else party.value!!.phoneNumber ,
         items = Converters().fromList(billItemList),
         gross =  stringToFloat(grossWeight.value!!) ,
         fine = stringToFloat(fineWeight.value!!),

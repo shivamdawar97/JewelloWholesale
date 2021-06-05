@@ -21,6 +21,7 @@ class PartiesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_parties)
+        title = "Parties"
         binding.isLoading = true
         setUpRecyclerView()
 

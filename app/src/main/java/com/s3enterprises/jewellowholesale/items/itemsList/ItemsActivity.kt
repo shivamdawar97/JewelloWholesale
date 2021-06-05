@@ -23,7 +23,7 @@ class ItemsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_items)
-
+        title = "Items"
         binding.swipeToRefresh.setOnRefreshListener {
             binding.isLoading = true
             binding.swipeToRefresh.isRefreshing = false

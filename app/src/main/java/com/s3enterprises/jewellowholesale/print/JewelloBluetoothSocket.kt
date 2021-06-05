@@ -44,7 +44,7 @@ object JewelloBluetoothSocket {
 
     private val nameBuffer = "Kamal Jewellers\n".toByteArray()
 
-    private fun findDeviceAndConnect(context: Context) {
+    private suspend fun findDeviceAndConnect(context: Context) {
         if (Utils.printerName == "") return
         val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         try {
@@ -63,7 +63,7 @@ object JewelloBluetoothSocket {
 
     }
 
-    private fun startConnection(
+    private suspend fun startConnection(
         pairedDevices: MutableSet<BluetoothDevice>,
         bluetoothAdapter: BluetoothAdapter
     ) {
@@ -72,11 +72,14 @@ object JewelloBluetoothSocket {
             break
         }
         val uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB") //Standard SerialPortService ID
-        if (socket == null) socket =
+        if (socket == null) socket = withContext(Dispatchers.Default){
             bluetoothDevice!!.createRfcommSocketToServiceRecord(uuid)
+        }
 
         bluetoothAdapter.cancelDiscovery()
-        socket?.connect()
+        withContext(Dispatchers.Default){
+            socket?.connect()
+        }
 
         outputStream = socket!!.outputStream
         inputStream = socket!!.inputStream
@@ -133,7 +136,7 @@ object JewelloBluetoothSocket {
         e.printStackTrace()
     }
 
-    fun printData(text: String,context: Context) = try {
+    suspend fun printData(text: String,context: Context) = try {
         findDeviceAndConnect(context)
         val buffer = text.toByteArray()
         outputStream?.let {

@@ -23,7 +23,7 @@ class BillsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_bills)
         binding.lifecycleOwner = this
-
+        title = "Bills"
         binding.billsRecycler.layoutManager = LinearLayoutManager(this)
         binding.viewModel = viewModel
         viewModel.bills.observeForever {

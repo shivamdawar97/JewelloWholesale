@@ -3,7 +3,6 @@
     package="com.s3enterprises.jewellowholesale">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
@@ -16,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JewelloWholesale">
         <activity
+            android:name=".pendings.PendingsActivity"
+            android:exported="true" />
+        <activity
             android:name=".sales.SalesActivity"
             android:exported="true" />
         <activity
@@ -24,7 +26,6 @@
         <activity
             android:name=".bills.BillsActivity"
             android:exported="true" />
-
         <activity
             android:name=".authentication.LoginActivity"
             android:exported="true"

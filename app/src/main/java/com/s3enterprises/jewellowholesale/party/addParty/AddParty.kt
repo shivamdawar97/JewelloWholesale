@@ -22,6 +22,7 @@ class AddParty : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_party)
+        title = "Add Party"
         initiateSetup()
         setUpClickListeners()
     }
