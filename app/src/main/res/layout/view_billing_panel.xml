@@ -112,6 +112,7 @@
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/medium"
                             android:padding="0dp"
+                            android:imeOptions="flagNoExtractUi"
                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -214,7 +215,8 @@
                         android:id="@+id/bhav_edit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ems="5"
+                        android:ems="4"
+                        android:inputType="number"
                         android:textStyle="bold"
                         app:layout_constraintStart_toEndOf="@id/label_0"
                         app:layout_constraintTop_toTopOf="parent"
@@ -227,32 +229,33 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/total_amount"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/label_0"
+                        app:layout_constraintStart_toEndOf="@id/bhav_edit"
+                        app:layout_constraintTop_toTopOf="parent"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/medium"
                         android:layout_marginTop="14dp"
+                        android:layout_marginStart="5dp"
                         />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintStart_toEndOf="@id/label_1"
-                        app:layout_constraintTop_toBottomOf="@id/label_0"
+                        app:layout_constraintTop_toTopOf="parent"
                         tools:text="32323"
                         android:layout_marginStart="10dp"
                         android:textColor="@android:color/black"
                         android:textStyle="bold"
                         android:textSize="@dimen/large"
                         android:layout_marginTop="14dp"
-                        android:text="@{model.totalAmount}"
+                        android:text="@{Utils.getRupeesFormatted(model.totalAmount)}"
                         />
 
                     <TextView
                         android:id="@+id/label_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/label_1"
+                        app:layout_constraintTop_toBottomOf="@id/label_0"
                         app:layout_constraintStart_toStartOf="parent"
                         android:text="@string/gold_rcv"
                         android:textSize="@dimen/medium"
@@ -262,10 +265,11 @@
 
                     <LinearLayout
                         android:id="@+id/container_1"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/label_2"
+                        app:layout_constraintTop_toBottomOf="@id/label_0"
                         android:orientation="horizontal"
+                        app:layout_constraintStart_toEndOf="@id/label_2"
                         >
 
                         <com.s3enterprises.jewellowholesale.customViews.FloatEditText
@@ -284,8 +288,8 @@
                             android:text="X"
                             android:textSize="@dimen/large"
                             android:textColor="@android:color/black"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
+                            android:layout_marginStart="3dp"
+                            android:layout_marginEnd="3dp"
                             />
 
                         <com.s3enterprises.jewellowholesale.customViews.FloatEditText
@@ -302,7 +306,7 @@
                             android:text="%"
                             android:textSize="@dimen/large"
                             android:textColor="@android:color/black"
-                            android:layout_marginEnd="5dp"
+                            android:layout_marginEnd="3dp"
                             />
 
                         <TextView
@@ -336,7 +340,7 @@
                         android:text="@string/cash_rcv"
                         android:textSize="@dimen/medium"
                         android:textColor="@android:color/black"
-                        android:layout_marginTop="14dp"
+                        android:layout_marginTop="10dp"
                         />
 
 
@@ -361,10 +365,11 @@
                         app:layout_constraintStart_toStartOf="parent"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/medium"
-                        android:layout_marginTop="11dp"
+                        android:layout_marginTop="10dp"
                         />
 
                     <TextView
+                        android:id="@+id/label_4_v"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="10.70"
@@ -383,11 +388,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/due_cash"
-                        app:layout_constraintTop_toBottomOf="@id/label_4"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/label_3"
+                        app:layout_constraintStart_toEndOf="@id/label_4_v"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/medium"
-                        android:layout_marginTop="11dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="5dp"
                         />
 
                     <TextView
@@ -398,10 +404,10 @@
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/large"
                         app:layout_constraintStart_toEndOf="@id/label_5"
-                        app:layout_constraintTop_toBottomOf="@id/label_4"
+                        app:layout_constraintTop_toBottomOf="@id/label_3"
                         android:layout_marginTop="10dp"
                         android:layout_marginStart="10dp"
-                        android:text="@{model.dueCash}"
+                        android:text="@{Utils.getRupeesFormatted(model.totalAmount)}"
                         />
 
 

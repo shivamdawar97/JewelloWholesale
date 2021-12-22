@@ -32,12 +32,14 @@ import com.s3enterprises.jewellowholesale.print.JewelloBluetoothSocket
 import com.s3enterprises.jewellowholesale.rx.RxBus
 import com.s3enterprises.jewellowholesale.rx.RxEvent
 import com.s3enterprises.jewellowholesale.settings.SettingsActivity
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+@AndroidEntryPoint
 class BillingActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityBillingBinding
@@ -53,6 +55,12 @@ class BillingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.apply{
+            setDisplayShowHomeEnabled(true)
+            setLogo(R.drawable.ic_diamond)
+            setDisplayUseLogoEnabled(true)
+        }
+
         binding = DataBindingUtil.setContentView(this,R.layout.activity_billing)
         binding.model = viewModel
         itemsContainer = findViewById(R.id.items_container)

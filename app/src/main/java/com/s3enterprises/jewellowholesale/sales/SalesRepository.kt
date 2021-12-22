@@ -3,7 +3,6 @@ package com.s3enterprises.jewellowholesale.sales
 import com.google.firebase.firestore.DocumentReference
 import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.Utils.roundOff
-import com.s3enterprises.jewellowholesale.database.models.Party
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.coroutines.resume

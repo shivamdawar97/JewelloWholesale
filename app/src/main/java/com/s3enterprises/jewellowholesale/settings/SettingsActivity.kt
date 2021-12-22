@@ -3,6 +3,7 @@ package com.s3enterprises.jewellowholesale.settings
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
@@ -30,6 +31,7 @@ class SettingsActivity : AppCompatActivity() {
         rxOldBillSelected = RxBus.listen(RxEvent.PreviousBillSelected::class.java)!!.subscribe{
            finish()
         }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun setUpListView() {
@@ -44,6 +46,14 @@ class SettingsActivity : AppCompatActivity() {
                 4->startActivity(Intent(this,PrintActivity::class.java))
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == android.R.id.home)
+        {   finish()
+            return true
+        }
+        return false
     }
 
     override fun onDestroy() {

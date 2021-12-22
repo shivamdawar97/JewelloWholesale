@@ -16,22 +16,27 @@ import com.s3enterprises.jewellowholesale.database.models.Item
 import com.s3enterprises.jewellowholesale.database.models.Party
 import com.s3enterprises.jewellowholesale.items.ItemsRepository
 import com.s3enterprises.jewellowholesale.party.PartyRepository
-import com.s3enterprises.jewellowholesale.print.JewelloBluetoothSocket
-import com.s3enterprises.jewellowholesale.rx.RxEvent
 import com.s3enterprises.jewellowholesale.sales.SalesRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.StringBuilder
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class BillingViewModel:ViewModel() {
+@HiltViewModel
+class BillingViewModel @Inject constructor(
+    private val billRepository: BillRepository,
+    private val itemsRepository: ItemsRepository,
+    private val partyRepository: PartyRepository
+):ViewModel() {
 
     val billNo = MutableLiveData<Int>().apply { value = 0 }
     val loadedBill = MutableLiveData<Bill>()
     val items:LiveData<List<Item>>
-    get() = ItemsRepository.items
+    get() = itemsRepository.items
     val parties: LiveData<List<Party>>
-    get() = PartyRepository.parties
+    get() = partyRepository.parties
     val isloading = MutableLiveData<Boolean>().apply { value = false }
     val isBillLoading = MutableLiveData<Boolean>().apply { value = false }
     val isBillNotFound = MutableLiveData<Boolean>().apply { value = false }
@@ -50,8 +55,8 @@ class BillingViewModel:ViewModel() {
 
     init {
 
-        PartyRepository.loadParties()
-        ItemsRepository.loadItems()
+//        PartyRepository.loadParties()
+//        ItemsRepository.loadItems()
     }
 
     fun calculate(){
@@ -95,23 +100,20 @@ class BillingViewModel:ViewModel() {
         party.value = parties.value?.find { it.name == typedName }
     }
 
-    fun saveBill(){ // Or update bill
+    fun saveBill() { // Or update bill
         calculate()
-        if(party.value==null) return
         if(billNo.value == 0) viewModelScope.launch {
             isloading.value = true
-            BillRepository.checkForSalesDoc()
-            BillRepository.checkForPartyDoc(party.value!!.name)
-            SalesRepository.getTodaySaleRef()
-            loadedBill.value = BillRepository.insert(generateBill())
-            billNo.value = loadedBill.value!!.billNo
+            val newBill = generateBill()
+            billNo.value = billRepository.insert(newBill).toInt()
+            loadedBill.value = newBill
             isloading.value = false
 
         }
         else if(!isBillNotFound.value!!) viewModelScope.launch {
             isloading.value = true
             SalesRepository.getTodaySaleRef()
-            loadedBill.value = BillRepository.update(generateBill(),loadedBill.value!!)
+            //TODO loadedBill.value = BillRepository.update(generateBill(),loadedBill.value!!)
             isloading.value = false
         }
     }
@@ -185,8 +187,8 @@ class BillingViewModel:ViewModel() {
 
     private fun getBill() = viewModelScope.launch {
         isBillLoading.value = true
-        if(loadedBill.value == null || billNo.value!! != loadedBill.value!!.billNo)
-            loadedBill.value = BillRepository.getBill(billNo.value!!)
+//        TODO if(loadedBill.value == null || billNo.value!! != loadedBill.value!!.billNo)
+//            loadedBill.value = BillRepository.getBill(billNo.value!!)
         if(loadedBill.value!=null)
         setUpBill()
         else isBillNotFound.value = true

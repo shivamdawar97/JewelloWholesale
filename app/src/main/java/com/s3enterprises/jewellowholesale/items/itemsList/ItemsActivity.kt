@@ -14,37 +14,35 @@ import com.s3enterprises.jewellowholesale.databinding.ActivityItemsBinding
 import com.s3enterprises.jewellowholesale.items.ItemsRepository
 import com.s3enterprises.jewellowholesale.items.addItem.AddItem
 import com.s3enterprises.jewellowholesale.party.PartyRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ItemsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityItemsBinding
+    @Inject lateinit var itemsRepository: ItemsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_items)
         title = "Items"
-        binding.swipeToRefresh.setOnRefreshListener {
-            binding.isLoading = true
-            binding.swipeToRefresh.isRefreshing = false
-            ItemsRepository.loadItems(true)
-        }
         setUpRecyclerView()
+
     }
 
     private fun setUpRecyclerView() = with(binding){
-        isLoading = true
-        ItemsRepository.loadItems()
+
         itemRecycler.layoutManager = LinearLayoutManager(this@ItemsActivity)
 
         searchField.onTextChanged {
             (itemRecycler.adapter as ItemsAdapter).filter.filter(it)
         }
-
-        ItemsRepository.items.observeForever {
-            isLoading = false
+        itemsRepository.items.observeForever {
             itemRecycler.adapter = ItemsAdapter(it!!)
         }
+
     }
 
     fun addItem(v: View){

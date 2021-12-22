@@ -26,10 +26,7 @@
         <activity
             android:name=".bills.BillsActivity"
             android:exported="true" />
-        <activity
-            android:name=".authentication.LoginActivity"
-            android:exported="true"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+
         <activity
             android:name=".items.itemsList.ItemsActivity"
             android:exported="true" />

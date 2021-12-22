@@ -16,138 +16,154 @@
 
         <Button
             android:id="@+id/button_7"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/btn_width"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_zero"
             style="@style/Base.TextAppearance.AppCompat.Large"
             android:text="7"
             android:textColor="@android:color/black"
             android:backgroundTint="@color/off_white"
+            android:padding="0dp"
+            android:layout_marginEnd="1dp"
             />
 
 
         <Button
             android:id="@+id/button_8"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/btn_width"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_zero"
             style="@style/Base.TextAppearance.AppCompat.Large"
             android:text="8"
             android:textColor="@android:color/black"
             android:backgroundTint="@color/off_white"
+            android:padding="0dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
             />
 
         <Button
             android:id="@+id/button_9"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/btn_width"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_zero"
             style="@style/Base.TextAppearance.AppCompat.Large"
             android:text="9"
             android:textColor="@android:color/black"
             android:backgroundTint="@color/off_white"
+            android:padding="0dp"
+            android:layout_marginStart="1dp"
             />
 
         <Button
             android:id="@+id/button_4"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/btn_width"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_zero"
             style="@style/Base.TextAppearance.AppCompat.Large"
             android:text="4"
             android:textColor="@android:color/black"
             android:backgroundTint="@color/off_white"
+            android:padding="0dp"
+            android:layout_marginEnd="1dp"
             />
 
         <Button
             android:id="@+id/button_5"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/btn_width"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_zero"
             style="@style/Base.TextAppearance.AppCompat.Large"
             android:text="5"
             android:textColor="@android:color/black"
             android:backgroundTint="@color/off_white"
+            android:padding="0dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
             />
 
         <Button
             android:id="@+id/button_6"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/btn_width"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_zero"
             style="@style/Base.TextAppearance.AppCompat.Large"
             android:text="6"
             android:textColor="@android:color/black"
             android:backgroundTint="@color/off_white"
+            android:padding="0dp"
+            android:layout_marginStart="1dp"
             />
 
         <Button
             android:id="@+id/button_1"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/btn_width"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_zero"
             style="@style/Base.TextAppearance.AppCompat.Large"
             android:text="1"
             android:textColor="@android:color/black"
             android:backgroundTint="@color/off_white"
+            android:padding="0dp"
+            android:layout_marginEnd="1dp"
             />
 
         <Button
             android:id="@+id/button_2"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/btn_width"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_zero"
             style="@style/Base.TextAppearance.AppCompat.Large"
             android:text="2"
             android:textColor="@android:color/black"
             android:backgroundTint="@color/off_white"
+            android:padding="0dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
             />
 
         <Button
             android:id="@+id/button_3"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/btn_width"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_zero"
             style="@style/Base.TextAppearance.AppCompat.Large"
             android:text="3"
             android:textColor="@android:color/black"
             android:backgroundTint="@color/off_white"
+            android:padding="0dp"
+            android:layout_marginStart="1dp"
             />
 
 
         <Button
             android:id="@+id/button_cancel"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/btn_width"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_zero"
             style="@style/Base.TextAppearance.AppCompat.Large"
             android:text="X"
             android:textColor="@android:color/black"
             android:backgroundTint="@color/off_white"
+            android:padding="0dp"
+            android:layout_marginEnd="1dp"
             />
 
 
         <Button
             android:id="@+id/button_0"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_zero"
+            android:layout_width="@dimen/btn_width"
             style="@style/Base.TextAppearance.AppCompat.Large"
             android:text="0"
             android:textColor="@android:color/black"
             android:backgroundTint="@color/off_white"
+            android:padding="0dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
             />
 
 
         <Button
             android:id="@+id/button_decimal"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/btn_width"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_zero"
             style="@style/Base.TextAppearance.AppCompat.Large"
             android:text="."
             android:textColor="@android:color/black"
             android:backgroundTint="@color/off_white"
+            android:padding="0dp"
+            android:layout_marginStart="1dp"
             />
 
     </GridLayout>
@@ -162,13 +178,13 @@
         >
         <Button
             android:id="@+id/button_negative"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/btn_width"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
             style="@style/Base.TextAppearance.AppCompat.Large"
-            android:text="_"
+            android:text="—"
             android:textColor="@android:color/black"
             android:backgroundTint="@color/off_white"
+            android:padding="0dp"
             />
 
         <View
@@ -181,11 +197,12 @@
             android:id="@+id/button_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/large"
-            android:layout_margin="4dp"
+            android:textSize="@dimen/small"
             android:text="DELETE"
             android:textColor="@android:color/black"
             android:backgroundTint="@color/off_white"
+           android:layout_marginTop="-2dp"
+
             />
 
     </LinearLayout>

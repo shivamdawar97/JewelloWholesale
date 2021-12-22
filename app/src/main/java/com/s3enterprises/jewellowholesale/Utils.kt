@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,6 +39,7 @@ object Utils {
     var printerName = ""
     var bhav = 5832
     var INPUT_CONNECTION: InputConnection? =null
+    val rupeesFormat = DecimalFormat("##,##,###")
 
     object CurrentDate{
         private val date = Date()
@@ -72,6 +74,9 @@ object Utils {
 
     @JvmStatic
     fun getDate(date: Long): String = DATE_FORMAT.format(Date(date))
+
+    @JvmStatic
+    fun getRupeesFormatted(amount:String):String = rupeesFormat.format(amount.toInt())
 
     fun hideKeyboard(view: View) {
         val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

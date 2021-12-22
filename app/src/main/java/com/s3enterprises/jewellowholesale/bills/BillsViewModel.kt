@@ -7,10 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.s3enterprises.jewellowholesale.Utils.atEndOfDay
 import com.s3enterprises.jewellowholesale.Utils.atStartOfDay
 import com.s3enterprises.jewellowholesale.database.models.Bill
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 
-class BillsViewModel:ViewModel() {
+@HiltViewModel
+class BillsViewModel @Inject  constructor(private val billRepository: BillRepository):ViewModel()  {
 
     val isLoading = MutableLiveData<Boolean>().apply { value = false }
     val date = MutableLiveData<Date>().apply { value = Date() }
@@ -18,7 +21,7 @@ class BillsViewModel:ViewModel() {
         addSource(date) {
             viewModelScope.launch {
                 isLoading.value = true
-                value = BillRepository.getBills(atStartOfDay(it).time,atEndOfDay(it).time)
+                value = billRepository.getBills(atStartOfDay(it).time,atEndOfDay(it).time)
                 isLoading.value = false
             }
         }
