@@ -13,14 +13,16 @@ interface ItemDao {
     @Update
     suspend fun update(item: Item)
 
-    @Query("select * from Item")
+    @Query("select * from Item order by position")
     fun getAll(): LiveData<List<Item>>
 
     @Delete
-    fun delete(item: Item)
+    suspend fun delete(item: Item)
 
     @Query("delete from Item")
     fun clear()
 
+    @Query("select count(*) from Item")
+    suspend fun getCount():Int
 
 }

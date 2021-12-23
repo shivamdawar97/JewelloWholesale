@@ -27,4 +27,7 @@ class ItemsRepository @Inject constructor(private val itemDao: ItemDao) {
     suspend fun delete(item:Item){
         itemDao.delete(item)
     }
+
+    suspend fun getCount() = itemDao.getCount()
+
 }

@@ -136,12 +136,14 @@ class BillingActivity : AppCompatActivity() {
         }
 
         viewModel.items.observeForever { items ->
-            val adapter = ItemsDraggableAdapter(items!!){ i ->
+            val adapter = ItemsDraggableAdapter(items!!,{ i ->
                 val billItem = BillItem(i.iId,i.name,rate = i.rate)
                 viewModel.billItemList.add(billItem)
                 val view = BillItemCardView(this@BillingActivity,billItem)
                 itemsContainer.addView(view)
-            }
+            },{ updatedList ->
+                viewModel.updateItemsPositions(updatedList)
+            })
             itemsList.adapter = adapter
             val touchHelper = ItemTouchHelper(adapter.simpleCallback)
             touchHelper.attachToRecyclerView(itemsList)

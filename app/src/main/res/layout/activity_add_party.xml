@@ -51,6 +51,7 @@
                     android:enabled="@{isUpdate?false:!isLoading}"
                     android:text="@={partyName}"
                     android:background="@android:color/transparent"
+                    android:imeOptions="flagNoExtractUi"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -68,6 +69,7 @@
                     android:maxLength="10"
                     android:enabled="@{!isLoading}"
                     android:text="@={partyNumber}"
+                    android:imeOptions="flagNoExtractUi"
                     android:background="@android:color/transparent" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -84,6 +86,7 @@
                     android:inputType="textPostalAddress"
                     android:text="@={partyAddress}"
                     android:enabled="@{!isLoading}"
+                    android:imeOptions="flagNoExtractUi"
                     android:background="@android:color/transparent" />
 
             </com.google.android.material.textfield.TextInputLayout>

@@ -216,4 +216,10 @@ class BillingViewModel @Inject constructor(
         setUpBill()
     }
 
+    fun updateItemsPositions(updatedList: List<Item>) = viewModelScope.launch {
+        updatedList.forEach { item ->
+            itemsRepository.update(item)
+        }
+    }
+
 }

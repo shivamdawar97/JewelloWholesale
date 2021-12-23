@@ -10,16 +10,18 @@
     <TextView
         android:id="@+id/item_name"
         android:layout_width="match_parent"
-        android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:paddingEnd="?android:attr/expandableListPreferredItemPaddingLeft"
         android:textAppearance="?android:attr/textAppearanceListItem"
         tools:text="Sofa "
         android:layout_height="?android:attr/listPreferredItemHeight"
         android:gravity="center_vertical"
+        android:paddingStart="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
         />
-
+<!--
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,6 +30,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:srcCompat="@drawable/ic_drag_handle"
         android:layout_marginEnd="20dp"
+        />-->
+
+    <View
+        android:layout_height="0.3dp"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/gray"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="0dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

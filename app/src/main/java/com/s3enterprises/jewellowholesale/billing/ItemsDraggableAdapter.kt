@@ -10,10 +10,12 @@ import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.database.models.Item
 import java.util.*
 
-class ItemsDraggableAdapter(private val list:List<Item>,private val onSelected:(Item)->Unit) : RecyclerView.Adapter<ItemsDraggableAdapter.ViewHolder>() {
+class ItemsDraggableAdapter(private val list:List<Item>,
+                            private val onSelected:(Item)->Unit,
+                            private val onItemPositionsChanged:(List<Item>)->Unit) : RecyclerView.Adapter<ItemsDraggableAdapter.ViewHolder>() {
 
     val simpleCallback = object: ItemTouchHelper.SimpleCallback(
-        ItemTouchHelper.UP.or(ItemTouchHelper.DOWN),ItemTouchHelper.LEFT.or(ItemTouchHelper.RIGHT)){
+        ItemTouchHelper.UP.or(ItemTouchHelper.DOWN),ItemTouchHelper.ACTION_STATE_IDLE){
         override fun onMove(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
@@ -25,12 +27,10 @@ class ItemsDraggableAdapter(private val list:List<Item>,private val onSelected:(
             notifyItemMoved(fromPosition,toPosition)
             return true
         }
-
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
-        }
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) { return }
 
     }
+
 
     inner class ViewHolder(mView: View):RecyclerView.ViewHolder(mView) {
         private val nameView = mView.findViewById<TextView>(R.id.item_name)
