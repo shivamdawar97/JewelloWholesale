@@ -407,7 +407,7 @@
                         app:layout_constraintTop_toBottomOf="@id/label_3"
                         android:layout_marginTop="10dp"
                         android:layout_marginStart="10dp"
-                        android:text="@{Utils.getRupeesFormatted(model.totalAmount)}"
+                        android:text="@{Utils.getRupeesFormatted(model.dueCash)}"
                         />
 
 

@@ -19,8 +19,10 @@ class ItemsAdapter(private val items:List<Item>) :
 
     class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view){
         private val nameView =view.findViewById<TextView>(R.id.item_name)
+        private val rateView =view.findViewById<TextView>(R.id.item_rate)
         fun populateCard(item: Item) {
             nameView.text = item.name
+            rateView.text = item.rate.toString()
             view.setOnClickListener {
                 val i = Intent(view.context,AddItem::class.java)
                 i.putExtra("item",item)
@@ -44,7 +46,7 @@ class ItemsAdapter(private val items:List<Item>) :
             filteredItems = if(cs.isEmpty()) items else {
                 val filteredList = ArrayList<Item>()
                 items.forEach{
-                    if(it.name.toLowerCase().contains(cs.toLowerCase()))
+                    if(it.name.lowercase().contains(cs.lowercase()))
                         filteredList.add(it)
                 }
                 filteredList

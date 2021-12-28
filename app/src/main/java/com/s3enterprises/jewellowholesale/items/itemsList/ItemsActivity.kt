@@ -29,7 +29,7 @@ class ItemsActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this,R.layout.activity_items)
         title = "Items"
         setUpRecyclerView()
-
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun setUpRecyclerView() = with(binding){
@@ -43,6 +43,11 @@ class ItemsActivity : AppCompatActivity() {
             itemRecycler.adapter = ItemsAdapter(it!!)
         }
 
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     fun addItem(v: View){

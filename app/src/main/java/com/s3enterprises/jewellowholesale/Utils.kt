@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.lang.NumberFormatException
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -83,7 +84,11 @@ object Utils {
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    fun stringToFloat(value: String) = if (value.isNullOrBlank()) 0f else value.toFloat()
+    fun stringToFloat(value: String) = try {
+        if (value.isNullOrBlank()) 0f else value.toFloat()
+    } catch (e:NumberFormatException) {
+        0f
+    }
     fun stringToInt(value: String?) = if (value.isNullOrBlank()) 0 else value.toInt()
 
     fun updatePrinterName(name: String, sharedPreferences: SharedPreferences) {

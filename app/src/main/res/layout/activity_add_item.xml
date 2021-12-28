@@ -80,6 +80,17 @@
                 android:layout_marginTop="20dp"
                 />
 
+            <Button
+                android:id="@+id/delete_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/delete_item"
+                tools:text="Delete Item"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:visibility="@{isUpdate?isLoading?View.GONE:View.VISIBLE:View.GONE}"
+                android:layout_marginTop="20dp"
+                />
+
         </LinearLayout>
 
 

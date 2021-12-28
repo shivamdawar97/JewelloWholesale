@@ -28,10 +28,9 @@ class AddItem : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_add_item)
-        title = "Add Item"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         initializeSetup()
-
+        title = if(!binding.isUpdate!!) "Add Item" else "Update Item"
     }
 
     private fun initializeSetup() = with(binding){
@@ -53,7 +52,7 @@ class AddItem : AppCompatActivity() {
     }
 
     private fun setUpClickListener() = with(binding){
-        binding.addItem.setOnClickListener {
+        addItem.setOnClickListener {
             if(itemName.isNullOrBlank() || rate!!.isNaN())
                 Toast.makeText(this@AddItem,"Please fill all fields",Toast.LENGTH_LONG).show()
             else lifecycleScope.launch {
@@ -76,6 +75,13 @@ class AddItem : AppCompatActivity() {
             }
         }
 
+        deleteItem.setOnClickListener {
+            lifecycleScope.launch {
+                itemsRepository.delete(item)
+                Toast.makeText(this@AddItem,"Item Deleted ${item.name}",Toast.LENGTH_LONG).show()
+                finish()
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

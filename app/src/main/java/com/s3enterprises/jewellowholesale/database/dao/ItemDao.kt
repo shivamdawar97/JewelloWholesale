@@ -13,6 +13,9 @@ interface ItemDao {
     @Update
     suspend fun update(item: Item)
 
+    @Update
+    suspend fun updateAll(vararg item: Item)
+
     @Query("select * from Item order by position")
     fun getAll(): LiveData<List<Item>>
 

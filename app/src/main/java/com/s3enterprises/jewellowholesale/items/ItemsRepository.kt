@@ -28,6 +28,10 @@ class ItemsRepository @Inject constructor(private val itemDao: ItemDao) {
         itemDao.delete(item)
     }
 
+    suspend fun updateAll(list: List<Item>){
+        itemDao.updateAll(*list.toTypedArray())
+    }
+
     suspend fun getCount() = itemDao.getCount()
 
 }

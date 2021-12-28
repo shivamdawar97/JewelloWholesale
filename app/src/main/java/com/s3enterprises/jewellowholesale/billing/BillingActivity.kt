@@ -1,5 +1,6 @@
 package com.s3enterprises.jewellowholesale.billing
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -52,6 +53,7 @@ class BillingActivity : AppCompatActivity() {
     private lateinit var rxPendingillSelected: Disposable
     private var listenChangeEvents = true
     private lateinit var preferences: SharedPreferences
+    private var adapter: ItemsDraggableAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,6 +90,7 @@ class BillingActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initializeSetup() = with(binding){
         lifecycleOwner = this@BillingActivity
         model = viewModel
@@ -136,17 +139,28 @@ class BillingActivity : AppCompatActivity() {
         }
 
         viewModel.items.observeForever { items ->
-            val adapter = ItemsDraggableAdapter(items!!,{ i ->
-                val billItem = BillItem(i.iId,i.name,rate = i.rate)
+            if(adapter!=null && adapter!!.isdragged) {
+                adapter!!.isdragged = false
+                return@observeForever
+            }
+            adapter = ItemsDraggableAdapter(items!!,{ i ->
+                val billItem = BillItem(i.iId, i.name, rate = i.rate)
                 viewModel.billItemList.add(billItem)
-                val view = BillItemCardView(this@BillingActivity,billItem)
+                val view = BillItemCardView(this@BillingActivity, billItem)
                 itemsContainer.addView(view)
-            },{ updatedList ->
-                viewModel.updateItemsPositions(updatedList)
+            },{ positionsChangedList ->
+                viewModel.updateItemsPositions(positionsChangedList)
             })
             itemsList.adapter = adapter
-            val touchHelper = ItemTouchHelper(adapter.simpleCallback)
+            val touchHelper = ItemTouchHelper(adapter!!.simpleCallback)
             touchHelper.attachToRecyclerView(itemsList)
+            /*itemsList.setOnTouchListener { _, event ->
+                if(event.action == android.view.MotionEvent.ACTION_UP){
+                    if(adapter.isDragging) viewModel.updateItemsPositions(adapter.getRepositionedItems())
+                    adapter.isDragging = false
+                }
+                return@setOnTouchListener true
+            }*/
         }
 
         viewModel.parties.observeForever {

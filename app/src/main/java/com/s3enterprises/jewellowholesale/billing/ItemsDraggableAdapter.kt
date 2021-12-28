@@ -1,5 +1,6 @@
 package com.s3enterprises.jewellowholesale.billing
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ class ItemsDraggableAdapter(private val list:List<Item>,
                             private val onSelected:(Item)->Unit,
                             private val onItemPositionsChanged:(List<Item>)->Unit) : RecyclerView.Adapter<ItemsDraggableAdapter.ViewHolder>() {
 
+    var isdragged = false
     val simpleCallback = object: ItemTouchHelper.SimpleCallback(
         ItemTouchHelper.UP.or(ItemTouchHelper.DOWN),ItemTouchHelper.ACTION_STATE_IDLE){
         override fun onMove(
@@ -25,12 +27,24 @@ class ItemsDraggableAdapter(private val list:List<Item>,
             val toPosition = target.adapterPosition
             Collections.swap(list,fromPosition,toPosition)
             notifyItemMoved(fromPosition,toPosition)
+            isdragged = true
             return true
         }
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) { return }
 
+        override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+            super.clearView(recyclerView, viewHolder)
+            //On Drag finished
+            if(!isdragged) return
+            Log.i("DRAG","DETECTED")
+            updatePositions()
+            onItemPositionsChanged(list)
+        }
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) { return }
     }
 
+    fun updatePositions() = list.forEachIndexed{ index, item ->
+        item.position = index
+    }
 
     inner class ViewHolder(mView: View):RecyclerView.ViewHolder(mView) {
         private val nameView = mView.findViewById<TextView>(R.id.item_name)
