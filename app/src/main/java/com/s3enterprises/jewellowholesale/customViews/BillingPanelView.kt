@@ -3,6 +3,7 @@ package com.s3enterprises.jewellowholesale.customViews
 import android.content.Context
 import android.content.Intent
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.AutoCompleteTextView
 import android.widget.LinearLayout
@@ -15,6 +16,8 @@ import com.s3enterprises.jewellowholesale.billing.BillingViewModel
 import com.s3enterprises.jewellowholesale.database.models.Party
 import com.s3enterprises.jewellowholesale.databinding.ViewBillingPanelBinding
 import com.s3enterprises.jewellowholesale.party.addParty.AddParty
+import com.s3enterprises.jewellowholesale.rx.RxBus
+import com.s3enterprises.jewellowholesale.rx.RxEvent
 
 class BillingPanelView: LinearLayout {
 
@@ -38,47 +41,50 @@ class BillingPanelView: LinearLayout {
         binding = ViewBillingPanelBinding.inflate(inflater,this,true)
         binding.lifecycleOwner = context as BillingActivity
 
-        setUpPanel()
-
     }
 
-    private fun setUpPanel() = with(binding) {
+
+    fun setViewModel(viewModel:BillingViewModel) = with(binding){
+        model = viewModel
+
         autoCompleteTextView.onTextChanged {
-            if(model!!.billNo.value==0) model!!.findParty(it.toString())
-            if(model!!.party.value!=null) Utils.hideKeyboard(autoCompleteTextView)
+            if(viewModel.billNo.value==0) model!!.findParty(it.toString())
+            if(viewModel.party.value!=null) Utils.hideKeyboard(autoCompleteTextView)
         }
 
         billChanger.setOnPreviousListener{
-            model!!.getPreviousBill()
+            viewModel.getPreviousBill()
         }
         billChanger.setOnNextListener{
-            model!!.getNextBill()
+            viewModel.getNextBill()
         }
 
-        binding.addParty.setOnClickListener {
+        addParty.setOnClickListener {
             context.startActivity(Intent(context,AddParty::class.java))
         }
 
-        binding.bhavEdit.onTextChanged {
-            model?.calculate()
+        goldRcvRate.setText(viewModel.goldPurity.toString())
+        bhavEdit.onTextChanged {
+            viewModel.goldBhav = bhavEdit.floatValue.toInt()
+            viewModel.calculate()
+            RxBus.publish(RxEvent.BhavUpdated())
         }
 
-        binding.goldRcv.onTextChanged {
-            model?.calculate()
+        goldRcv.onTextChanged {
+            viewModel.goldWeight = goldRcv.floatValue
+            viewModel.calculate()
         }
 
-        binding.goldRcvRate.onTextChanged {
-            model?.calculate()
+        goldRcvRate.onTextChanged {
+            viewModel.goldPurity = goldRcvRate.floatValue
+            viewModel.calculate()
         }
 
-        binding.cashRcv.onTextChanged {
-            model?.calculate()
+        cashRcv.onTextChanged {
+            viewModel.cashReceived = cashRcv.floatValue.toInt()
+            viewModel.calculate()
         }
 
-    }
-
-    fun setViewModel(viewModel:BillingViewModel){
-        binding.model = viewModel
     }
 
     fun setPartiesAdapter(parties: List<Party>) {

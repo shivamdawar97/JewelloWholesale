@@ -45,19 +45,13 @@ class BillingViewModel @Inject constructor(
     val grossWeight = MutableLiveData<String>().apply { value = "0.0" }
     val fineWeight = MutableLiveData<String>().apply { value = "0.0" }
     val totalAmount = MutableLiveData<String>().apply { value = "0" }
-    val goldWeight = MutableLiveData<String>().apply { value = "0.0" }
-    val goldPurity = MutableLiveData<String>().apply { value = "99.50" }
+    var goldWeight = 0f
+    var goldPurity = 99.5f
     val goldFine = MutableLiveData<String>().apply { value = "0.0" }
-    val cashReceived = MutableLiveData<String>().apply { value = "0" }
+    var cashReceived = 0
     val dueFineGold = MutableLiveData<String>().apply { value = "0.0" }
     val dueCash = MutableLiveData<String>().apply { value = "0" }
-    val goldBhav = MutableLiveData<String>().apply { value = "0" }
-
-    init {
-
-//        PartyRepository.loadParties()
-//        ItemsRepository.loadItems()
-    }
+    var goldBhav = 0
 
     fun calculate(){
         var gross = 0f; var fine = 0f
@@ -65,17 +59,16 @@ class BillingViewModel @Inject constructor(
             gross+=it.weight
             fine+=it.fine
         }
-        val bhav = stringToInt(goldBhav.value!!)
-        val tAmount = (fine * bhav).toInt()
-        val goldWt = stringToFloat(goldWeight.value!!)
-        val goldPr = stringToFloat(goldPurity.value!!)
-        val rcdFine = goldWt * goldPr/100
-        val cashRvd = if(cashReceived.value.isNullOrBlank()) 0 else cashReceived.value!!.toInt()
 
-        val goldOfCashRvd = if(bhav<1) 0f else cashRvd.toFloat() / bhav
+        val tAmount = (fine * goldBhav).toInt()
+        val rcdFine = goldWeight * goldPurity/100
+
+        val goldOfCashRvd = if(goldBhav<1) 0f else cashReceived.toFloat() / goldBhav
         val totalGoldRvd = rcdFine + goldOfCashRvd
         val dueGold = (fine - totalGoldRvd).roundOff(3)
-        val dueAmount = (dueGold * bhav).toInt()
+
+        val totalCashRvd = cashReceived + (rcdFine*goldBhav).toInt()
+        val dueAmount = tAmount - totalCashRvd
 
         grossWeight.value =  gross.roundOff(3).toString()
         fineWeight.value = fine.roundOff(3).toString()
@@ -87,12 +80,9 @@ class BillingViewModel @Inject constructor(
     }
 
     fun clearAll() {
-        billNo.value = 0
-        isBillNotFound.value = false
-        billItemList.clear()
-        goldWeight.value = "0.0"
-        cashReceived.value = "0"
-        goldPurity.value = 99.50.toString()
+        billNo.value = 0; isBillNotFound.value = false
+        billItemList.clear(); goldWeight = 0f
+        cashReceived = 0; goldPurity = 99.50f
         calculate()
     }
 
@@ -149,12 +139,12 @@ class BillingViewModel @Inject constructor(
         items = Converters().fromList(billItemList),
         gross =  stringToFloat(grossWeight.value!!) ,
         fine = stringToFloat(fineWeight.value!!),
-        bhav = stringToInt(goldBhav.value!!),
+        bhav = goldBhav,
         tAmount = stringToInt(totalAmount.value!!),
-        goldReceived = stringToFloat(goldWeight.value!!),
-        receivedRate = stringToFloat(goldPurity.value!!),
+        goldReceived = goldWeight,
+        receivedRate = goldPurity,
         goldReceivedFine = stringToFloat(goldFine.value!!).roundOff(3),
-        cashReceived = stringToInt(cashReceived.value!!),
+        cashReceived = cashReceived,
         dueGold = stringToFloat(dueFineGold.value!!),
         dueAmount = stringToInt(dueCash.value!!)
     )
@@ -199,10 +189,10 @@ class BillingViewModel @Inject constructor(
         billItemList = Converters().fromString(it.items)  as ArrayList<BillItem>
         isBillNotFound.value = false
         findParty(it.partyName)
-        goldBhav.value = it.bhav.toString()
-        cashReceived.value = it.cashReceived.toString()
-        goldWeight.value = it.goldReceived.toString()
-        goldPurity.value = it.receivedRate.toString()
+        goldBhav = it.bhav
+        cashReceived = it.cashReceived
+        goldWeight = it.goldReceived
+        goldPurity = it.receivedRate
         grossWeight.value = it.gross.toString()
         fineWeight.value = it.fine.toString()
         totalAmount.value = it.tAmount.toString()

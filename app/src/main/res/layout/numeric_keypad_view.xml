@@ -198,7 +198,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/small"
-            android:text="DELETE"
+            android:text="@string/clear"
             android:textColor="@android:color/black"
             android:backgroundTint="@color/off_white"
            android:layout_marginTop="-2dp"

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
@@ -226,11 +227,10 @@ class BillingActivity : AppCompatActivity() {
     }
 
     private fun getBhav() {
-        viewModel.goldBhav.value = preferences.getString("bhav","0")
+        viewModel.goldBhav = preferences.getInt("bhav",0)
     }
 
     private fun saveBhav(){
-        if(!viewModel.goldBhav.value.isNullOrBlank() &&  viewModel.goldBhav.value != "0")
-        preferences.edit().putString("bhav",viewModel.goldBhav.value).apply()
+        preferences.edit().putInt("bhav",viewModel.goldBhav).apply()
     }
 }
