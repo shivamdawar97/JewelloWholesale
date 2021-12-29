@@ -16,7 +16,7 @@ class ItemsDraggableAdapter(private val list:List<Item>,
                             private val onItemPositionsChanged:(List<Item>)->Unit) : RecyclerView.Adapter<ItemsDraggableAdapter.ViewHolder>() {
 
     var isdragged = false
-    val simpleCallback = object: ItemTouchHelper.SimpleCallback(
+    fun generateSimpleCallback() = object: ItemTouchHelper.SimpleCallback(
         ItemTouchHelper.UP.or(ItemTouchHelper.DOWN),ItemTouchHelper.ACTION_STATE_IDLE){
         override fun onMove(
             recyclerView: RecyclerView,
@@ -35,7 +35,6 @@ class ItemsDraggableAdapter(private val list:List<Item>,
             super.clearView(recyclerView, viewHolder)
             //On Drag finished
             if(!isdragged) return
-            Log.i("DRAG","DETECTED")
             updatePositions()
             onItemPositionsChanged(list)
         }

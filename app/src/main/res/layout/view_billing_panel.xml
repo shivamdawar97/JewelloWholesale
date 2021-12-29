@@ -273,6 +273,7 @@
                         >
 
                         <com.s3enterprises.jewellowholesale.customViews.FloatEditText
+                            android:id="@+id/gold_rcv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ems="4"
@@ -293,6 +294,7 @@
                             />
 
                         <com.s3enterprises.jewellowholesale.customViews.FloatEditText
+                            android:id="@+id/gold_rcv_rate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ems="3"
@@ -345,6 +347,7 @@
 
 
                     <com.s3enterprises.jewellowholesale.customViews.FloatEditText
+                        android:id="@+id/cash_rcv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="5"

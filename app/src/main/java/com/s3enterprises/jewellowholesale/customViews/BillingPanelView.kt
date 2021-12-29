@@ -59,6 +59,22 @@ class BillingPanelView: LinearLayout {
             context.startActivity(Intent(context,AddParty::class.java))
         }
 
+        binding.bhavEdit.onTextChanged {
+            model?.calculate()
+        }
+
+        binding.goldRcv.onTextChanged {
+            model?.calculate()
+        }
+
+        binding.goldRcvRate.onTextChanged {
+            model?.calculate()
+        }
+
+        binding.cashRcv.onTextChanged {
+            model?.calculate()
+        }
+
     }
 
     fun setViewModel(viewModel:BillingViewModel){

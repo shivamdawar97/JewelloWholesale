@@ -38,6 +38,7 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
@@ -52,8 +53,8 @@ class BillingActivity : AppCompatActivity() {
     private lateinit var rxOldBillSelected: Disposable
     private lateinit var rxPendingillSelected: Disposable
     private var listenChangeEvents = true
-    private lateinit var preferences: SharedPreferences
-    private var adapter: ItemsDraggableAdapter? = null
+    @Inject lateinit var preferences: SharedPreferences
+    private var touchHelper: ItemTouchHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,13 +68,14 @@ class BillingActivity : AppCompatActivity() {
         binding.model = viewModel
         itemsContainer = findViewById(R.id.items_container)
         initializeSetup()
-        preferences = getSharedPreferences("jewello_wholesale", Context.MODE_PRIVATE)
+        getBhav()
         rxBillItemValuesChanged =  RxBus.listen(RxEvent.EventBillItemChanged::class.java)!!.subscribe {
              if(listenChangeEvents) viewModel.calculate()
         }
 
         rxBhavChanged =  RxBus.listen(RxEvent.BhavUpdated::class.java)!!.subscribe {
-             viewModel.calculate()
+            saveBhav()
+            viewModel.calculate()
         }
 
         rxBillItemRemoved =  RxBus.listen(RxEvent.EventBillItemRemoved::class.java)!!.subscribe { event ->
@@ -89,6 +91,7 @@ class BillingActivity : AppCompatActivity() {
             viewModel.onOldBillSelected(event.pending)
         }
     }
+
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initializeSetup() = with(binding){
@@ -139,11 +142,9 @@ class BillingActivity : AppCompatActivity() {
         }
 
         viewModel.items.observeForever { items ->
-            if(adapter!=null && adapter!!.isdragged) {
-                adapter!!.isdragged = false
-                return@observeForever
-            }
-            adapter = ItemsDraggableAdapter(items!!,{ i ->
+
+            touchHelper?.attachToRecyclerView(null)
+            val adapter = ItemsDraggableAdapter(items,{ i ->
                 val billItem = BillItem(i.iId, i.name, rate = i.rate)
                 viewModel.billItemList.add(billItem)
                 val view = BillItemCardView(this@BillingActivity, billItem)
@@ -152,15 +153,9 @@ class BillingActivity : AppCompatActivity() {
                 viewModel.updateItemsPositions(positionsChangedList)
             })
             itemsList.adapter = adapter
-            val touchHelper = ItemTouchHelper(adapter!!.simpleCallback)
-            touchHelper.attachToRecyclerView(itemsList)
-            /*itemsList.setOnTouchListener { _, event ->
-                if(event.action == android.view.MotionEvent.ACTION_UP){
-                    if(adapter.isDragging) viewModel.updateItemsPositions(adapter.getRepositionedItems())
-                    adapter.isDragging = false
-                }
-                return@setOnTouchListener true
-            }*/
+            touchHelper = ItemTouchHelper(adapter.generateSimpleCallback())
+            touchHelper?.attachToRecyclerView(itemsList)
+
         }
 
         viewModel.parties.observeForever {
@@ -230,8 +225,12 @@ class BillingActivity : AppCompatActivity() {
         rxOldBillSelected.dispose()
     }
 
+    private fun getBhav() {
+        viewModel.goldBhav.value = preferences.getString("bhav","0")
+    }
+
     private fun saveBhav(){
         if(!viewModel.goldBhav.value.isNullOrBlank() &&  viewModel.goldBhav.value != "0")
-        preferences.edit().putString("printer_name",viewModel.goldBhav.value).apply()
+        preferences.edit().putString("bhav",viewModel.goldBhav.value).apply()
     }
 }

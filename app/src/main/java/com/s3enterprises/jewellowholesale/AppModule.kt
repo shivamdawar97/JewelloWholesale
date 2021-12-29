@@ -26,6 +26,11 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun getSharedPreferences(@ApplicationContext app: Context) =
+        app.getSharedPreferences("jewello_wholesale", Context.MODE_PRIVATE)
+
+    @Singleton
+    @Provides
     fun provideBillDao(database: JewelloDatabase) = database.billDao
 
     @Singleton
