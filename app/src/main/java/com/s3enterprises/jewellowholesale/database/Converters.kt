@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.s3enterprises.jewellowholesale.database.models.Bill
 import com.s3enterprises.jewellowholesale.database.models.BillItem
+import com.s3enterprises.jewellowholesale.database.models.GoldItem
 
 class Converters {
 
@@ -15,7 +16,7 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromList(list: List<BillItem>?): String {
+    fun fromList(list: List<Any>?): String {
         return Gson().toJson(list)
     }
 

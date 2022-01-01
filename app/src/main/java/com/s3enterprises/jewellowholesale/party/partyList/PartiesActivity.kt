@@ -43,7 +43,6 @@ class PartiesActivity : AppCompatActivity() {
             }
     }
 
-
     fun addParty(v: View){
         startActivity(Intent(this,AddParty::class.java))
     }

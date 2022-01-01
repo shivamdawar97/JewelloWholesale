@@ -41,14 +41,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:hint="Party Name">
+                android:hint="@string/party_name">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:maxLength="20"
-                    android:enabled="@{isUpdate?false:!isLoading}"
                     android:text="@={partyName}"
                     android:background="@android:color/transparent"
                     android:imeOptions="flagNoExtractUi"

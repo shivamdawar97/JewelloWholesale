@@ -10,10 +10,7 @@ import com.s3enterprises.jewellowholesale.Utils.stringToFloat
 import com.s3enterprises.jewellowholesale.Utils.stringToInt
 import com.s3enterprises.jewellowholesale.bills.BillRepository
 import com.s3enterprises.jewellowholesale.database.Converters
-import com.s3enterprises.jewellowholesale.database.models.Bill
-import com.s3enterprises.jewellowholesale.database.models.BillItem
-import com.s3enterprises.jewellowholesale.database.models.Item
-import com.s3enterprises.jewellowholesale.database.models.Party
+import com.s3enterprises.jewellowholesale.database.models.*
 import com.s3enterprises.jewellowholesale.items.ItemsRepository
 import com.s3enterprises.jewellowholesale.party.PartyRepository
 import com.s3enterprises.jewellowholesale.sales.SalesRepository
@@ -37,43 +34,55 @@ class BillingViewModel @Inject constructor(
     get() = itemsRepository.items
     val parties: LiveData<List<Party>>
     get() = partyRepository.parties
+
+    val party = MutableLiveData<Party>()
+
     val isloading = MutableLiveData<Boolean>().apply { value = false }
     val isBillLoading = MutableLiveData<Boolean>().apply { value = false }
     val isBillNotFound = MutableLiveData<Boolean>().apply { value = false }
-    var billItemList = ArrayList<BillItem>()
-    val party = MutableLiveData<Party>()
-    val grossWeight = MutableLiveData<String>().apply { value = "0.0" }
-    val fineWeight = MutableLiveData<String>().apply { value = "0.0" }
+
+    val billItemList = ArrayList<BillItem>()
+    val grossGS = MutableLiveData<String>().apply { value = "0.0" }
+    val fineGS = MutableLiveData<String>().apply { value = "0.0" }
+
+    val goldItemList = ArrayList<GoldItem>()
+    val grossGR = MutableLiveData<String>().apply { value = "0.0" }
+    val fineGR = MutableLiveData<String>().apply { value = "0.0" }
+
+
     val totalAmount = MutableLiveData<String>().apply { value = "0" }
-    var goldWeight = 0f
-    var goldPurity = 99.5f
-    val goldFine = MutableLiveData<String>().apply { value = "0.0" }
+
+
     var cashReceived = 0
     val dueFineGold = MutableLiveData<String>().apply { value = "0.0" }
     val dueCash = MutableLiveData<String>().apply { value = "0" }
     var goldBhav = 0
 
     fun calculate(){
-        var gross = 0f; var fine = 0f
+        var grossGs = 0f; var fineGs = 0f ;var grossGr = 0f; var fineGr = 0f
         billItemList.forEach {
-            gross+=it.weight
-            fine+=it.fine
+            grossGs+=it.weight
+            fineGs+=it.fine
         }
 
-        val tAmount = (fine * goldBhav).toInt()
-        val rcdFine = goldWeight * goldPurity/100
+        goldItemList.forEach {
+            grossGr+=it.weight
+            fineGr+=it.fine
+        }
+
+        val tAmount = (fineGs * goldBhav).toInt()
 
         val goldOfCashRvd = if(goldBhav<1) 0f else cashReceived.toFloat() / goldBhav
-        val totalGoldRvd = rcdFine + goldOfCashRvd
-        val dueGold = (fine - totalGoldRvd).roundOff(3)
+        val totalGoldRvd = fineGr + goldOfCashRvd
+        val dueGold = (fineGs - totalGoldRvd).roundOff(3)
 
-        val totalCashRvd = cashReceived + (rcdFine*goldBhav).toInt()
+        val totalCashRvd = cashReceived + (fineGr*goldBhav).toInt()
         val dueAmount = tAmount - totalCashRvd
 
-        grossWeight.value =  gross.roundOff(3).toString()
-        fineWeight.value = fine.roundOff(3).toString()
+        grossGS.value =  grossGs.roundOff(3).toString()
+        fineGS.value = fineGs.roundOff(3).toString()
         totalAmount.value = tAmount.toString()
-        goldFine.value = rcdFine.roundOff(3).toString()
+
         dueFineGold.value = dueGold.toString()
         dueCash.value = dueAmount.toString()
 
@@ -81,8 +90,8 @@ class BillingViewModel @Inject constructor(
 
     fun clearAll() {
         billNo.value = 0; isBillNotFound.value = false
-        billItemList.clear(); goldWeight = 0f
-        cashReceived = 0; goldPurity = 99.50f
+        billItemList.clear(); goldItemList.clear()
+        cashReceived = 0;
         calculate()
     }
 
@@ -103,7 +112,9 @@ class BillingViewModel @Inject constructor(
         else if(!isBillNotFound.value!!) viewModelScope.launch {
             isloading.value = true
             SalesRepository.getTodaySaleRef()
-            //TODO loadedBill.value = BillRepository.update(generateBill(),loadedBill.value!!)
+            val updatedBill = generateBill(loadedBill.value!!)
+            billRepository.update(updatedBill)
+            loadedBill.value = updatedBill
             isloading.value = false
         }
     }
@@ -119,11 +130,16 @@ class BillingViewModel @Inject constructor(
                     .append("${i.weight} * ${i.rate} = ${i.fine}")
             }
             stringBuilder.append("\n----------------------------\n")
-                .append("Gross:${it.gross}\t Pure(fine):${it.fine}")
-                .append("Bhav ${it.bhav}")
-                .append("Total Amount ${it.tAmount}")
-        if(it.goldReceived!=0f)
-            stringBuilder.append("Gold received\n ${it.goldReceived} * ${it.receivedRate} = ${it.goldReceivedFine}")
+                .append("GS \t${it.grossGs}\t\t\t ${it.fineGs}")
+
+        if(fineGR.value!!.toFloat()!=0f)
+            goldItemList.forEach { i ->
+                stringBuilder.append("${i.weight} * ${i.purity} = ${i.fine}")
+            }
+        stringBuilder.append("\n----------------------------\n")
+            .append("GR \t${it.grossGr}\t\t\t ${it.fineGr}")
+            .append("CR ${it.bhav}")
+            .append("Total Amount ${it.tAmount}")
         if(it.cashReceived!=0)
             stringBuilder.append("Amount received: ${it.cashReceived}")
         stringBuilder.append("Due Gold: ${it.dueGold}")
@@ -131,23 +147,28 @@ class BillingViewModel @Inject constructor(
     }
 
 
-    fun generateBill() = Bill(
-        date = Date().time,
-        partyId = if(party.value==null) "N/A" else party.value!!.pId.toString(),
-        partyName = if(party.value==null) "N/A" else party.value!!.name,
-        partyNumber = if(party.value==null) "N/A" else party.value!!.phoneNumber ,
-        items = Converters().fromList(billItemList),
-        gross =  stringToFloat(grossWeight.value!!) ,
-        fine = stringToFloat(fineWeight.value!!),
-        bhav = goldBhav,
-        tAmount = stringToInt(totalAmount.value!!),
-        goldReceived = goldWeight,
-        receivedRate = goldPurity,
-        goldReceivedFine = stringToFloat(goldFine.value!!).roundOff(3),
-        cashReceived = cashReceived,
-        dueGold = stringToFloat(dueFineGold.value!!),
-        dueAmount = stringToInt(dueCash.value!!)
-    )
+    fun generateBill(oldBill: Bill?=null):Bill {
+        val bill = oldBill?:Bill(
+            date = Date().time,
+            partyId = if(party.value==null) "N/A" else party.value!!.pId.toString(),
+            partyName = if(party.value==null) "N/A" else party.value!!.name,
+            partyNumber = if(party.value==null) "N/A" else party.value!!.phoneNumber ,
+        )
+        with(bill){
+            items = Converters().fromList(billItemList)
+            golds = Converters().fromList(goldItemList)
+            grossGs =  stringToFloat(grossGS.value!!)
+            fineGs = stringToFloat(fineGS.value!!)
+            grossGr =  stringToFloat(grossGR.value!!)
+            fineGr = stringToFloat(fineGR.value!!)
+            bhav = goldBhav
+            tAmount = stringToInt(totalAmount.value!!)
+            cashReceived = this@BillingViewModel.cashReceived
+            dueGold = stringToFloat(dueFineGold.value!!)
+            dueAmount = stringToInt(dueCash.value!!)
+        }
+        return bill
+    }
 
     fun getPreviousBill() {
         if(billNo.value==0)
@@ -186,17 +207,20 @@ class BillingViewModel @Inject constructor(
     }
 
     private fun setUpBill() = loadedBill.value?.let {
-        billItemList = Converters().fromString(it.items)  as ArrayList<BillItem>
+        billItemList.clear()
+        billItemList.addAll(Converters().fromString(it.items)!!)
         isBillNotFound.value = false
         findParty(it.partyName)
+
+        grossGS.value = it.grossGs.toString()
+        fineGS.value = it.fineGs.toString()
+
+        grossGR.value = it.grossGr.toString()
+        fineGR.value = it.fineGr.toString()
+
         goldBhav = it.bhav
-        cashReceived = it.cashReceived
-        goldWeight = it.goldReceived
-        goldPurity = it.receivedRate
-        grossWeight.value = it.gross.toString()
-        fineWeight.value = it.fine.toString()
         totalAmount.value = it.tAmount.toString()
-        goldFine.value = it.goldReceivedFine.toString()
+        cashReceived = it.cashReceived
         dueFineGold.value = it.dueGold.toString()
         dueCash.value = it.dueAmount.toString()
     }

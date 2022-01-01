@@ -46,7 +46,7 @@ class BillingPanelView: LinearLayout {
 
     fun setViewModel(viewModel:BillingViewModel) = with(binding){
         model = viewModel
-
+        bhavEdit.setText(viewModel.goldBhav.toString())
         autoCompleteTextView.onTextChanged {
             if(viewModel.billNo.value==0) model!!.findParty(it.toString())
             if(viewModel.party.value!=null) Utils.hideKeyboard(autoCompleteTextView)
@@ -63,21 +63,10 @@ class BillingPanelView: LinearLayout {
             context.startActivity(Intent(context,AddParty::class.java))
         }
 
-        goldRcvRate.setText(viewModel.goldPurity.toString())
         bhavEdit.onTextChanged {
             viewModel.goldBhav = bhavEdit.floatValue.toInt()
             viewModel.calculate()
             RxBus.publish(RxEvent.BhavUpdated())
-        }
-
-        goldRcv.onTextChanged {
-            viewModel.goldWeight = goldRcv.floatValue
-            viewModel.calculate()
-        }
-
-        goldRcvRate.onTextChanged {
-            viewModel.goldPurity = goldRcvRate.floatValue
-            viewModel.calculate()
         }
 
         cashRcv.onTextChanged {
@@ -99,6 +88,7 @@ class BillingPanelView: LinearLayout {
 
     fun clear() {
         autoCompleteTextView.setText("")
+        binding.cashRcv.setText("")
     }
 
     fun setPartyName(name: String) {

@@ -61,6 +61,7 @@ class AddParty : AppCompatActivity() {
                     finish()
                 }catch (e:Exception){
                     Toast.makeText(this@AddParty,e.message,Toast.LENGTH_LONG).show()
+                    isLoading = false
                 }
             }
 

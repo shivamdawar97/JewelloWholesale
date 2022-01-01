@@ -83,14 +83,16 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/add_party"
-                        android:layout_width="wrap_content"
+                        android:layout_width="52dp"
                         android:layout_height="match_parent"
                         app:srcCompat="@drawable/ic_add"
                         android:tint="@color/purple_700"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
-                        android:scaleX="1.4"
-                        android:scaleY="1.4"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?android:selectableItemBackground"
+
                         />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -157,14 +159,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_margin="5dp"
                     >
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="Total"
+                        android:text="GS"
                         android:textColor="@color/purple_700"
                         android:textSize="@dimen/large"
                         />
@@ -177,7 +178,7 @@
                         tools:text="Gross"
                         android:textColor="@color/purple_700"
                         android:textSize="@dimen/large"
-                        android:text="@{model.grossWeight}"
+                        android:text="@{model.grossGS}"
                         />
 
                     <TextView
@@ -188,8 +189,54 @@
                         tools:text="Pure"
                         android:textSize="@dimen/large"
                         android:textStyle="bold"
-                        android:text="@{model.fineWeight}"
+                        android:text="@{model.fineGS}"
                         />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/golds_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="GR"
+                        android:textColor="@color/purple_700"
+                        android:textSize="@dimen/large"
+                        />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        tools:text="Gross"
+                        android:textColor="@color/purple_700"
+                        android:textSize="@dimen/large"
+                        android:text="@{model.grossGR}"
+                        />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/purple_700"
+                        tools:text="Pure"
+                        android:textSize="@dimen/large"
+                        android:textStyle="bold"
+                        android:text="@{model.fineGR}"
+                        />
+
 
                 </LinearLayout>
 
@@ -230,9 +277,9 @@
                         android:text="@string/total_amount"
                         app:layout_constraintStart_toEndOf="@id/bhav_edit"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@+id/bhav_edit"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/medium"
-                        android:layout_marginTop="14dp"
                         android:layout_marginStart="5dp"
                         />
 
@@ -241,100 +288,21 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintStart_toEndOf="@id/label_1"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@+id/bhav_edit"
                         tools:text="32323"
                         android:layout_marginStart="10dp"
                         android:textColor="@android:color/black"
                         android:textStyle="bold"
                         android:textSize="@dimen/large"
-                        android:layout_marginTop="14dp"
+
                         android:text="@{Utils.getRupeesFormatted(model.totalAmount)}"
                         />
-
-                    <TextView
-                        android:id="@+id/label_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/label_0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:text="@string/gold_rcv"
-                        android:textSize="@dimen/medium"
-                        android:textColor="@android:color/black"
-                        android:layout_marginTop="14dp"
-                        />
-
-                    <LinearLayout
-                        android:id="@+id/container_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/label_0"
-                        android:orientation="horizontal"
-                        app:layout_constraintStart_toEndOf="@id/label_2"
-                        >
-
-                        <com.s3enterprises.jewellowholesale.customViews.FloatEditText
-                            android:id="@+id/gold_rcv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ems="4"
-                            android:inputType="numberDecimal|numberSigned"
-                            tools:text="20.732"
-                            android:textStyle="bold"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="X"
-                            android:textSize="@dimen/large"
-                            android:textColor="@android:color/black"
-                            android:layout_marginStart="3dp"
-                            android:layout_marginEnd="3dp"
-                            />
-
-                        <com.s3enterprises.jewellowholesale.customViews.FloatEditText
-                            android:id="@+id/gold_rcv_rate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ems="3"
-                            android:inputType="numberDecimal"
-                            tools:text="99.50"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="%"
-                            android:textSize="@dimen/large"
-                            android:textColor="@android:color/black"
-                            android:layout_marginEnd="3dp"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="="
-                            android:textSize="@dimen/large"
-                            android:textColor="@android:color/black"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="8dp"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="20.732"
-                            android:textStyle="bold"
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/large"
-                            android:text="@{model.goldFine}"
-                            />
-
-                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/label_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/container_1"
+                        app:layout_constraintTop_toBottomOf="@id/label_1"
                         app:layout_constraintStart_toStartOf="parent"
                         android:text="@string/cash_rcv"
                         android:textSize="@dimen/medium"
@@ -350,9 +318,8 @@
                         tools:text="2000000"
                         android:textStyle="bold"
                         app:layout_constraintStart_toEndOf="@id/label_3"
-                        app:layout_constraintTop_toBottomOf="@id/container_1"
+                        app:layout_constraintTop_toBottomOf="@id/label_1"
                         android:layout_marginStart="10dp"
-
                         />
 
                     <TextView

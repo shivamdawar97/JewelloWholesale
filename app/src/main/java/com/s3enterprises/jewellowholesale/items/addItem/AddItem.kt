@@ -58,7 +58,7 @@ class AddItem : AppCompatActivity() {
             else lifecycleScope.launch {
                 isLoading = true
                 if(!isUpdate!!) {
-                    val pos = itemsRepository.getCount()
+                    val pos = itemsRepository.getCount()+1
                     item = Item(name = itemName!!,rate = binding.rate!!, position = pos)
                     itemsRepository.insert(item)
                     Toast.makeText(this@AddItem,"Item Added ${item.name}",Toast.LENGTH_LONG).show()

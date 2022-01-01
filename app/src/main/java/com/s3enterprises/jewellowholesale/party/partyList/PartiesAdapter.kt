@@ -1,12 +1,14 @@
 package com.s3enterprises.jewellowholesale.party.partyList
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.database.models.Party
@@ -25,6 +27,7 @@ class PartiesAdapter(private val parties: List<Party>) :
             nameView.text = name
             numberView.text = phoneNumber
             view.setOnClickListener {
+                Log.i("Party","click")
                 val intent = Intent(view.context, AddParty::class.java)
                 intent.putExtra("party",party)
                 view.context.startActivity(intent)

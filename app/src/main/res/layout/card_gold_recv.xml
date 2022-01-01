@@ -1,70 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal">
+
+    <com.s3enterprises.jewellowholesale.customViews.FloatEditText
+        android:id="@+id/gold_rcv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="4"
+        android:inputType="numberDecimal|numberSigned"
+        tools:text="20.732"
+        android:textStyle="bold"
+        />
 
     <TextView
-        android:id="@+id/item_name"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
+        android:text="X"
         android:textSize="@dimen/large"
+        android:textColor="@android:color/black"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"
         />
 
     <com.s3enterprises.jewellowholesale.customViews.FloatEditText
-        android:id="@+id/item_weight"
-        android:layout_width="0dp"
-        android:layout_weight=".7"
+        android:id="@+id/gold_rcv_rate"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ems="3"
+        android:inputType="numberDecimal"
+        tools:text="99.50"
+        android:layout_weight=".5"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="*"
+        android:text="%"
         android:textSize="@dimen/large"
         android:textColor="@android:color/black"
+        android:layout_marginEnd="3dp"
         />
-    <com.s3enterprises.jewellowholesale.customViews.FloatEditText
-        android:id="@+id/item_rate"
-        android:layout_width="0dp"
-        android:layout_weight=".7"
-        android:layout_height="wrap_content"
-        />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="="
         android:textSize="@dimen/large"
         android:textColor="@android:color/black"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="8dp"
         />
 
     <TextView
-        android:id="@+id/item_fine"
-        android:layout_width="0dp"
-        android:layout_weight=".7"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        tools:text="20.732"
+        android:textStyle="bold"
         android:textColor="@android:color/black"
         android:textSize="@dimen/large"
-        android:paddingStart="3dp"
-        android:paddingEnd="0dp"
+        android:layout_weight="1"
+        android:text="@{model.goldFine}"
         />
 
     <TextView
         android:id="@+id/item_remove"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight=".4"
+        android:layout_weight="1"
         android:text="X"
         android:textStyle="bold"
         android:textSize="26sp"
         android:gravity="center"
-        android:scaleX="1.2"
         android:textColor="@android:color/holo_red_dark"
         android:clickable="true"
         android:focusable="true"
         android:background="?android:selectableItemBackground"
         />
-</LinearLayout>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

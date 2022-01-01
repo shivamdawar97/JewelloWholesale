@@ -28,7 +28,9 @@ import com.s3enterprises.jewellowholesale.customViews.BillItemCardView
 import com.s3enterprises.jewellowholesale.database.Converters
 import com.s3enterprises.jewellowholesale.database.models.Bill
 import com.s3enterprises.jewellowholesale.database.models.BillItem
+import com.s3enterprises.jewellowholesale.database.models.Item
 import com.s3enterprises.jewellowholesale.databinding.ActivityBillingBinding
+import com.s3enterprises.jewellowholesale.items.addItem.AddItem
 import com.s3enterprises.jewellowholesale.pendings.PendingsActivity
 import com.s3enterprises.jewellowholesale.print.JewelloBluetoothSocket
 import com.s3enterprises.jewellowholesale.rx.RxBus
@@ -68,8 +70,8 @@ class BillingActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this,R.layout.activity_billing)
         binding.model = viewModel
         itemsContainer = findViewById(R.id.items_container)
-        initializeSetup()
         getBhav()
+        initializeSetup()
         rxBillItemValuesChanged =  RxBus.listen(RxEvent.EventBillItemChanged::class.java)!!.subscribe {
              if(listenChangeEvents) viewModel.calculate()
         }
@@ -143,13 +145,17 @@ class BillingActivity : AppCompatActivity() {
         }
 
         viewModel.items.observeForever { items ->
-
+            val buttonList = arrayListOf(Item(0,"Add Item")).apply { addAll(items) }
             touchHelper?.attachToRecyclerView(null)
-            val adapter = ItemsDraggableAdapter(items,{ i ->
-                val billItem = BillItem(i.iId, i.name, rate = i.rate)
-                viewModel.billItemList.add(billItem)
-                val view = BillItemCardView(this@BillingActivity, billItem)
-                itemsContainer.addView(view)
+            val adapter = ItemsDraggableAdapter(buttonList,{ i ->
+                if(i.position == 0)
+                    startActivity(Intent(this@BillingActivity,AddItem::class.java))
+                else {
+                    val billItem = BillItem(i.iId, i.name, rate = i.rate)
+                    viewModel.billItemList.add(billItem)
+                    val view = BillItemCardView(this@BillingActivity, billItem)
+                    itemsContainer.addView(view)
+                }
             },{ positionsChangedList ->
                 viewModel.updateItemsPositions(positionsChangedList)
             })

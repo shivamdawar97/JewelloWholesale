@@ -27,7 +27,6 @@
     <string name="new_bill">New Bill</string>
     <string name="save">Save</string>
     <string name="calculate">Calculate</string>
-    <string name="party_name">Party Name</string>
     <string name="delete_party">Delete Party</string>
     <string name="party_name_or">Party name or number</string>
     <string name="bhav">Bhav</string>
@@ -43,4 +42,5 @@
     <string name="test_print">Test Print</string>
     <string name="delete_item">Delete Item</string>
     <string name="clear">CLEAR</string>
+    <string name="party_name">Party Name</string>
 </resources>

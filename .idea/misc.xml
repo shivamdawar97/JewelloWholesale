@@ -7,6 +7,7 @@
         <entry key="../../Android/Sdk/platforms/android-30/data/res/layout/simple_expandable_list_item_1.xml" value="0.15855263157894736" />
         <entry key="app/src/main/res/drawable/border_primary.xml" value="0.25625" />
         <entry key="app/src/main/res/drawable/card_party.xml" value="0.24479166666666666" />
+        <entry key="app/src/main/res/drawable/ic_add.xml" value="0.16875" />
         <entry key="app/src/main/res/drawable/ic_arrow_left.xml" value="0.2671875" />
         <entry key="app/src/main/res/drawable/ic_bussiness.xml" value="0.2671875" />
         <entry key="app/src/main/res/drawable/ic_cash.xml" value="0.16151315789473683" />
@@ -37,6 +38,7 @@
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.24010416666666667" />
         <entry key="app/src/main/res/layout/card_bill_item.xml" value="0.25104166666666666" />
         <entry key="app/src/main/res/layout/card_bill_record.xml" value="0.21721496169445698" />
+        <entry key="app/src/main/res/layout/card_gold_recv.xml" value="0.15855263157894736" />
         <entry key="app/src/main/res/layout/card_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/card_month_wise.xml" value="0.1513157894736842" />
         <entry key="app/src/main/res/layout/card_party.xml" value="0.22864583333333333" />

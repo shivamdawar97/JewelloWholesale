@@ -1,6 +1,5 @@
 package com.s3enterprises.jewellowholesale.billing
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +24,7 @@ class ItemsDraggableAdapter(private val list:List<Item>,
         ): Boolean {
             val fromPosition = viewHolder.adapterPosition
             val toPosition = target.adapterPosition
+            if(fromPosition==0 || toPosition==0) return false
             Collections.swap(list,fromPosition,toPosition)
             notifyItemMoved(fromPosition,toPosition)
             isdragged = true

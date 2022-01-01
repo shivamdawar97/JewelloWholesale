@@ -26,7 +26,7 @@ class BillRepository @Inject constructor (private val billDao: BillDao) {
     suspend fun insert(bill:Bill) = billDao.insert(bill)
 
 
-    suspend fun update(newBill:Bill,oldBill:Bill) {
+    suspend fun update(newBill:Bill) {
         billDao.update(newBill)
     }
 
