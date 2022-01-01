@@ -214,6 +214,13 @@
                         android:text="GR"
                         android:textColor="@color/purple_700"
                         android:textSize="@dimen/large"
+                        app:drawableEndCompat="@drawable/ic_add"
+                        android:paddingEnd="10dp"
+                        android:paddingStart="0dp"
+                        app:drawableTint="@color/purple_700"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?android:selectableItemBackground"
                         />
 
                     <TextView

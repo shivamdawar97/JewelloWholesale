@@ -82,7 +82,9 @@ class BillingActivity : AppCompatActivity() {
         }
 
         rxBillItemRemoved =  RxBus.listen(RxEvent.EventBillItemRemoved::class.java)!!.subscribe { event ->
-            viewModel.billItemList = viewModel.billItemList.filter { it.iId!= event.id } as ArrayList<BillItem>
+            val newList = viewModel.billItemList.filter { it.iId!= event.id }
+            viewModel.billItemList.clear()
+            viewModel.billItemList.addAll(newList)
             viewModel.calculate()
         }
 
