@@ -1,33 +1,27 @@
 package com.s3enterprises.jewellowholesale.billing
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ArrayAdapter
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.s3enterprises.jewellowholesale.Converter
 import com.s3enterprises.jewellowholesale.R
-import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.Utils.atEndOfDay
 import com.s3enterprises.jewellowholesale.Utils.atStartOfDay
 import com.s3enterprises.jewellowholesale.customViews.BillItemCardView
+import com.s3enterprises.jewellowholesale.customViews.GoldItemCardView
 import com.s3enterprises.jewellowholesale.database.Converters
-import com.s3enterprises.jewellowholesale.database.models.Bill
 import com.s3enterprises.jewellowholesale.database.models.BillItem
+import com.s3enterprises.jewellowholesale.database.models.GoldItem
 import com.s3enterprises.jewellowholesale.database.models.Item
 import com.s3enterprises.jewellowholesale.databinding.ActivityBillingBinding
 import com.s3enterprises.jewellowholesale.items.addItem.AddItem
@@ -39,7 +33,6 @@ import com.s3enterprises.jewellowholesale.settings.SettingsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -49,12 +42,13 @@ class BillingActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityBillingBinding
     private val viewModel by viewModels<BillingViewModel>()
-    private lateinit var itemsContainer:LinearLayout
+
     private lateinit var rxBillItemValuesChanged: Disposable
     private lateinit var rxBillItemRemoved: Disposable
+    private lateinit var rxGoldItemRemoved: Disposable
     private lateinit var rxBhavChanged: Disposable
     private lateinit var rxOldBillSelected: Disposable
-    private lateinit var rxPendingillSelected: Disposable
+    private lateinit var rxPendingBillSelected: Disposable
     private var listenChangeEvents = true
     @Inject lateinit var preferences: SharedPreferences
     private var touchHelper: ItemTouchHelper? = null
@@ -69,22 +63,28 @@ class BillingActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this,R.layout.activity_billing)
         binding.model = viewModel
-        itemsContainer = findViewById(R.id.items_container)
+
         getBhav()
         initializeSetup()
+
         rxBillItemValuesChanged =  RxBus.listen(RxEvent.EventBillItemChanged::class.java)!!.subscribe {
              if(listenChangeEvents) viewModel.calculate()
         }
 
-        rxBhavChanged =  RxBus.listen(RxEvent.BhavUpdated::class.java)!!.subscribe {
+        rxBhavChanged = RxBus.listen(RxEvent.BhavUpdated::class.java)!!.subscribe {
             saveBhav()
-            viewModel.calculate()
         }
 
         rxBillItemRemoved =  RxBus.listen(RxEvent.EventBillItemRemoved::class.java)!!.subscribe { event ->
-            val newList = viewModel.billItemList.filter { it.iId!= event.id }
+            val newList = viewModel.billItemList.filter { it!= event.item }
             viewModel.billItemList.clear()
             viewModel.billItemList.addAll(newList)
+            viewModel.calculate()
+        }
+        rxGoldItemRemoved =  RxBus.listen(RxEvent.EventGoldItemRemoved::class.java)!!.subscribe { event ->
+            val newList = viewModel.goldItemList.filter { it != event.item }
+            viewModel.goldItemList.clear()
+            viewModel.goldItemList.addAll(newList)
             viewModel.calculate()
         }
 
@@ -92,18 +92,17 @@ class BillingActivity : AppCompatActivity() {
             viewModel.onOldBillSelected(event.bill)
         }
 
-        rxPendingillSelected = RxBus.listen(RxEvent.PendingBillSelected::class.java)!!.subscribe { event ->
+        rxPendingBillSelected = RxBus.listen(RxEvent.PendingBillSelected::class.java)!!.subscribe { event ->
             viewModel.onOldBillSelected(event.pending)
         }
     }
-
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initializeSetup() = with(binding){
         lifecycleOwner = this@BillingActivity
         model = viewModel
         billingPanel.setViewModel(viewModel)
-        isItemsListVisible = false
+
 
         itemsList.layoutManager = LinearLayoutManager(this@BillingActivity)
 
@@ -146,6 +145,13 @@ class BillingActivity : AppCompatActivity() {
             }
         }
 
+        billingPanel.binding.addGoldLabel.setOnClickListener {
+            val goldItem = GoldItem()
+            viewModel.goldItemList.add(goldItem)
+            val view = GoldItemCardView(this@BillingActivity,goldItem)
+            billingPanel.binding.goldsContainer.addView(view)
+        }
+
         viewModel.items.observeForever { items ->
             val buttonList = arrayListOf(Item(0,"Add Item")).apply { addAll(items) }
             touchHelper?.attachToRecyclerView(null)
@@ -156,7 +162,7 @@ class BillingActivity : AppCompatActivity() {
                     val billItem = BillItem(i.iId, i.name, rate = i.rate)
                     viewModel.billItemList.add(billItem)
                     val view = BillItemCardView(this@BillingActivity, billItem)
-                    itemsContainer.addView(view)
+                    billingPanel.binding.itemsContainer.addView(view)
                 }
             },{ positionsChangedList ->
                 viewModel.updateItemsPositions(positionsChangedList)
@@ -178,11 +184,16 @@ class BillingActivity : AppCompatActivity() {
         viewModel.party.observeForever {
             if(viewModel.billNo.value!=0) {
                 billingPanel.setPartyName(it.name)
-                itemsContainer.removeAllViews()
+                billingPanel.binding.itemsContainer.removeAllViews()
+                billingPanel.binding.goldsContainer.removeAllViews()
                 listenChangeEvents = false
                 viewModel.billItemList.forEach { billItem ->
                     val view = BillItemCardView(this@BillingActivity,billItem)
-                    itemsContainer.addView(view)
+                    billingPanel.binding.itemsContainer.addView(view)
+                }
+                viewModel.goldItemList.forEach { goldItem ->
+                    val view = GoldItemCardView(this@BillingActivity,goldItem)
+                    billingPanel.binding.goldsContainer.addView(view)
                 }
                 listenChangeEvents = true
             }
@@ -221,7 +232,8 @@ class BillingActivity : AppCompatActivity() {
     }
 
     private fun resetBill(){
-        itemsContainer.removeAllViews()
+        binding.billingPanel.binding.itemsContainer.removeAllViews()
+        binding.billingPanel.binding.goldsContainer.removeAllViews()
         viewModel.clearAll()
         binding.billingPanel.clear()
     }

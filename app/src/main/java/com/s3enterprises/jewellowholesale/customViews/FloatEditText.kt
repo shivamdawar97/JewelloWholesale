@@ -1,6 +1,7 @@
 package com.s3enterprises.jewellowholesale.customViews
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Handler
 import android.os.Looper
 import android.text.InputType
@@ -27,6 +28,7 @@ class FloatEditText:AppCompatEditText {
     }
 
     private fun initiateSetup() {
+        if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) return
         showSoftInputOnFocus = false
         setOnFocusChangeListener { _, b ->
            if(b) Handler(Looper.getMainLooper()).postDelayed({

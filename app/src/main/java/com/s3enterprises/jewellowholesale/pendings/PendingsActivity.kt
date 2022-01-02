@@ -34,7 +34,7 @@ class PendingsActivity : AppCompatActivity() {
             p,v,i->
             v.findViewById<TextView>(R.id.bill_no).text = (i+1).toString()
             v.findViewById<TextView>(R.id.party_name).text = p.partyName
-            v.findViewById<TextView>(R.id.total_amount).text = p.tAmount.toString()
+            v.findViewById<TextView>(R.id.total_amount).text = p.cashDu.toString()
             v.findViewById<TextView>(R.id.date_view).text = Utils.getDate(p.date)
             v.setOnClickListener {
                 list.remove(p)

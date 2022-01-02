@@ -25,7 +25,7 @@
         <entry key="app/src/main/res/layout-land/ic_chevron_left.xml" value="0.29863945578231293" />
         <entry key="app/src/main/res/layout/activity_add_item.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_add_party.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/activity_billing.xml" value="0.25104166666666666" />
+        <entry key="app/src/main/res/layout/activity_billing.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_bills.xml" value="0.25104166666666666" />
         <entry key="app/src/main/res/layout/activity_edit_party.xml" value="0.17358490566037735" />
         <entry key="app/src/main/res/layout/activity_items.xml" value="0.18795180722891566" />
@@ -36,7 +36,7 @@
         <entry key="app/src/main/res/layout/activity_print.xml" value="0.15855263157894736" />
         <entry key="app/src/main/res/layout/activity_sales.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.24010416666666667" />
-        <entry key="app/src/main/res/layout/card_bill_item.xml" value="0.25104166666666666" />
+        <entry key="app/src/main/res/layout/card_bill_item.xml" value="0.23958333333333334" />
         <entry key="app/src/main/res/layout/card_bill_record.xml" value="0.21721496169445698" />
         <entry key="app/src/main/res/layout/card_gold_recv.xml" value="0.15855263157894736" />
         <entry key="app/src/main/res/layout/card_item.xml" value="0.25" />

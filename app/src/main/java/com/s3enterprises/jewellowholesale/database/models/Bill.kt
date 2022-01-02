@@ -21,22 +21,10 @@ data class Bill(
     var items:String="N/A",
     @ColumnInfo
     var golds:String="N/A",
-    @ColumnInfo(name = "gross_gs")
-    var grossGs:Float=0f,
-    @ColumnInfo(name = "fine_gs")
-    var fineGs:Float=0f,
-    @ColumnInfo(name = "gross_gr")
-    var grossGr:Float=0f,
-    @ColumnInfo(name = "fine_gr")
-    var fineGr:Float=0f,
     @ColumnInfo
     var bhav:Int=0,
     @ColumnInfo
-    var tAmount:Int=0,
-    @ColumnInfo
     var cashReceived:Int=0,
-    @ColumnInfo
-    var dueGold:Float=0f,
-    @ColumnInfo
-    var dueAmount:Int=0
+    @ColumnInfo(name = "cash_du")
+    var cashDu:Int=0
 ):Serializable

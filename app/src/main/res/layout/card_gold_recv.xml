@@ -5,20 +5,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal">
 
+
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/large"
+        />
+
+
     <com.s3enterprises.jewellowholesale.customViews.FloatEditText
         android:id="@+id/gold_rcv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ems="4"
+        android:layout_weight="0.7"
         android:inputType="numberDecimal|numberSigned"
         tools:text="20.732"
-        android:textStyle="bold"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="X"
+        android:text="*"
         android:textSize="@dimen/large"
         android:textColor="@android:color/black"
         android:layout_marginStart="3dp"
@@ -27,20 +37,11 @@
 
     <com.s3enterprises.jewellowholesale.customViews.FloatEditText
         android:id="@+id/gold_rcv_rate"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ems="3"
         android:inputType="numberDecimal"
         tools:text="99.50"
-        android:layout_weight=".5"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="%"
-        android:textSize="@dimen/large"
-        android:textColor="@android:color/black"
-        android:layout_marginEnd="3dp"
+        android:layout_weight=".7"
         />
 
     <TextView
@@ -54,29 +55,28 @@
         />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/gold_rcv_fine"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="20.732"
-        android:textStyle="bold"
         android:textColor="@android:color/black"
         android:textSize="@dimen/large"
         android:layout_weight="1"
-        android:text="@{model.goldFine}"
         />
 
     <TextView
         android:id="@+id/item_remove"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight=".4"
         android:text="X"
         android:textStyle="bold"
         android:textSize="26sp"
         android:gravity="center"
+        android:scaleX="1.2"
         android:textColor="@android:color/holo_red_dark"
         android:clickable="true"
         android:focusable="true"
         android:background="?android:selectableItemBackground"
         />
-
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.Utils.roundOff
-import com.s3enterprises.jewellowholesale.Utils.stringToFloat
-import com.s3enterprises.jewellowholesale.Utils.stringToInt
 import com.s3enterprises.jewellowholesale.bills.BillRepository
 import com.s3enterprises.jewellowholesale.database.Converters
 import com.s3enterprises.jewellowholesale.database.models.*
@@ -42,20 +40,21 @@ class BillingViewModel @Inject constructor(
     val isBillNotFound = MutableLiveData<Boolean>().apply { value = false }
 
     val billItemList = ArrayList<BillItem>()
-    val grossGS = MutableLiveData<String>().apply { value = "0.0" }
-    val fineGS = MutableLiveData<String>().apply { value = "0.0" }
+    val grossGS = MutableLiveData<Float>().apply { value = 0f }
+    val fineGS = MutableLiveData<Float>().apply { value = 0f }
 
     val goldItemList = ArrayList<GoldItem>()
-    val grossGR = MutableLiveData<String>().apply { value = "0.0" }
-    val fineGR = MutableLiveData<String>().apply { value = "0.0" }
+    val grossGR = MutableLiveData<Float>().apply { value = 0f }
+    val fineGR = MutableLiveData<Float>().apply { value = 0f }
 
+    val fineBH = MutableLiveData<Float>().apply { value = 0f }
+    val fineCR = MutableLiveData<Float>().apply { value = 0f }
 
-    val totalAmount = MutableLiveData<String>().apply { value = "0" }
-
+    val cashBH = MutableLiveData<Int>().apply { value = 0 }
 
     var cashReceived = 0
-    val dueFineGold = MutableLiveData<String>().apply { value = "0.0" }
-    val dueCash = MutableLiveData<String>().apply { value = "0" }
+    val fineDU = MutableLiveData<Float>().apply { value = 0f }
+    val cashDU = MutableLiveData<Int>().apply { value = 0 }
     var goldBhav = 0
 
     fun calculate(){
@@ -70,21 +69,27 @@ class BillingViewModel @Inject constructor(
             fineGr+=it.fine
         }
 
-        val tAmount = (fineGs * goldBhav).toInt()
+        val fineBh = fineGs - fineGr
+        val tAmount = (fineBh * goldBhav).toInt()
 
-        val goldOfCashRvd = if(goldBhav<1) 0f else cashReceived.toFloat() / goldBhav
-        val totalGoldRvd = fineGr + goldOfCashRvd
-        val dueGold = (fineGs - totalGoldRvd).roundOff(3)
+        val fineCr = if(goldBhav<1) 0f else cashReceived.toFloat() / goldBhav
 
-        val totalCashRvd = cashReceived + (fineGr*goldBhav).toInt()
-        val dueAmount = tAmount - totalCashRvd
+        val fineDu = (fineBh-fineCr).roundOff(3)
 
-        grossGS.value =  grossGs.roundOff(3).toString()
-        fineGS.value = fineGs.roundOff(3).toString()
-        totalAmount.value = tAmount.toString()
+        val cashDu = tAmount - cashReceived
 
-        dueFineGold.value = dueGold.toString()
-        dueCash.value = dueAmount.toString()
+        grossGS.value =  grossGs.roundOff(3)
+        fineGS.value = fineGs.roundOff(3)
+
+        grossGR.value =  grossGr.roundOff(3)
+        fineGR.value = fineGr.roundOff(3)
+
+        cashBH.value = tAmount
+
+        fineBH.value = fineBh.roundOff(3)
+        fineCR.value = fineCr.roundOff(3)
+        fineDU.value = fineDu
+        cashDU.value = cashDu
 
     }
 
@@ -130,20 +135,20 @@ class BillingViewModel @Inject constructor(
                     .append("${i.weight} * ${i.rate} = ${i.fine}")
             }
             stringBuilder.append("\n----------------------------\n")
-                .append("GS \t${it.grossGs}\t\t\t ${it.fineGs}")
+                .append("GS \t${grossGS.value}\t\t\t ${fineGS.value}")
 
         if(fineGR.value!!.toFloat()!=0f)
             goldItemList.forEach { i ->
                 stringBuilder.append("${i.weight} * ${i.purity} = ${i.fine}")
             }
         stringBuilder.append("\n----------------------------\n")
-            .append("GR \t${it.grossGr}\t\t\t ${it.fineGr}")
+            .append("GR \t${grossGR.value}}\t\t\t ${fineGR.value}")
             .append("CR ${it.bhav}")
-            .append("Total Amount ${it.tAmount}")
+            .append("Total Amount ${cashBH.value}")
         if(it.cashReceived!=0)
             stringBuilder.append("Amount received: ${it.cashReceived}")
-        stringBuilder.append("Due Gold: ${it.dueGold}")
-        stringBuilder.append("Due Amount: ${it.dueAmount}").toString()
+        stringBuilder.append("Due Gold: ${fineDU.value}")
+        stringBuilder.append("Due Amount: ${cashDU.value}").toString()
     }
 
 
@@ -157,15 +162,9 @@ class BillingViewModel @Inject constructor(
         with(bill){
             items = Converters().fromList(billItemList)
             golds = Converters().fromList(goldItemList)
-            grossGs =  stringToFloat(grossGS.value!!)
-            fineGs = stringToFloat(fineGS.value!!)
-            grossGr =  stringToFloat(grossGR.value!!)
-            fineGr = stringToFloat(fineGR.value!!)
             bhav = goldBhav
-            tAmount = stringToInt(totalAmount.value!!)
             cashReceived = this@BillingViewModel.cashReceived
-            dueGold = stringToFloat(dueFineGold.value!!)
-            dueAmount = stringToInt(dueCash.value!!)
+            cashDu = cashDU.value!!
         }
         return bill
     }
@@ -211,18 +210,8 @@ class BillingViewModel @Inject constructor(
         billItemList.addAll(Converters().fromString(it.items)!!)
         isBillNotFound.value = false
         findParty(it.partyName)
-
-        grossGS.value = it.grossGs.toString()
-        fineGS.value = it.fineGs.toString()
-
-        grossGR.value = it.grossGr.toString()
-        fineGR.value = it.fineGr.toString()
-
         goldBhav = it.bhav
-        totalAmount.value = it.tAmount.toString()
         cashReceived = it.cashReceived
-        dueFineGold.value = it.dueGold.toString()
-        dueCash.value = it.dueAmount.toString()
     }
 
     fun onOldBillSelected(bill: Bill) {

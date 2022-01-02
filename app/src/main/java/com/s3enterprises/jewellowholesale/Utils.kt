@@ -77,7 +77,11 @@ object Utils {
     fun getDate(date: Long): String = DATE_FORMAT.format(Date(date))
 
     @JvmStatic
-    fun getRupeesFormatted(amount:String):String = rupeesFormat.format(amount.toInt())
+    fun getRupeesFormatted(amount:Int):String {
+        val once = amount%10
+        val oAmount = if(once>7) amount+10-once else amount-once
+        return rupeesFormat.format(oAmount)
+    }
 
     fun hideKeyboard(view: View) {
         val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

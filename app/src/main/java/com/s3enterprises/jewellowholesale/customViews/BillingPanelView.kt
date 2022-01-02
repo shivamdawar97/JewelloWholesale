@@ -21,7 +21,7 @@ import com.s3enterprises.jewellowholesale.rx.RxEvent
 
 class BillingPanelView: LinearLayout {
 
-    private lateinit var binding : ViewBillingPanelBinding
+    lateinit var binding : ViewBillingPanelBinding
     private val autoCompleteTextView by lazy { (binding.nameField.editText as AutoCompleteTextView) }
 
     constructor(context: Context) : super(context) {
@@ -79,6 +79,9 @@ class BillingPanelView: LinearLayout {
     fun setPartiesAdapter(parties: List<Party>) {
         val adapter = AutoCompleteAdapter(context, R.layout.list_item,parties)
         autoCompleteTextView.setAdapter(adapter)
+        autoCompleteTextView.setText(" ")
+        autoCompleteTextView.setText("")
+
     }
 
     fun setBillNo(billNo:Int) {
@@ -97,5 +100,6 @@ class BillingPanelView: LinearLayout {
             autoCompleteTextView.dismissDropDown()
         }
     }
+
 
 }

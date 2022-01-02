@@ -30,7 +30,7 @@ class BillRepository @Inject constructor (private val billDao: BillDao) {
         billDao.update(newBill)
     }
 
-    suspend fun getBill(billNo: Int) =  suspendCoroutine<Bill?> { cont ->
+ /*   suspend fun getBill(billNo: Int) =  suspendCoroutine<Bill?> { cont ->
         billsCollection.document(billNo.toString()).get().addOnSuccessListener {
             if(it.exists()){
                 val bill = it.toObject(Bill::class.java)!!
@@ -38,7 +38,7 @@ class BillRepository @Inject constructor (private val billDao: BillDao) {
                 cont.resume(bill)
             } else cont.resume(null)
         }.addOnFailureListener { throw it }
-    }
+    }*/
 
     suspend fun getBills(dayStart:Long,dayEnd:Long) = suspendCoroutine<List<Bill>>{ cont ->
         billsCollection.whereGreaterThan("date",dayStart).whereLessThan("date",dayEnd)
@@ -47,7 +47,7 @@ class BillRepository @Inject constructor (private val billDao: BillDao) {
             it.documents.forEach { doc ->
                 val bill = doc.toObject(Bill::class.java)!!
                 bill.billNo = doc.id.toInt()
-                bill.tAmount = doc["tamount"].toString().toInt()
+                //bill.tAmount = doc["tamount"].toString().toInt()
                 list.add(bill)
             }
             cont.resume(list)
