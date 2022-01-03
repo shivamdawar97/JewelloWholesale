@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.databinding.ActivityBillsBinding
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class BillsActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityBillsBinding

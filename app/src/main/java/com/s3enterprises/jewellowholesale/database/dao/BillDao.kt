@@ -3,6 +3,7 @@ package com.s3enterprises.jewellowholesale.database.dao
 
 import androidx.room.*
 import com.s3enterprises.jewellowholesale.database.models.Bill
+import kotlinx.coroutines.selects.select
 
 @Dao
 interface BillDao {
@@ -13,8 +14,8 @@ interface BillDao {
     @Update
     suspend fun update(bill: Bill)
 
-    @Query("select * from Bill")
-    fun getAll(): List<Bill>
+    @Query("select * from Bill where date between (:dayStart) and :dayEnd")
+    suspend fun getBillsByRange(dayStart:Long,dayEnd:Long): List<Bill>
 
     @Delete
     fun delete(item: Bill)
@@ -22,6 +23,7 @@ interface BillDao {
     @Query("delete from Bill")
     fun clear()
 
-
+    @Query("select  * from Bill where billNo = :billNo")
+    suspend fun getBill(billNo: Int)
 
 }

@@ -124,7 +124,7 @@ class BillingActivity : AppCompatActivity() {
                                 di.dismiss()
                             }
                             .show()
-                    else viewModel.saveBill().also { saveBhav() }
+                    else viewModel.saveBill()
                 }
                 viewModel.party.value==null -> {
                     AlertDialog.Builder(this@BillingActivity)
@@ -133,15 +133,14 @@ class BillingActivity : AppCompatActivity() {
                         .setPositiveButton("Yes"){
                                 di,_ ->
                             di.dismiss()
-                            viewModel.findParty("unknown")
-                            viewModel.saveBill().also { saveBhav() }
+                            viewModel.saveBill()
                         }
                         .setNegativeButton("Cancel"){ di,_->
                             di.dismiss()
                         }
                         .show()
                 }
-                else -> viewModel.saveBill().also { saveBhav() }
+                else -> viewModel.saveBill()
             }
         }
 
