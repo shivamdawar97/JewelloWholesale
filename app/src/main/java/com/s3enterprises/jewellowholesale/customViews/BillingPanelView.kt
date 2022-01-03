@@ -23,6 +23,7 @@ class BillingPanelView: LinearLayout {
 
     lateinit var binding : ViewBillingPanelBinding
     private val autoCompleteTextView by lazy { (binding.nameField.editText as AutoCompleteTextView) }
+    var listenChangeEvents = true
 
     constructor(context: Context) : super(context) {
         inflateLayout(context)
@@ -63,13 +64,13 @@ class BillingPanelView: LinearLayout {
             context.startActivity(Intent(context,AddParty::class.java))
         }
 
-        bhavEdit.onTextChanged {
+        bhavEdit.onTextChanged { if(!listenChangeEvents) return@onTextChanged
             viewModel.goldBhav = bhavEdit.floatValue.toInt()
             viewModel.calculate()
-            RxBus.publish(RxEvent.BhavUpdated())
+            RxBus.publish(RxEvent.PreferencesUpdated())
         }
 
-        cashRcv.onTextChanged {
+        cashRcv.onTextChanged { if(!listenChangeEvents) return@onTextChanged
             viewModel.cashReceived = cashRcv.floatValue.toInt()
             viewModel.calculate()
         }

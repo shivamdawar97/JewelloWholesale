@@ -11,7 +11,8 @@ import com.s3enterprises.jewellowholesale.database.Converters
 import com.s3enterprises.jewellowholesale.database.models.*
 import com.s3enterprises.jewellowholesale.items.ItemsRepository
 import com.s3enterprises.jewellowholesale.party.PartyRepository
-import com.s3enterprises.jewellowholesale.sales.SalesRepository
+import com.s3enterprises.jewellowholesale.rx.RxBus
+import com.s3enterprises.jewellowholesale.rx.RxEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.StringBuilder
@@ -56,6 +57,7 @@ class BillingViewModel @Inject constructor(
     val fineDU = MutableLiveData<Float>().apply { value = 0f }
     val cashDU = MutableLiveData<Int>().apply { value = 0 }
     var goldBhav = 0
+    var billCounter = 0
 
     fun calculate(){
         var grossGs = 0f; var fineGs = 0f ;var grossGr = 0f; var fineGr = 0f
@@ -96,7 +98,7 @@ class BillingViewModel @Inject constructor(
     fun clearAll() {
         billNo.value = 0; isBillNotFound.value = false
         billItemList.clear(); goldItemList.clear()
-        cashReceived = 0;
+        cashReceived = 0
         calculate()
     }
 
@@ -109,14 +111,14 @@ class BillingViewModel @Inject constructor(
         if(billNo.value == 0) viewModelScope.launch {
             isloading.value = true
             val newBill = generateBill()
+            billCounter = if(billCounter!=2000) billCounter+1 else 1
             billNo.value = billRepository.insert(newBill).toInt()
+            RxBus.publish(RxEvent.PreferencesUpdated())
             loadedBill.value = newBill
             isloading.value = false
-
         }
         else if(!isBillNotFound.value!!) viewModelScope.launch {
             isloading.value = true
-            SalesRepository.getTodaySaleRef()
             val updatedBill = generateBill(loadedBill.value!!)
             billRepository.update(updatedBill)
             loadedBill.value = updatedBill
@@ -154,6 +156,7 @@ class BillingViewModel @Inject constructor(
 
     fun generateBill(oldBill: Bill?=null):Bill {
         val bill = oldBill?:Bill(
+            billNo = billCounter,
             date = Date().time,
             partyId = if(party.value==null) "N/A" else party.value!!.pId.toString(),
             partyName = if(party.value==null) "N/A" else party.value!!.name,
@@ -170,48 +173,34 @@ class BillingViewModel @Inject constructor(
     }
 
     fun getPreviousBill() {
-        if(billNo.value==0)
-            Utils.KEY_VALUES.addSnapshotListener { value, error ->
-                if(error==null && value!=null)
-                {
-                    billNo.value = value["bill_counter"].toString().toInt()
-                    getBill()
-                }
-            }
-        else {
-            billNo.value = billNo.value!!.minus(1)
-            getBill()
-        }
+        if(billNo.value==0) billNo.value = billCounter
+        else billNo.value = billNo.value!!.minus(1)
+        getBill()
     }
 
     fun getNextBill(){
-        Utils.KEY_VALUES.addSnapshotListener { value, error ->
-            if(error==null && value!=null && billNo.value != value["bill_counter"].toString().toInt())
-            {
-                billNo.value = billNo.value!!.plus(1)
-                getBill()
-            }
-
-        }
+        if(billNo.value == billCounter) billNo.value = 0
+        else billNo.value = billNo.value!!.plus(1)
+        getBill()
     }
 
     private fun getBill() = viewModelScope.launch {
         isBillLoading.value = true
-//        TODO if(loadedBill.value == null || billNo.value!! != loadedBill.value!!.billNo)
-//            loadedBill.value = BillRepository.getBill(billNo.value!!)
-        if(loadedBill.value!=null)
-        setUpBill()
+        loadedBill.value = billRepository.getBill(billNo.value!!)
+        if(loadedBill.value!=null) setUpBill()
         else isBillNotFound.value = true
         isBillLoading.value = false
     }
 
     private fun setUpBill() = loadedBill.value?.let {
-        billItemList.clear()
-        billItemList.addAll(Converters().fromString(it.items)!!)
+
+        billItemList.clear(); billItemList.addAll(Converters().fromString(it.items)!!)
+        goldItemList.clear(); goldItemList.addAll(Converters().fromString1(it.golds)!!)
         isBillNotFound.value = false
         findParty(it.partyName)
         goldBhav = it.bhav
         cashReceived = it.cashReceived
+        calculate()
     }
 
     fun onOldBillSelected(bill: Bill) {

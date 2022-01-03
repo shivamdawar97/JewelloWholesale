@@ -2,12 +2,13 @@ package com.s3enterprises.jewellowholesale.database.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
 @Entity
 data class Bill(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     var billNo:Int=0,
     @ColumnInfo
     val date:Long =0,

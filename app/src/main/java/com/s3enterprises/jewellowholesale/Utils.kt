@@ -28,13 +28,6 @@ import java.util.*
 
 object Utils {
 
-    val FIRESTORE by lazy { Firebase.firestore
-        .collection("business_username")
-    }
-    val KEY_VALUES by lazy {
-        Firebase.firestore
-            .collection("business_username").document("key_values")
-    }
     private val DATE_FORMAT = SimpleDateFormat("EEE, dd MMM yyyy HH:mm", Locale.US)
     private val DATE_FORMAT_FOR_HEADING = SimpleDateFormat("dd MMM yyyy", Locale.US)
     var printerName = ""

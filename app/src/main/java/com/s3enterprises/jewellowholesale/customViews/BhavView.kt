@@ -44,7 +44,6 @@ class BhavView : LinearLayout {
             bhavEdit.visibility = View.VISIBLE
             bhavField.isEnabled = false
             bhav = bhavField.getTextToInt()
-            RxBus.publish(RxEvent.BhavUpdated())
         }
 
     }

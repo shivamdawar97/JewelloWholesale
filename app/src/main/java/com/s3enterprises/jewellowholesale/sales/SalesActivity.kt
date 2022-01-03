@@ -18,31 +18,9 @@ class SalesActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this,R.layout.activity_sales)
         title = "Sales"
         setUp()
-
     }
 
     private fun setUp() = lifecycleScope.launch {
-
-        SalesRepository.getCurrentYearSale().forEach { sale ->
-            when(sale.name){
-                "party" -> {
-                    val partyCard = CardMonthWise(this@SalesActivity)
-                    partyCard.setPartyData(sale)
-                    binding.partyWiseContainer.addView(partyCard)
-                }
-                "today" -> {
-                    binding.gold = sale.gold
-                    binding.cash = sale.cash
-                    binding.total = sale.total
-                }
-                else -> {
-                    val monthCard = CardMonthWise(this@SalesActivity)
-                    monthCard.setData(sale)
-                    binding.monthWiseContainer.addView(monthCard)
-                }
-            }
-        }
-
 
     }
 }

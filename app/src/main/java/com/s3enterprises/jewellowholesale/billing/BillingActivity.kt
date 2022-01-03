@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -64,15 +63,15 @@ class BillingActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this,R.layout.activity_billing)
         binding.model = viewModel
 
-        getBhav()
+        getPreferences()
         initializeSetup()
 
         rxBillItemValuesChanged =  RxBus.listen(RxEvent.EventBillItemChanged::class.java)!!.subscribe {
              if(listenChangeEvents) viewModel.calculate()
         }
 
-        rxBhavChanged = RxBus.listen(RxEvent.BhavUpdated::class.java)!!.subscribe {
-            saveBhav()
+        rxBhavChanged = RxBus.listen(RxEvent.PreferencesUpdated::class.java)!!.subscribe {
+            savePreferences()
         }
 
         rxBillItemRemoved =  RxBus.listen(RxEvent.EventBillItemRemoved::class.java)!!.subscribe { event ->
@@ -180,12 +179,13 @@ class BillingActivity : AppCompatActivity() {
             billingPanel.setBillNo(it)
         }
 
-        viewModel.party.observeForever {
+        viewModel.loadedBill.observeForever {
             if(viewModel.billNo.value!=0) {
-                billingPanel.setPartyName(it.name)
+                billingPanel.setPartyName(it.partyName)
                 billingPanel.binding.itemsContainer.removeAllViews()
                 billingPanel.binding.goldsContainer.removeAllViews()
                 listenChangeEvents = false
+                billingPanel.listenChangeEvents = false
                 viewModel.billItemList.forEach { billItem ->
                     val view = BillItemCardView(this@BillingActivity,billItem)
                     billingPanel.binding.itemsContainer.addView(view)
@@ -194,7 +194,10 @@ class BillingActivity : AppCompatActivity() {
                     val view = GoldItemCardView(this@BillingActivity,goldItem)
                     billingPanel.binding.goldsContainer.addView(view)
                 }
+                billingPanel.binding.bhavEdit.setText(viewModel.goldBhav.toString())
+                billingPanel.binding.cashRcv.setText(viewModel.cashReceived.toString())
                 listenChangeEvents = true
+                billingPanel.listenChangeEvents = true
             }
         }
 
@@ -245,11 +248,13 @@ class BillingActivity : AppCompatActivity() {
         rxOldBillSelected.dispose()
     }
 
-    private fun getBhav() {
+    private fun getPreferences() {
         viewModel.goldBhav = preferences.getInt("bhav",0)
+        viewModel.billCounter = preferences.getInt("bill_counter",0)
     }
 
-    private fun saveBhav(){
+    private fun savePreferences(){
         preferences.edit().putInt("bhav",viewModel.goldBhav).apply()
+        preferences.edit().putInt("bill_counter",viewModel.billCounter).apply()
     }
 }

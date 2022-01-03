@@ -8,7 +8,7 @@ import kotlinx.coroutines.selects.select
 @Dao
 interface BillDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(bill: Bill):Long
 
     @Update
@@ -24,6 +24,6 @@ interface BillDao {
     fun clear()
 
     @Query("select  * from Bill where billNo = :billNo")
-    suspend fun getBill(billNo: Int)
+    suspend fun getBill(billNo: Int):Bill
 
 }
