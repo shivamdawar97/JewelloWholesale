@@ -36,8 +36,7 @@ class BillingViewModel @Inject constructor(
 
     val party = MutableLiveData<Party>()
 
-    val isloading = MutableLiveData<Boolean>().apply { value = false }
-    val isBillLoading = MutableLiveData<Boolean>().apply { value = false }
+    val isLoading = MutableLiveData<Boolean>().apply { value = false }
     val isBillNotFound = MutableLiveData<Boolean>().apply { value = false }
 
     val billItemList = ArrayList<BillItem>()
@@ -109,20 +108,20 @@ class BillingViewModel @Inject constructor(
     fun saveBill() { // Or update bill
         calculate()
         if(billNo.value == 0) viewModelScope.launch {
-            isloading.value = true
+            isLoading.value = true
+            billCounter = if(billCounter!=5) billCounter+1 else 1
             val newBill = generateBill()
-            billCounter = if(billCounter!=2000) billCounter+1 else 1
             billNo.value = billRepository.insert(newBill).toInt()
             RxBus.publish(RxEvent.PreferencesUpdated())
             loadedBill.value = newBill
-            isloading.value = false
+            isLoading.value = false
         }
         else if(!isBillNotFound.value!!) viewModelScope.launch {
-            isloading.value = true
+            isLoading.value = true
             val updatedBill = generateBill(loadedBill.value!!)
             billRepository.update(updatedBill)
             loadedBill.value = updatedBill
-            isloading.value = false
+            isLoading.value = false
         }
     }
 
@@ -173,23 +172,23 @@ class BillingViewModel @Inject constructor(
     }
 
     fun getPreviousBill() {
-        if(billNo.value==0) billNo.value = billCounter
+        if(billNo.value==1) billNo.value = billCounter
         else billNo.value = billNo.value!!.minus(1)
         getBill()
     }
 
     fun getNextBill(){
-        if(billNo.value == billCounter) billNo.value = 0
+        if(billNo.value == billCounter) billNo.value = 1
         else billNo.value = billNo.value!!.plus(1)
         getBill()
     }
 
     private fun getBill() = viewModelScope.launch {
-        isBillLoading.value = true
+        isLoading.value = true
         loadedBill.value = billRepository.getBill(billNo.value!!)
         if(loadedBill.value!=null) setUpBill()
         else isBillNotFound.value = true
-        isBillLoading.value = false
+        isLoading.value = false
     }
 
     private fun setUpBill() = loadedBill.value?.let {

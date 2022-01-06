@@ -46,43 +46,56 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <GridLayout
             android:id="@+id/buttons_layout"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:columnCount="4"
             android:orientation="horizontal"
+            android:useDefaultMargins="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             >
 
             <Button
+                android:id="@+id/btn_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/save"
+                android:enabled="@{!model.isLoading}"
+                />
+
+            <Button
                 android:id="@+id/btn_calculate"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/calculate"
-                android:layout_marginStart="20dp"
                 android:backgroundTint="@color/off_black"
                 android:onClick="@{()->model.calculate()}"
                 />
 
             <Button
-                android:id="@+id/btn_save"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:text="@string/save"
-                android:enabled="@{!model.isloading}"
-                android:layout_marginStart="20dp"
-                />
-
-            <ProgressBar
+                android:id="@+id/btn_print"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:padding="3dp"
-                android:visibility="@{model.isloading?View.VISIBLE:View.INVISIBLE}"
+                android:layout_height="wrap_content"
+                android:text="@string/print"
+                android:onClick="@{()->model.calculate()}"
+                android:visibility="@{model.billNo!=0?View.VISIBLE:View.INVISIBLE}"
                 />
 
-        </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/delete"
+                android:visibility="@{model.billNo!=0?View.VISIBLE:View.INVISIBLE}"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:enabled="@{!model.isLoading}"
+                />
+
+        </GridLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

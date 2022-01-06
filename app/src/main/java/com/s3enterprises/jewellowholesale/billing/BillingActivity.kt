@@ -201,7 +201,7 @@ class BillingActivity : AppCompatActivity() {
             }
         }
 
-        printBtn?.setOnClickListener {
+        btnPrint?.setOnClickListener {
             val printBill = viewModel.generateBillPrint()
             if(printBill!=null) lifecycleScope.launch {
                 JewelloBluetoothSocket.printData(printBill,this@BillingActivity)
@@ -251,10 +251,12 @@ class BillingActivity : AppCompatActivity() {
     private fun getPreferences() {
         viewModel.goldBhav = preferences.getInt("bhav",0)
         viewModel.billCounter = preferences.getInt("bill_counter",0)
+        binding.billingPanel.binding.counterLabel.text = viewModel.billCounter.toString()
     }
 
     private fun savePreferences(){
         preferences.edit().putInt("bhav",viewModel.goldBhav).apply()
         preferences.edit().putInt("bill_counter",viewModel.billCounter).apply()
+        binding.billingPanel.binding.counterLabel.text = viewModel.billCounter.toString()
     }
 }

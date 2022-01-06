@@ -60,48 +60,47 @@
                 android:layout_height="wrap_content"/>
 
             <Button
-                android:id="@+id/btn_calculate"
-                android:layout_width="150dp"
-                android:layout_height="60dp"
-                android:text="@string/calculate"
+                android:id="@+id/btn_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/save"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/keyboard_view"
-                app:layout_constraintBottom_toTopOf="@+id/btn_save"
-                android:layout_marginStart="20dp"
-                android:backgroundTint="@color/off_black"
-                android:onClick="@{()->model.calculate()}"
+                app:layout_constraintEnd_toStartOf="@id/btn_calculate"
+                android:onClick="@{()->model.saveBill()}"
+                android:enabled="@{!model.isLoading}"
                 />
 
             <Button
-                android:id="@+id/print_btn"
+                android:id="@+id/btn_calculate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/keyboard_view"
-                app:layout_constraintBottom_toTopOf="@+id/btn_save"
-                app:layout_constraintStart_toEndOf="@id/btn_calculate"
+                app:layout_constraintStart_toEndOf="@id/btn_save"
+                android:text="@string/calculate"
+                android:onClick="@{()->model.calculate()}"
+                />
+
+            <Button
+                android:id="@+id/btn_print"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/print"
+                app:layout_constraintStart_toStartOf="@id/btn_save"
+                app:layout_constraintTop_toBottomOf="@id/btn_save"
                 android:visibility="@{model.billNo!=0?View.VISIBLE:View.INVISIBLE}"
                 />
 
             <Button
-                android:id="@+id/btn_save"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:text="@string/save"
-                android:enabled="@{!model.isloading}"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_calculate"
-                android:layout_marginStart="20dp"
-                />
-
-            <ProgressBar
+                android:id="@+id/btn_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@+id/btn_save"
-                app:layout_constraintTop_toBottomOf="@id/btn_calculate"
-                app:layout_constraintBottom_toBottomOf="@id/btn_save"
-                android:visibility="@{model.isloading?View.VISIBLE:View.INVISIBLE}"
+                app:layout_constraintStart_toStartOf="@id/btn_calculate"
+                app:layout_constraintTop_toTopOf="@id/btn_print"
+                android:text="@string/delete"
+                android:visibility="@{model.billNo!=0?View.VISIBLE:View.INVISIBLE}"
+                android:backgroundTint="@android:color/holo_red_light"
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
