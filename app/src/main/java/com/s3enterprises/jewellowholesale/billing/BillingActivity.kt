@@ -201,11 +201,27 @@ class BillingActivity : AppCompatActivity() {
             }
         }
 
-        btnPrint?.setOnClickListener {
+        btnPrint.setOnClickListener {
             val printBill = viewModel.generateBillPrint()
             if(printBill!=null) lifecycleScope.launch {
                 JewelloBluetoothSocket.printData(printBill,this@BillingActivity)
             }
+        }
+
+        btnDelete.setOnClickListener {
+            AlertDialog.Builder(this@BillingActivity)
+                .setTitle("Delete Bill")
+                .setMessage("Are you sure, you want to delete this bill")
+                .setPositiveButton("Yes"){
+                        di,_ ->
+                    di.dismiss()
+                    viewModel.deleteBill()
+                    resetBill()
+                }
+                .setNegativeButton("Cancel"){ di,_->
+                    di.dismiss()
+                }
+                .show()
         }
     }
 

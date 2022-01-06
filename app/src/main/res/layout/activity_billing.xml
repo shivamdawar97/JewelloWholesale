@@ -27,7 +27,7 @@
                 android:id="@+id/items_list"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".3"
+                android:layout_weight=".25"
                 />
 
             <ScrollView
@@ -46,13 +46,11 @@
 
         </LinearLayout>
 
-        <GridLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/buttons_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="4"
             android:orientation="horizontal"
-            android:useDefaultMargins="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,42 +58,62 @@
 
             <Button
                 android:id="@+id/btn_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:text="@string/save"
                 android:enabled="@{!model.isLoading}"
-                />
-
-            <Button
-                android:id="@+id/btn_calculate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/calculate"
-                android:backgroundTint="@color/off_black"
-                android:onClick="@{()->model.calculate()}"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_print"
                 />
 
             <Button
                 android:id="@+id/btn_print"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:text="@string/print"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
+                android:textAllCaps="false"
                 android:onClick="@{()->model.calculate()}"
+                app:layout_constraintStart_toEndOf="@id/btn_save"
+                app:layout_constraintEnd_toStartOf="@id/btn_calculate"
                 android:visibility="@{model.billNo!=0?View.VISIBLE:View.INVISIBLE}"
+                />
+
+
+            <Button
+                android:id="@+id/btn_calculate"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="@string/calculate"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toEndOf="@id/btn_print"
+                app:layout_constraintEnd_toStartOf="@id/btn_delete"
+                android:onClick="@{()->model.calculate()}"
                 />
 
 
             <Button
                 android:id="@+id/btn_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:text="@string/delete"
+                android:textAllCaps="false"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
+                app:layout_constraintStart_toEndOf="@id/btn_calculate"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:visibility="@{model.billNo!=0?View.VISIBLE:View.INVISIBLE}"
                 android:backgroundTint="@android:color/holo_red_light"
                 android:enabled="@{!model.isLoading}"
                 />
 
-        </GridLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

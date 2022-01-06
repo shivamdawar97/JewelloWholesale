@@ -97,7 +97,7 @@ class BillingViewModel @Inject constructor(
     fun clearAll() {
         billNo.value = 0; isBillNotFound.value = false
         billItemList.clear(); goldItemList.clear()
-        cashReceived = 0
+        cashReceived = 0 ; party.value = null
         calculate()
     }
 
@@ -172,15 +172,19 @@ class BillingViewModel @Inject constructor(
     }
 
     fun getPreviousBill() {
-        if(billNo.value==1) billNo.value = billCounter
+        if(billNo.value == 1) return
+        if(billNo.value == 0) billNo.value = billCounter
         else billNo.value = billNo.value!!.minus(1)
         getBill()
     }
 
     fun getNextBill(){
-        if(billNo.value == billCounter) billNo.value = 1
-        else billNo.value = billNo.value!!.plus(1)
-        getBill()
+        if(billNo.value == 0) return
+        if(billNo.value == billCounter) clearAll()
+        else {
+            billNo.value = billNo.value!!.plus(1)
+            getBill()
+        }
     }
 
     private fun getBill() = viewModelScope.launch {
@@ -209,6 +213,10 @@ class BillingViewModel @Inject constructor(
 
     fun updateItemsPositions(updatedList: List<Item>) = viewModelScope.launch {
         itemsRepository.updateAll(updatedList)
+    }
+
+    fun deleteBill() = viewModelScope.launch {
+        billRepository.deleteBill(loadedBill.value!!)
     }
 
 }

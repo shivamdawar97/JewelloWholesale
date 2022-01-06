@@ -9,7 +9,7 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/btn_previous"
         android:layout_height="42dp"
-        android:layout_width="62dp"
+        android:layout_width="42dp"
         android:tint="@android:color/black"
         app:srcCompat="@drawable/ic_arrow_left"
         android:scaleX="1.5"
@@ -34,7 +34,7 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/btn_next"
         android:layout_height="42dp"
-        android:layout_width="62dp"
+        android:layout_width="42dp"
         android:tint="@android:color/black"
         app:srcCompat="@drawable/ic_arrow_right"
         android:layout_gravity="center"

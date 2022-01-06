@@ -64,6 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/save"
+                android:textAllCaps="false"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/keyboard_view"
                 app:layout_constraintEnd_toStartOf="@id/btn_calculate"
@@ -79,6 +80,7 @@
                 app:layout_constraintTop_toBottomOf="@id/keyboard_view"
                 app:layout_constraintStart_toEndOf="@id/btn_save"
                 android:text="@string/calculate"
+                android:textAllCaps="false"
                 android:onClick="@{()->model.calculate()}"
                 />
 
@@ -87,6 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/print"
+                android:textAllCaps="false"
                 app:layout_constraintStart_toStartOf="@id/btn_save"
                 app:layout_constraintTop_toBottomOf="@id/btn_save"
                 android:visibility="@{model.billNo!=0?View.VISIBLE:View.INVISIBLE}"
@@ -99,6 +102,7 @@
                 app:layout_constraintStart_toStartOf="@id/btn_calculate"
                 app:layout_constraintTop_toTopOf="@id/btn_print"
                 android:text="@string/delete"
+                android:textAllCaps="false"
                 android:visibility="@{model.billNo!=0?View.VISIBLE:View.INVISIBLE}"
                 android:backgroundTint="@android:color/holo_red_light"
                 />

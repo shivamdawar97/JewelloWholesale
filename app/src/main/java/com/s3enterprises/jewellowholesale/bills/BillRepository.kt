@@ -17,4 +17,8 @@ class BillRepository @Inject constructor (private val billDao: BillDao) {
     suspend fun getBills(dayStart:Long,dayEnd:Long)=
         billDao.getBillsByRange(dayStart,dayEnd)
 
+    fun deleteBill(value: Bill) {
+        billDao.delete(value)
+    }
+
 }
