@@ -13,8 +13,6 @@ data class Bill(
     @ColumnInfo
     val date:Long =0,
     @ColumnInfo
-    val partyId:String="N/A",
-    @ColumnInfo
     val partyName:String="N/A",
     @ColumnInfo
     val partyNumber:String="N/A",

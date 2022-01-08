@@ -10,7 +10,6 @@ import com.s3enterprises.jewellowholesale.R
 
 class BillNoChangerView: LinearLayout {
 
-    private val billNo = 0
     private val billNoLabel by lazy { findViewById<TextView>(R.id.bill_no) }
     private val btnPrevious by lazy { findViewById<AppCompatImageView>(R.id.btn_previous) }
     private val btnNext by lazy { findViewById<AppCompatImageView>(R.id.btn_next) }

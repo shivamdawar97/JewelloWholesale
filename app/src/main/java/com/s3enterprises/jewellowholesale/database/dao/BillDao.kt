@@ -18,12 +18,12 @@ interface BillDao {
     suspend fun getBillsByRange(dayStart:Long,dayEnd:Long): List<Bill>
 
     @Delete
-    fun delete(item: Bill)
+    suspend fun delete(item: Bill)
 
     @Query("delete from Bill")
     fun clear()
 
     @Query("select  * from Bill where billNo = :billNo")
-    suspend fun getBill(billNo: Int):Bill
+    suspend fun getBill(billNo: Int):Bill?
 
 }

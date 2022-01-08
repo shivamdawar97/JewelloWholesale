@@ -43,7 +43,7 @@
             android:id="@+id/total_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/delete_item"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="₹ 40,000"
             android:textStyle="bold"
@@ -55,11 +55,24 @@
             android:id="@+id/date_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/delete_item"
             app:layout_constraintTop_toBottomOf="@id/total_amount"
             tools:text="21 Dev 2021"
             android:textColor="@color/black"
             />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/delete_item"
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_delete"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

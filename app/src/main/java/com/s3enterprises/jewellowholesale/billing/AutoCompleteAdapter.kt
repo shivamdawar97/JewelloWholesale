@@ -47,8 +47,9 @@ class AutoCompleteAdapter(ctx: Context, private val resource:Int, private val pa
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val v = convertView ?: LayoutInflater.from(context).inflate(resource,parent,false)
-        v.findViewById<TextView>(R.id.party_name).text = getItem(position)!!.name
-        v.findViewById<TextView>(R.id.party_number).text = getItem(position)!!.phoneNumber
+        val party = getItem(position)!!
+        v.findViewById<TextView>(R.id.party_name).text = party.name
+        v.findViewById<TextView>(R.id.party_number).text = party.phoneNumber
         return v
     }
 

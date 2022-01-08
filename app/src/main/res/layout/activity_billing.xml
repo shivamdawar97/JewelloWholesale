@@ -80,7 +80,7 @@
                 android:onClick="@{()->model.calculate()}"
                 app:layout_constraintStart_toEndOf="@id/btn_save"
                 app:layout_constraintEnd_toStartOf="@id/btn_calculate"
-                android:visibility="@{model.billNo!=0?View.VISIBLE:View.INVISIBLE}"
+                android:visibility="@{model.loadedBill!=null?View.VISIBLE:View.INVISIBLE}"
                 />
 
 
@@ -108,7 +108,7 @@
                 android:scaleY="0.9"
                 app:layout_constraintStart_toEndOf="@id/btn_calculate"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:visibility="@{model.billNo!=0?View.VISIBLE:View.INVISIBLE}"
+                android:visibility="@{model.loadedBill!=null?View.VISIBLE:View.INVISIBLE}"
                 android:backgroundTint="@android:color/holo_red_light"
                 android:enabled="@{!model.isLoading}"
                 />

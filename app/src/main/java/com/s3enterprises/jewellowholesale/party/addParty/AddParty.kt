@@ -40,7 +40,6 @@ class AddParty : AppCompatActivity() {
                 party = p ;isUpdate = true
                 partyName = party.name
                 partyNumber = party.phoneNumber
-                partyAddress = party.from
             }
         }
     }
@@ -52,7 +51,7 @@ class AddParty : AppCompatActivity() {
                 Toast.makeText(this@AddParty,R.string.please_fill,Toast.LENGTH_LONG).show()
 
             else if(!isUpdate!!) lifecycleScope.launch{
-                val newParty = Party(name=partyName!!,phoneNumber=partyNumber!!,from=partyAddress?:"")
+                val newParty = Party(name=partyName!!,phoneNumber=partyNumber!!)
                 try{
                     isLoading = true
                     partiesRepository.insert(newParty)
@@ -66,7 +65,7 @@ class AddParty : AppCompatActivity() {
             }
 
             else lifecycleScope.launch {
-                party.name = partyName!! ; party.phoneNumber = partyNumber!! ; party.from = partyAddress?:""
+                party.name = partyName!! ; party.phoneNumber = partyNumber!!
                 isLoading = true
                 partiesRepository.update(party)
                 isLoading = true
@@ -84,13 +83,9 @@ class AddParty : AppCompatActivity() {
         }}
     }
 
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == android.R.id.home)
-        {   finish()
-            return true
-        }
-        return false
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
 }

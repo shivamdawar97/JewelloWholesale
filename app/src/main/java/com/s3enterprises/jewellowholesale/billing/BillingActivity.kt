@@ -47,8 +47,6 @@ class BillingActivity : AppCompatActivity() {
     private lateinit var rxGoldItemRemoved: Disposable
     private lateinit var rxBhavChanged: Disposable
     private lateinit var rxOldBillSelected: Disposable
-    private lateinit var rxPendingBillSelected: Disposable
-    private var listenChangeEvents = true
     @Inject lateinit var preferences: SharedPreferences
     private var touchHelper: ItemTouchHelper? = null
 
@@ -67,7 +65,7 @@ class BillingActivity : AppCompatActivity() {
         initializeSetup()
 
         rxBillItemValuesChanged =  RxBus.listen(RxEvent.EventBillItemChanged::class.java)!!.subscribe {
-             if(listenChangeEvents) viewModel.calculate()
+             if(viewModel.listenChangeEvents) viewModel.calculate()
         }
 
         rxBhavChanged = RxBus.listen(RxEvent.PreferencesUpdated::class.java)!!.subscribe {
@@ -88,12 +86,9 @@ class BillingActivity : AppCompatActivity() {
         }
 
         rxOldBillSelected = RxBus.listen(RxEvent.PreviousBillSelected::class.java)!!.subscribe{ event ->
-            viewModel.onOldBillSelected(event.bill)
+            viewModel.setUpBill(event.bill)
         }
 
-        rxPendingBillSelected = RxBus.listen(RxEvent.PendingBillSelected::class.java)!!.subscribe { event ->
-            viewModel.onOldBillSelected(event.pending)
-        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -102,15 +97,13 @@ class BillingActivity : AppCompatActivity() {
         model = viewModel
         billingPanel.setViewModel(viewModel)
 
-
         itemsList.layoutManager = LinearLayoutManager(this@BillingActivity)
 
         btnSave.setOnClickListener {
             when {
-                viewModel.billNo.value!=0 -> {
+                viewModel.loadedBill.value == null -> {
 
                     val billDate = viewModel.loadedBill.value!!.date
-
                     val thisDate = Date()
                     val todayRange = atStartOfDay(thisDate).time..atEndOfDay(thisDate).time
 
@@ -175,30 +168,15 @@ class BillingActivity : AppCompatActivity() {
             billingPanel.setPartiesAdapter(it)
         }
 
-        viewModel.billNo.observeForever {
-            billingPanel.setBillNo(it)
-        }
+        viewModel.loadedBill.observeForever { bill ->
+            if(bill!=null) {
+                viewModel.listenChangeEvents = false
 
-        viewModel.loadedBill.observeForever {
-            if(viewModel.billNo.value!=0) {
-                billingPanel.setPartyName(it.partyName)
-                billingPanel.binding.itemsContainer.removeAllViews()
-                billingPanel.binding.goldsContainer.removeAllViews()
-                listenChangeEvents = false
-                billingPanel.listenChangeEvents = false
-                viewModel.billItemList.forEach { billItem ->
-                    val view = BillItemCardView(this@BillingActivity,billItem)
-                    billingPanel.binding.itemsContainer.addView(view)
-                }
-                viewModel.goldItemList.forEach { goldItem ->
-                    val view = GoldItemCardView(this@BillingActivity,goldItem)
-                    billingPanel.binding.goldsContainer.addView(view)
-                }
-                billingPanel.binding.bhavEdit.setText(viewModel.goldBhav.toString())
-                billingPanel.binding.cashRcv.setText(viewModel.cashReceived.toString())
-                listenChangeEvents = true
-                billingPanel.listenChangeEvents = true
+                billingPanel.setUpBill(bill)
+
+                viewModel.listenChangeEvents = true
             }
+            else resetBill()
         }
 
         btnPrint.setOnClickListener {
@@ -232,17 +210,17 @@ class BillingActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
-            R.id.reset -> resetBill()
+            R.id.reset -> viewModel.loadedBill.value = null
             R.id.settings -> startActivity(Intent(this,SettingsActivity::class.java))
             R.id.send_pending -> {
                 val converter = Converters()
                 val listInString = preferences.getString("pending","")
                 val list = if(listInString.isNullOrBlank()) ArrayList() else converter.fromStringToBills(listInString)
-                val bill = viewModel.generateBill()
+                val bill = viewModel.generateBill().apply { billNo = 0 }
                 list?.add(bill)
                 val stringOfList = converter.fromListToString(list)
                 preferences.edit().putString("pending",stringOfList).apply()
-                resetBill()
+                viewModel.loadedBill.value = null
             }
             R.id.view_pending -> startActivity(Intent(this,PendingsActivity::class.java))
         }
@@ -254,6 +232,7 @@ class BillingActivity : AppCompatActivity() {
         binding.billingPanel.binding.goldsContainer.removeAllViews()
         viewModel.clearAll()
         binding.billingPanel.clear()
+        viewModel.goldBhav = preferences.getInt("bhav",0)
     }
 
     override fun onDestroy() {

@@ -27,8 +27,8 @@ class BillingViewModel @Inject constructor(
     private val partyRepository: PartyRepository
 ):ViewModel() {
 
-    val billNo = MutableLiveData<Int>().apply { value = 0 }
-    val loadedBill = MutableLiveData<Bill>()
+    var listenChangeEvents = true
+    val loadedBill = MutableLiveData<Bill?>()
     val items:LiveData<List<Item>>
     get() = itemsRepository.items
     val parties: LiveData<List<Party>>
@@ -95,7 +95,7 @@ class BillingViewModel @Inject constructor(
     }
 
     fun clearAll() {
-        billNo.value = 0; isBillNotFound.value = false
+        isBillNotFound.value = false
         billItemList.clear(); goldItemList.clear()
         cashReceived = 0 ; party.value = null
         calculate()
@@ -107,11 +107,11 @@ class BillingViewModel @Inject constructor(
 
     fun saveBill() { // Or update bill
         calculate()
-        if(billNo.value == 0) viewModelScope.launch {
+        if(loadedBill.value == null || loadedBill.value?.billNo?:0 == 0) viewModelScope.launch {
             isLoading.value = true
             billCounter = if(billCounter!=5) billCounter+1 else 1
             val newBill = generateBill()
-            billNo.value = billRepository.insert(newBill).toInt()
+            billRepository.insert(newBill).toInt()
             RxBus.publish(RxEvent.PreferencesUpdated())
             loadedBill.value = newBill
             isLoading.value = false
@@ -157,7 +157,6 @@ class BillingViewModel @Inject constructor(
         val bill = oldBill?:Bill(
             billNo = billCounter,
             date = Date().time,
-            partyId = if(party.value==null) "N/A" else party.value!!.pId.toString(),
             partyName = if(party.value==null) "N/A" else party.value!!.name,
             partyNumber = if(party.value==null) "N/A" else party.value!!.phoneNumber ,
         )
@@ -171,44 +170,41 @@ class BillingViewModel @Inject constructor(
         return bill
     }
 
-    fun getPreviousBill() {
-        if(billNo.value == 1) return
-        if(billNo.value == 0) billNo.value = billCounter
-        else billNo.value = billNo.value!!.minus(1)
-        getBill()
-    }
-
-    fun getNextBill(){
-        if(billNo.value == 0) return
-        if(billNo.value == billCounter) clearAll()
-        else {
-            billNo.value = billNo.value!!.plus(1)
-            getBill()
+    fun getPreviousBill() { when {
+            loadedBill.value == null -> if(billCounter!=0) getBill(billCounter) else return
+            loadedBill.value!!.billNo == 1 -> return
+            else -> getBill(loadedBill.value!!.billNo-1)
         }
     }
 
-    private fun getBill() = viewModelScope.launch {
+    fun getNextBill(){ when{
+            loadedBill.value == null -> return
+            loadedBill.value!!.billNo == billCounter -> loadedBill.value = null
+            else -> getBill(loadedBill.value!!.billNo+1)
+        }
+    }
+
+    private fun getBill(no:Int) = viewModelScope.launch {
         isLoading.value = true
-        loadedBill.value = billRepository.getBill(billNo.value!!)
-        if(loadedBill.value!=null) setUpBill()
-        else isBillNotFound.value = true
+        val bill = billRepository.getBill(no)
+        if(bill!=null) setUpBill(bill)
+        else {
+            isBillNotFound.value = true
+            loadedBill.value = Bill(billNo = no)
+        }
         isLoading.value = false
     }
 
-    private fun setUpBill() = loadedBill.value?.let {
+    fun setUpBill(bill: Bill)  {
 
-        billItemList.clear(); billItemList.addAll(Converters().fromString(it.items)!!)
-        goldItemList.clear(); goldItemList.addAll(Converters().fromString1(it.golds)!!)
+        billItemList.clear(); billItemList.addAll(Converters().fromString(bill.items)!!)
+        goldItemList.clear(); goldItemList.addAll(Converters().fromString1(bill.golds)!!)
         isBillNotFound.value = false
-        findParty(it.partyName)
-        goldBhav = it.bhav
-        cashReceived = it.cashReceived
+        goldBhav = bill.bhav
+        cashReceived = bill.cashReceived
+        party.value = Party(name=bill.partyName, phoneNumber = bill.partyNumber)
         calculate()
-    }
-
-    fun onOldBillSelected(bill: Bill) {
-        loadedBill.value = bill ; billNo.value = bill.billNo
-        setUpBill()
+        loadedBill.value = bill
     }
 
     fun updateItemsPositions(updatedList: List<Item>) = viewModelScope.launch {
@@ -217,6 +213,7 @@ class BillingViewModel @Inject constructor(
 
     fun deleteBill() = viewModelScope.launch {
         billRepository.deleteBill(loadedBill.value!!)
+        loadedBill.value = null
     }
 
 }

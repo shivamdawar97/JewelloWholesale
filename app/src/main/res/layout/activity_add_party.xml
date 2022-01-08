@@ -15,9 +15,6 @@
             name="partyNumber"
             type="String" />
         <variable
-            name="partyAddress"
-            type="String" />
-        <variable
             name="isLoading"
             type="Boolean" />
     </data>
@@ -68,23 +65,6 @@
                     android:maxLength="10"
                     android:enabled="@{!isLoading}"
                     android:text="@={partyNumber}"
-                    android:imeOptions="flagNoExtractUi"
-                    android:background="@android:color/transparent" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="Address">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPostalAddress"
-                    android:text="@={partyAddress}"
-                    android:enabled="@{!isLoading}"
                     android:imeOptions="flagNoExtractUi"
                     android:background="@android:color/transparent" />
 

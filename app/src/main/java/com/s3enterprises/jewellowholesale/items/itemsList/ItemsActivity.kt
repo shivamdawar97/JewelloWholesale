@@ -50,6 +50,7 @@ class ItemsActivity : AppCompatActivity() {
         return true
     }
 
+
     fun addItem(v: View){
         startActivity(Intent(this,AddItem::class.java))
     }

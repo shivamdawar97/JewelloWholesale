@@ -2,6 +2,7 @@ package com.s3enterprises.jewellowholesale.bills
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
@@ -32,6 +33,7 @@ class BillsActivity : AppCompatActivity() {
             binding.billsRecycler.adapter = BillsAdapter(it)
         }
         setUpDatePicker()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun setUpDatePicker() {
@@ -41,6 +43,14 @@ class BillsActivity : AppCompatActivity() {
         binding.datePicker.setOnClickListener {
             datePicker.show(supportFragmentManager,"DATE_PICKER")
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == android.R.id.home)
+        {   finish()
+            return true
+        }
+        return false
     }
 
 }
