@@ -29,8 +29,10 @@ class BillsActivity : AppCompatActivity() {
         title = "Bills"
         binding.billsRecycler.layoutManager = LinearLayoutManager(this)
         binding.viewModel = viewModel
+        binding.isListEmpty = false
         viewModel.bills.observeForever {
-            binding.billsRecycler.adapter = BillsAdapter(it)
+            if(it.isNullOrEmpty()) binding.isListEmpty = true
+            else binding.billsRecycler.adapter = BillsAdapter(it).also { binding.isListEmpty = false }
         }
         setUpDatePicker()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

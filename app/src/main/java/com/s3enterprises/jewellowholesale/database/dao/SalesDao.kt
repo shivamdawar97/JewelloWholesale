@@ -1,24 +1,24 @@
 package com.s3enterprises.jewellowholesale.database.dao
 
 import androidx.room.*
-import com.s3enterprises.jewellowholesale.database.models.Item
+import com.s3enterprises.jewellowholesale.database.models.Sales
 
 @Dao
 interface SalesDao {
 
-    @Insert
-    suspend fun insert(bill: Item)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(sales: Sales)
 
     @Update
-    suspend fun update(bill: Item)
+    suspend fun update(sales: Sales)
 
-    @Query("select * from Item")
-    fun getAll(): List<Item>
+    @Query("select * from Sales")
+    fun getAll(): List<Sales>
 
     @Delete
-    fun delete(item: Item)
+    fun delete(sales: Sales)
 
-    @Query("delete from Item")
+    @Query("delete from Sales")
     fun clear()
 
 

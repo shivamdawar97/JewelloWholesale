@@ -71,13 +71,13 @@ class BillingViewModel @Inject constructor(
         }
 
         val fineBh = fineGs - fineGr
-        val tAmount = (fineBh * goldBhav).toInt()
+        val cashBh = (fineBh * goldBhav).toInt()
 
         val fineCr = if(goldBhav<1) 0f else cashReceived.toFloat() / goldBhav
 
         val fineDu = (fineBh-fineCr).roundOff(3)
 
-        val cashDu = tAmount - cashReceived
+        val cashDu = cashBh - cashReceived
 
         grossGS.value =  grossGs.roundOff(3)
         fineGS.value = fineGs.roundOff(3)
@@ -85,7 +85,7 @@ class BillingViewModel @Inject constructor(
         grossGR.value =  grossGr.roundOff(3)
         fineGR.value = fineGr.roundOff(3)
 
-        cashBH.value = tAmount
+        cashBH.value = cashBh
 
         fineBH.value = fineBh.roundOff(3)
         fineCR.value = fineCr.roundOff(3)
@@ -127,29 +127,29 @@ class BillingViewModel @Inject constructor(
 
     fun generateBillPrint() = loadedBill.value?.let{
         val stringBuilder = StringBuilder()
-            .append("\n Bill Estimation\n")
-            .append("Bill no: ${it.billNo} \tDate:${Utils.getDate(it.date)}")
-            .append("Party: ${it.partyName}\t Number: ${it.partyNumber}")
-            .append("\n----------------------------\n")
+            .append("\n\t Bill Estimation\n")
+            .append("Bill no: ${it.billNo} \tDate:${Utils.getDate(it.date)}\n")
+            .append("Party: ${it.partyName}\t Number: ${it.partyNumber}\n")
+            .append("-----------------------------------\n")
             billItemList.forEach { i ->
-                stringBuilder.append("${i.name}\n")
-                    .append("${i.weight} * ${i.rate} = ${i.fine}")
+                stringBuilder.append("${i.name}\t")
+                    .append("${i.weight} * ${i.rate}\t${i.fine}\n")
             }
-            stringBuilder.append("\n----------------------------\n")
-                .append("GS \t${grossGS.value}\t\t\t ${fineGS.value}")
+        stringBuilder.append("-----------------------------------\n")
+                .append("GS \t${grossGS.value}\t ${fineGS.value}\n")
 
-        if(fineGR.value!!.toFloat()!=0f)
-            goldItemList.forEach { i ->
-                stringBuilder.append("${i.weight} * ${i.purity} = ${i.fine}")
+
+        if(goldItemList.isNotEmpty()) {
+            goldItemList.forEachIndexed  { pos, i ->
+                stringBuilder.append("${if(pos==0) "GR" else ""}\t${i.weight} * ${i.purity}\t\t${i.fine}\n")
             }
-        stringBuilder.append("\n----------------------------\n")
-            .append("GR \t${grossGR.value}}\t\t\t ${fineGR.value}")
-            .append("CR ${it.bhav}")
-            .append("Total Amount ${cashBH.value}")
-        if(it.cashReceived!=0)
-            stringBuilder.append("Amount received: ${it.cashReceived}")
-        stringBuilder.append("Due Gold: ${fineDU.value}")
-        stringBuilder.append("Due Amount: ${cashDU.value}").toString()
+            stringBuilder.append("-----------------------------------\n")
+            .append("GRT \t${grossGR.value}\t\t${fineGR.value}\n")
+        }
+
+        stringBuilder.append("BH ${it.bhav}\t${Utils.getRupeesFormatted(cashBH.value?:0)}\t\t${fineBH.value?:0f}\n")
+        if(it.cashReceived!=0) stringBuilder.append("CR \t${Utils.getRupeesFormatted(it.cashReceived)}\t\t${fineCR.value?:0f}\n")
+            stringBuilder.append("DU \t${Utils.getRupeesFormatted(cashDU.value?:0)}\t\t${fineDU.value?:0f}\n\n\n\n").toString()
     }
 
 

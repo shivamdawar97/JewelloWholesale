@@ -6,9 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Sales (
-    @PrimaryKey(autoGenerate = true)
-    val id:Long,
-
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo
     val date:Long,
 
@@ -16,6 +14,9 @@ data class Sales (
     val cash:Int,
 
     @ColumnInfo
-    val gold:Long
+    val gold:Float,
+
+    @ColumnInfo
+    val total:Float
 
 )

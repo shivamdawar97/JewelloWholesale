@@ -11,7 +11,7 @@ import com.s3enterprises.jewellowholesale.database.models.Item
 import com.s3enterprises.jewellowholesale.database.models.Party
 import com.s3enterprises.jewellowholesale.database.models.Sales
 
-@Database(entities = [Bill::class,Item::class, Party::class,Sales::class],version = 1,exportSchema = false)
+@Database(entities = [Bill::class,Item::class, Party::class,Sales::class],version = 2,exportSchema = false)
 abstract class JewelloDatabase:RoomDatabase() {
 
     abstract val itemDao:ItemDao

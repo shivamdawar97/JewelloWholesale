@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.s3enterprises.jewellowholesale.R
+import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.Utils.atEndOfDay
 import com.s3enterprises.jewellowholesale.Utils.atStartOfDay
 import com.s3enterprises.jewellowholesale.customViews.BillItemCardView
@@ -182,7 +183,7 @@ class BillingActivity : AppCompatActivity() {
         btnPrint.setOnClickListener {
             val printBill = viewModel.generateBillPrint()
             if(printBill!=null) lifecycleScope.launch {
-                JewelloBluetoothSocket.printData(printBill,this@BillingActivity)
+                JewelloBluetoothSocket().printData(printBill,this@BillingActivity)
             }
         }
 
@@ -246,6 +247,7 @@ class BillingActivity : AppCompatActivity() {
     private fun getPreferences() {
         viewModel.goldBhav = preferences.getInt("bhav",0)
         viewModel.billCounter = preferences.getInt("bill_counter",0)
+        Utils.printerName = preferences.getString("printer_name","")!!
         binding.billingPanel.binding.counterLabel.text = viewModel.billCounter.toString()
     }
 

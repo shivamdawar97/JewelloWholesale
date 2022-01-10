@@ -10,37 +10,36 @@ import androidx.lifecycle.lifecycleScope
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.databinding.ActivityPrintBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PrintActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPrintBinding
-    private lateinit var preferences: SharedPreferences
-    private val PRINTER_KEY = "printer_name"
+    @Inject lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_print)
         title = "Printer Setting"
-        preferences = getSharedPreferences("jewello_wholesale",Context.MODE_PRIVATE)
         setUp()
-
-
     }
 
     private fun setUp() = with(binding) {
-        printerName = preferences.getString(PRINTER_KEY,"")
+        printerName = Utils.printerName
 
         saveBtn.setOnClickListener {
             if(!printerName.isNullOrBlank())
-            preferences.edit().putString(PRINTER_KEY,printerName).apply().also { Utils.printerName = printerName!! }
+            preferences.edit().putString("printer_name",printerName).apply().also { Utils.printerName = printerName!! }
             else Toast.makeText(this@PrintActivity,"Please enter printer name",Toast.LENGTH_LONG).show()
         }
 
         testPrint.setOnClickListener {
             if(!printerName.isNullOrBlank())
                 lifecycleScope.launch {
-                    JewelloBluetoothSocket.printData("Test print....\n\n\n",this@PrintActivity)
+                    JewelloBluetoothSocket().printData("Test print....\n\n\n",this@PrintActivity)
                 }
             else Toast.makeText(this@PrintActivity,"Please enter printer name",Toast.LENGTH_LONG).show()
         }

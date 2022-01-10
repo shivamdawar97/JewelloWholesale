@@ -20,9 +20,9 @@ import java.nio.charset.Charset
 import java.util.*
 import kotlin.experimental.or
 
-object JewelloBluetoothSocket {
+class JewelloBluetoothSocket {
 
-    fun isConnected() = if (socket != null) socket!!.isConnected else false
+    //fun isConnected() = if (socket != null) socket!!.isConnected else false
 
     private var bluetoothDevice: BluetoothDevice? = null
     private var outputStream: OutputStream? = null
@@ -35,14 +35,20 @@ object JewelloBluetoothSocket {
 
     private var socket: BluetoothSocket? = null
     private val defaultPrintFormat = byteArrayOf(27, 33, 0)
-    private val boldPrintFormat = byteArrayOf(27, 33, 0).apply {
+    private val bigPrintFormat = byteArrayOf(27, 33, 0).apply {
         this[2] = this[2]
             .or(0x8) // bold
             .or(0x10) // height
             .or(0x20) // width
     }
+    private val boldPrintFormat = byteArrayOf(27, 33, 0).apply {
+        this[2] = this[2]
+            .or(0x4) // bold
+            .or(0x4) // height
+            .or(0x8) // width
+    }
 
-    private val nameBuffer = "Kamal Jewellers\n".toByteArray()
+    //private val nameBuffer = "Kamal Jewellers\n".toByteArray()
 
     private suspend fun findDeviceAndConnect(context: Context) {
         if (Utils.printerName == "") return
@@ -141,8 +147,7 @@ object JewelloBluetoothSocket {
         val buffer = text.toByteArray()
         outputStream?.let {
             it.write(boldPrintFormat)
-            it.write(nameBuffer, 0, nameBuffer.size)
-            it.write(defaultPrintFormat)
+//            it.write(defaultPrintFormat)
             it.write(buffer, 0, buffer.size)
         }
         disconnectBT()
@@ -150,7 +155,7 @@ object JewelloBluetoothSocket {
         ex.printStackTrace()
     }
 
-    @Throws(IOException::class)
+
     private fun disconnectBT() {
         try {
             stopWorker = true

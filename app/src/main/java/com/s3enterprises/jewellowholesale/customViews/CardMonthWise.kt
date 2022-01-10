@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.s3enterprises.jewellowholesale.R
-import com.s3enterprises.jewellowholesale.sales.Sale
+import com.s3enterprises.jewellowholesale.database.models.Sales
 
 class CardMonthWise: LinearLayout {
 
@@ -30,16 +30,12 @@ class CardMonthWise: LinearLayout {
         inflate(context, R.layout.card_month_wise,this)
     }
 
-    fun setData(sale: Sale){
-        this.month.text = sale.name
-        this.gold.text = sale.gold
-        this.cash.text = sale.cash
-        this.total.text = sale.total
+    fun setData(sale: Sales){
+
     }
 
-    fun setPartyData(sale: Sale) {
-        this.month.text = sale.gold
-        this.total.text = sale.total
+    fun setPartyData(sale: Sales) {
+
     }
 
 }
