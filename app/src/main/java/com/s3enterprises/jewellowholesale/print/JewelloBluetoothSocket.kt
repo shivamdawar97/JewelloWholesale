@@ -12,6 +12,7 @@ import android.util.Log
 import android.widget.Toast
 import com.s3enterprises.jewellowholesale.Utils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.io.InputStream
@@ -45,7 +46,7 @@ class JewelloBluetoothSocket {
         this[2] = this[2]
             .or(0x4) // bold
             .or(0x4) // height
-            .or(0x8) // width
+            .or(0x16) // width
     }
 
     //private val nameBuffer = "Kamal Jewellers\n".toByteArray()
@@ -150,6 +151,7 @@ class JewelloBluetoothSocket {
 //            it.write(defaultPrintFormat)
             it.write(buffer, 0, buffer.size)
         }
+        delay(1000)
         disconnectBT()
     } catch (ex: Exception) {
         ex.printStackTrace()

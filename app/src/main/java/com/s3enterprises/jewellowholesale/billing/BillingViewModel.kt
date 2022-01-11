@@ -127,16 +127,16 @@ class BillingViewModel @Inject constructor(
 
     fun generateBillPrint() = loadedBill.value?.let{
         val stringBuilder = StringBuilder()
-            .append("\n\t Bill Estimation\n")
+            .append("\tEstimation\n")
             .append("Bill no: ${it.billNo} \tDate:${Utils.getDate(it.date)}\n")
-            .append("Party: ${it.partyName}\t Number: ${it.partyNumber}\n")
+            .append("Party: ${it.partyName}\n")
             .append("-----------------------------------\n")
             billItemList.forEach { i ->
                 stringBuilder.append("${i.name}\t")
                     .append("${i.weight} * ${i.rate}\t${i.fine}\n")
             }
         stringBuilder.append("-----------------------------------\n")
-                .append("GS \t${grossGS.value}\t ${fineGS.value}\n")
+                .append("GS \t${grossGS.value}\t\t${fineGS.value}\n")
 
 
         if(goldItemList.isNotEmpty()) {
@@ -144,7 +144,7 @@ class BillingViewModel @Inject constructor(
                 stringBuilder.append("${if(pos==0) "GR" else ""}\t${i.weight} * ${i.purity}\t\t${i.fine}\n")
             }
             stringBuilder.append("-----------------------------------\n")
-            .append("GRT \t${grossGR.value}\t\t${fineGR.value}\n")
+            if(goldItemList.size>1) stringBuilder.append("GRT \t${grossGR.value}\t\t${fineGR.value}\n")
         }
 
         stringBuilder.append("BH ${it.bhav}\t${Utils.getRupeesFormatted(cashBH.value?:0)}\t\t${fineBH.value?:0f}\n")
