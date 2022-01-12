@@ -39,6 +39,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:text="@={itemName}"
+                    android:maxLength="20"
                     android:enabled="@{!isLoading}"
                     android:imeOptions="flagNoExtractUi"
                     android:background="@android:color/transparent"

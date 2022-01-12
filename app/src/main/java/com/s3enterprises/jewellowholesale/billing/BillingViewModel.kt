@@ -109,7 +109,7 @@ class BillingViewModel @Inject constructor(
         calculate()
         if(loadedBill.value == null || loadedBill.value?.billNo?:0 == 0) viewModelScope.launch {
             isLoading.value = true
-            billCounter = if(billCounter!=5) billCounter+1 else 1
+            billCounter = if(billCounter!=2000) billCounter+1 else 1
             val newBill = generateBill()
             billRepository.insert(newBill).toInt()
             RxBus.publish(RxEvent.PreferencesUpdated())
@@ -123,34 +123,6 @@ class BillingViewModel @Inject constructor(
             loadedBill.value = updatedBill
             isLoading.value = false
         }
-    }
-
-    fun generateBillPrint() = loadedBill.value?.let{
-
-        val stringBuilder = StringBuilder()
-            .append("\tEstimation\n")
-            .append("Bill no: ${it.billNo} \tDate:${Utils.getDate(it.date)}\n")
-            .append("Party: ${it.partyName}\n")
-            .append("-----------------------------------\n")
-            billItemList.forEach { i ->
-                stringBuilder.append("${i.name}\t")
-                    .append("${i.weight} * ${i.rate}\t${i.fine}\n")
-            }
-        stringBuilder.append("-----------------------------------\n")
-                .append("GS \t${grossGS.value}\t\t${fineGS.value}\n")
-
-
-        if(goldItemList.isNotEmpty()) {
-            goldItemList.forEachIndexed  { pos, i ->
-                stringBuilder.append("${if(pos==0) "GR" else ""}\t${i.weight} * ${i.purity}\t\t${i.fine}\n")
-            }
-            stringBuilder.append("-----------------------------------\n")
-            if(goldItemList.size>1) stringBuilder.append("GRT \t${grossGR.value}\t\t${fineGR.value}\n")
-        }
-
-        stringBuilder.append("BH ${it.bhav}\t${Utils.getRupeesFormatted(cashBH.value?:0)}\t\t${fineBH.value?:0f}\n")
-        if(it.cashReceived!=0) stringBuilder.append("CR \t${Utils.getRupeesFormatted(it.cashReceived)}\t\t${fineCR.value?:0f}\n")
-            stringBuilder.append("DU \t${Utils.getRupeesFormatted(cashDU.value?:0)}\t\t${fineDU.value?:0f}\n\n\n\n").toString()
     }
 
     fun generateBillPrint2() = loadedBill.value?.let{

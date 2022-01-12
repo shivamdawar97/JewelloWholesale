@@ -30,6 +30,7 @@ object Utils {
 
     private val DATE_FORMAT = SimpleDateFormat("EEE, dd MMM yyyy HH:mm", Locale.US)
     private val DATE_FORMAT_FOR_HEADING = SimpleDateFormat("dd MMM yyyy", Locale.US)
+    private val DATE_FORMAT_FOR_SALES = SimpleDateFormat("MMM yyyy", Locale.US)
     var printerName = ""
     var bhav = 5832
     var INPUT_CONNECTION: InputConnection? =null
@@ -65,6 +66,9 @@ object Utils {
 
     @JvmStatic
     fun getDate(date: Date): String = DATE_FORMAT_FOR_HEADING.format(date)
+
+    @JvmStatic
+    fun getMonthDate(date: Date): String = DATE_FORMAT_FOR_SALES.format(date)
 
     @JvmStatic
     fun getDate(date: Long): String = DATE_FORMAT.format(Date(date))

@@ -3,6 +3,7 @@ package com.s3enterprises.jewellowholesale.bills
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
@@ -31,8 +32,8 @@ class BillsActivity : AppCompatActivity() {
         binding.viewModel = viewModel
         binding.isListEmpty = false
         viewModel.bills.observeForever {
-            if(it.isNullOrEmpty()) binding.isListEmpty = true
-            else binding.billsRecycler.adapter = BillsAdapter(it).also { binding.isListEmpty = false }
+            binding.billsRecycler.adapter = BillsAdapter(it)
+            binding.isListEmpty = it.isNullOrEmpty()
         }
         setUpDatePicker()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

@@ -45,4 +45,5 @@
     <string name="party_name">Party Name</string>
     <string name="delete">Delete</string>
     <string name="empty_list">No Data Found!</string>
+    <string name="total">Total</string>
 </resources>

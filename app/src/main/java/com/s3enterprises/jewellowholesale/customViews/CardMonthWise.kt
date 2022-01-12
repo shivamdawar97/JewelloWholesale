@@ -9,7 +9,7 @@ import com.s3enterprises.jewellowholesale.database.models.Sales
 
 class CardMonthWise: LinearLayout {
 
-    private val month by lazy { findViewById<TextView>(R.id.month_name) }
+    private val month by lazy { findViewById<TextView>(R.id.date) }
     private val gold by lazy { findViewById<TextView>(R.id.gold) }
     private val cash by lazy { findViewById<TextView>(R.id.cash) }
     private val total by lazy { findViewById<TextView>(R.id.total) }

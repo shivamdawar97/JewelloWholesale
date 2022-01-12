@@ -42,7 +42,10 @@ class JewelloBluetoothSocket {
             .or(0x10) // height
             .or(0x20) // width
     }
-
+    private val boldPrintFormat = byteArrayOf(27, 33, 0).apply {
+        this[2] = this[2]
+            .or(0x8) // bold
+    }
     private val customPrintFormat = byteArrayOf(27, 33, 0).apply {
         this[2] = this[2]
             .or(0x4) // bold

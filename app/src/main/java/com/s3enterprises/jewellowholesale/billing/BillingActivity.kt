@@ -102,7 +102,7 @@ class BillingActivity : AppCompatActivity() {
 
         btnSave.setOnClickListener {
             when {
-                viewModel.loadedBill.value == null -> {
+                viewModel.loadedBill.value != null -> {
 
                     val billDate = viewModel.loadedBill.value!!.date
                     val thisDate = Date()

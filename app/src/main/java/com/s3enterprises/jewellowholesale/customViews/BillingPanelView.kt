@@ -2,9 +2,12 @@ package com.s3enterprises.jewellowholesale.customViews
 
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.inputmethod.EditorInfo
 import android.widget.AutoCompleteTextView
 import android.widget.LinearLayout
 import com.s3enterprises.jewellowholesale.R
@@ -24,6 +27,7 @@ class BillingPanelView: LinearLayout {
 
     lateinit var binding : ViewBillingPanelBinding
     private val autoCompleteTextView by lazy { (binding.nameField.editText as AutoCompleteTextView) }
+    private val ic by lazy { autoCompleteTextView.onCreateInputConnection(EditorInfo()) }
 
     constructor(context: Context) : super(context) {
         inflateLayout(context)
@@ -48,9 +52,10 @@ class BillingPanelView: LinearLayout {
     fun setViewModel(viewModel:BillingViewModel) = with(binding){
         model = viewModel
         bhavEdit.setText(viewModel.goldBhav.toString())
+
         autoCompleteTextView.onTextChanged { if(!viewModel.listenChangeEvents) return@onTextChanged
             if(viewModel.loadedBill.value==null) model!!.findParty(it.toString())
-            if(viewModel.party.value!=null) Utils.hideKeyboard(autoCompleteTextView)
+            if(viewModel.party.value!=null) Utils.hideKeyboard(autoCompleteTextView).also { autoCompleteTextView.clearFocus() }
         }
 
         billChanger.setOnPreviousListener{
@@ -80,6 +85,12 @@ class BillingPanelView: LinearLayout {
     fun setPartiesAdapter(parties: List<Party>) {
         val adapter = AutoCompleteAdapter(context, R.layout.list_item,parties)
         autoCompleteTextView.setAdapter(adapter)
+        autoCompleteTextView.setOnFocusChangeListener { _, hasFocus ->
+            if(hasFocus) Handler(Looper.getMainLooper()).postDelayed({
+                Utils.INPUT_CONNECTION = ic
+            },100)
+            else Utils.INPUT_CONNECTION = null
+        }
         autoCompleteTextView.setText(" ")
         autoCompleteTextView.setText("")
     }

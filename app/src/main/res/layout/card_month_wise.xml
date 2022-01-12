@@ -9,7 +9,7 @@
     >
 
     <TextView
-        android:id="@+id/month_name"
+        android:id="@+id/date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="May"
