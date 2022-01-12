@@ -181,7 +181,7 @@ class BillingActivity : AppCompatActivity() {
         }
 
         btnPrint.setOnClickListener {
-            val printBill = viewModel.generateBillPrint()
+            val printBill = viewModel.generateBillPrint2()
             if(printBill!=null) lifecycleScope.launch {
                 JewelloBluetoothSocket().printData(printBill,this@BillingActivity)
             }

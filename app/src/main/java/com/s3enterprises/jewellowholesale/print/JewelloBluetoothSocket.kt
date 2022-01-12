@@ -42,14 +42,14 @@ class JewelloBluetoothSocket {
             .or(0x10) // height
             .or(0x20) // width
     }
-    private val boldPrintFormat = byteArrayOf(27, 33, 0).apply {
+
+    private val customPrintFormat = byteArrayOf(27, 33, 0).apply {
         this[2] = this[2]
             .or(0x4) // bold
             .or(0x4) // height
             .or(0x16) // width
-    }
 
-    //private val nameBuffer = "Kamal Jewellers\n".toByteArray()
+    }
 
     private suspend fun findDeviceAndConnect(context: Context) {
         if (Utils.printerName == "") return
@@ -147,7 +147,7 @@ class JewelloBluetoothSocket {
         findDeviceAndConnect(context)
         val buffer = text.toByteArray()
         outputStream?.let {
-            it.write(boldPrintFormat)
+          //  it.write(customPrintFormat)
 //            it.write(defaultPrintFormat)
             it.write(buffer, 0, buffer.size)
         }
