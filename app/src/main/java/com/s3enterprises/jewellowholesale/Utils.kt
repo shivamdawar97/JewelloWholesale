@@ -34,7 +34,7 @@ object Utils {
     var printerName = ""
     var bhav = 5832
     var INPUT_CONNECTION: InputConnection? =null
-    val rupeesFormat = DecimalFormat("##,##,###")
+    private val rupeesFormat = DecimalFormat("##,##,###")
 
     object CurrentDate{
         private val date = Date()

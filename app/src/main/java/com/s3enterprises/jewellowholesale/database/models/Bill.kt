@@ -25,5 +25,7 @@ data class Bill(
     @ColumnInfo
     var cashReceived:Int=0,
     @ColumnInfo(name = "cash_du")
-    var cashDu:Int=0
+    var cashDu:Int=0,
+    @ColumnInfo(name = "fine_gs")
+    var fineGs:Float=0f
 ):Serializable

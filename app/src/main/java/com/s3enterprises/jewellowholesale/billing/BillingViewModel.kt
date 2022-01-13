@@ -13,6 +13,7 @@ import com.s3enterprises.jewellowholesale.items.ItemsRepository
 import com.s3enterprises.jewellowholesale.party.PartyRepository
 import com.s3enterprises.jewellowholesale.rx.RxBus
 import com.s3enterprises.jewellowholesale.rx.RxEvent
+import com.s3enterprises.jewellowholesale.sales.SalesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.*
@@ -24,7 +25,8 @@ import kotlin.text.StringBuilder
 class BillingViewModel @Inject constructor(
     private val billRepository: BillRepository,
     private val itemsRepository: ItemsRepository,
-    private val partyRepository: PartyRepository
+    private val partyRepository: PartyRepository,
+    private val salesRepository: SalesRepository
 ):ViewModel() {
 
     var listenChangeEvents = true
@@ -111,32 +113,80 @@ class BillingViewModel @Inject constructor(
             isLoading.value = true
             billCounter = if(billCounter!=2000) billCounter+1 else 1
             val newBill = generateBill()
-            billRepository.insert(newBill).toInt()
+            billRepository.insert(newBill)
             RxBus.publish(RxEvent.PreferencesUpdated())
             loadedBill.value = newBill
             isLoading.value = false
+            updateSales()
         }
         else if(!isBillNotFound.value!!) viewModelScope.launch {
             isLoading.value = true
             val updatedBill = generateBill(loadedBill.value!!)
             billRepository.update(updatedBill)
+            updateSales(updatedBill)
             loadedBill.value = updatedBill
             isLoading.value = false
         }
     }
 
-    fun generateBillPrint2() = loadedBill.value?.let{
-        val tab = "     "
+    private suspend fun updateSales(updatedBill:Bill?=null,isDelete:Boolean=false) = loadedBill.value!!.let {
+        when {
+            updatedBill!=null -> {
+                val cash = (updatedBill.cashReceived + updatedBill.cashDu) - (it.cashReceived+it.cashDu)
+                val fine = (updatedBill.fineGs - it.fineGs).roundOff(3)
+                val total = (fine * updatedBill.bhav + cash) - (it.fineGs * it.bhav + it.cashReceived + it.cashDu )
+                salesRepository.updateTodaySale(cash,fine,total.toInt())
+            }
+            isDelete -> {
+                val cash =  it.cashReceived + it.cashDu
+                val fine =  it.fineGs.roundOff(3)
+                val total = fine * it.bhav + cash
+                salesRepository.updateTodaySale(-cash,-fine,-total.toInt())
+            }
+            else -> {
+                val cash =  it.cashReceived + it.cashDu
+                val fine =  it.fineGs.roundOff(3)
+                val total = fine * it.bhav + cash
+                salesRepository.updateTodaySale(cash,fine,total.toInt())
+            }
+        }
+
+    }
+
+    fun generateSamplePrint():String {
         val stringBuilder = StringBuilder()
-            .append("            Estimation\n")
-            .append("Bill no: ${it.billNo}${tab}${Utils.getDate(it.date)}\n")
+        billItemList.forEach { i ->
+            var det = 0
+            stringBuilder.append(i.name.apply { det+=length })
+                .append(tab(14-det).apply { det+=length })
+                .append("${i.weight}  x  ${i.rate}".apply { det+=length })
+                .append(tab(32-det))
+                .append("${i.fine}\n")
+        }
+        stringBuilder.append("----------------------------------------\n")
+        var det1 = 0
+        stringBuilder.append("GS".apply { det1+=length })
+            .append(tab(14-det1).apply { det1+=length })
+            .append("${grossGS.value}".apply { det1+=length })
+            .append(tab(32-det1))
+            .append("${fineGS.value}\n\n\n\n")
+        return stringBuilder.toString()
+    }
+
+    fun generateBillPrint2() = loadedBill.value?.let{
+        val stringBuilder = StringBuilder()
+            .append(tab(14))
+            .append("Estimation\n")
+            .append("Bill no: ${it.billNo}${tab(12)}${Utils.getDate(it.date)}\n")
             .append("Party: ${it.partyName}\n")
             .append("----------------------------------------\n")
-            billItemList.forEach { i ->
+        billItemList.forEach { i ->
                 var det = 0
                 stringBuilder.append(i.name.apply { det+=length })
                 .append(tab(14-det).apply { det+=length })
                 .append("${i.weight}  x  ${i.rate}".apply { det+=length })
+                .append(tab(30-det).apply { det+=length })
+                .append("=".apply { det+=length })
                 .append(tab(32-det))
                 .append("${i.fine}\n")
             }
@@ -146,7 +196,7 @@ class BillingViewModel @Inject constructor(
         stringBuilder.append("GS".apply { det1+=length })
             .append(tab(14-det1).apply { det1+=length })
             .append("${grossGS.value}".apply { det1+=length })
-            .append(tab(32-det1))
+            .append(tab(30-det1))
             .append("${fineGS.value}\n\n")
 
         goldItemList.forEachIndexed  { pos, i ->
@@ -154,6 +204,8 @@ class BillingViewModel @Inject constructor(
             if(pos==0) stringBuilder.append("GR".apply { det+=length })
             stringBuilder.append(tab(14-det).apply { det+=length })
                 .append("${i.weight} x ${i.purity}".apply { det+=length })
+                .append(tab(30-det).apply { det+=length })
+                .append("=".apply { det+=length })
                 .append(tab(32-det))
                 .append("${i.fine}\n")
         }
@@ -168,7 +220,7 @@ class BillingViewModel @Inject constructor(
         }
 
         var det2 = 0
-        stringBuilder.append("BH ${it.bhav}".apply { det2+=length })
+        stringBuilder.append("BHAV ${it.bhav}".apply { det2+=length })
             .append(tab(14-det2).apply { det2+=length })
             .append(Utils.getRupeesFormatted(cashBH.value?:0).apply { det2+=length })
             .append(tab(32-det2))
@@ -186,9 +238,9 @@ class BillingViewModel @Inject constructor(
             .append(tab(14-det4).apply { det4+=length })
             .append(Utils.getRupeesFormatted(cashDU.value?:0).apply { det4+=length })
             .append(tab(32-det4))
-            .append("${fineDU.value ?: 0f}\n\n")
-
-        .append("_____________Thank you____________\n\n\n\n").toString()
+            .append("${fineDU.value ?: 0f}\n\n\n")
+            .append("Gross Weight:\n\n\n")
+        .append("_________________Thank you________________\n\n\n\n").toString()
     }
 
 
@@ -205,6 +257,7 @@ class BillingViewModel @Inject constructor(
             bhav = goldBhav
             cashReceived = this@BillingViewModel.cashReceived
             cashDu = cashDU.value!!
+            fineGs = fineGS.value!!
         }
         return bill
     }
@@ -251,11 +304,14 @@ class BillingViewModel @Inject constructor(
     }
 
     fun deleteBill() = viewModelScope.launch {
+        isLoading.value = true
         billRepository.deleteBill(loadedBill.value!!)
+        updateSales(isDelete = true)
         loadedBill.value = null
+        isLoading.value = false
     }
 
-    fun tab(size:Int) :String {
+    private fun tab(size:Int) :String {
         val s = StringBuilder()
         for(i in 0..size) s.append(" ")
         return s.toString()

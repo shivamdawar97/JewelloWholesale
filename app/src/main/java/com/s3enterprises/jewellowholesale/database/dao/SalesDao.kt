@@ -13,13 +13,18 @@ interface SalesDao {
     suspend fun update(sales: Sales)
 
     @Query("select * from Sales")
-    fun getAll(): List<Sales>
+    suspend fun getAll(): List<Sales>
 
     @Delete
-    fun delete(sales: Sales)
+    suspend fun delete(sales: Sales)
 
     @Query("delete from Sales")
     fun clear()
 
+    @Query("select * from Sales where date=:date")
+    suspend fun getSale(date:Long):Sales?
+
+    @Query("select * from Sales where date between (:monthStart) and :monthEnd order by date desc")
+    suspend fun getSalesByRange(monthStart: Long, monthEnd: Long): List<Sales>
 
 }

@@ -21,7 +21,7 @@ class BillsAdapter(private val bills:List<Bill>) : RecyclerView.Adapter<BillsAda
          fun setData(bill: Bill) = with(bill){
 
              billNoView.text = billNo.toString()
-             amount.text = "₹ $cashDu"
+             amount.text = "₹ $fineGs"
              partyNameView.text = partyName
              dateView.text = Utils.getDate(date)
              mView.setOnClickListener {

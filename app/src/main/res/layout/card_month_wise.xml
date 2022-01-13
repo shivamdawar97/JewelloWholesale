@@ -12,10 +12,11 @@
         android:id="@+id/date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        tools:text="May"
+        tools:text="20 May"
         android:textColor="@android:color/black"
         android:textSize="@dimen/medium"
         android:layout_weight="1"
+        android:gravity="center"
         />
 
     <TextView

@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
-@Entity(indices =[Index(value = ["phone_number","name"], unique = true)])
+@Entity(indices =[Index(value = ["name"], unique = true)])
 data class Party(
     @PrimaryKey(autoGenerate = true)
     var pId:Int=0,

@@ -32,13 +32,22 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
+        <TextView
+            android:id="@+id/range_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/month_picker"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@{viewModel.saleRange}"
+            />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/month_picker"
+            app:layout_constraintTop_toBottomOf="@id/range_label"
             tools:context=".sales.SalesActivity"
             android:layout_marginStart="30dp"
             >
@@ -141,7 +150,7 @@
                 />
 
             <TextView
-                android:id="@+id/tGold"
+                android:id="@+id/gold"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 tools:text="100.21"
@@ -177,6 +186,7 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/sales_recycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@id/total_header"

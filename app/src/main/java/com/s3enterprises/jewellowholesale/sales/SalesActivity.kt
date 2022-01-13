@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.customViews.MonthYearPickerDialog
@@ -25,24 +26,31 @@ class SalesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_sales)
         binding.viewModel = viewModel
-        title = "Sales"
-        setUp()
+        binding.lifecycleOwner = this; title = "Sales"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         monthPicker = MonthYearPickerDialog(viewModel.date.value!!).apply {
             setListener { _, year, month, dayOfMonth ->
                 Calendar.getInstance().also {
                     it.time = date
                     it.set(Calendar.YEAR,year) ; it.set(Calendar.MONTH,month) ; it.set(Calendar.DAY_OF_MONTH,dayOfMonth)
+                    viewModel.year = year ; viewModel.month = month
                     viewModel.date.value = it.time
                 }
             }
         }
-
-        viewModel.date.observeForever {
-            Toast.makeText(this,Utils.getMonthDate(it),Toast.LENGTH_LONG).show()
-        }
         binding.monthPicker.setOnClickListener {
-            monthPicker.show(supportFragmentManager,"MonthYearPickerDialog")
+            monthPicker.show(supportFragmentManager,"MonthYearPicker")
+        }
+        binding.salesRecycler.layoutManager = LinearLayoutManager(this)
+        viewModel.sales.observeForever {
+            var x1 = 0; var x2=0f; var x3=0
+            it.forEach { sale ->
+                x1+=sale.cash ; x2+=sale.gold ; x3+=sale.total
+            }
+            binding.salesRecycler.adapter = SalesRecyclerAdapter(it)
+            binding.cash.text = Utils.getRupeesFormatted(x1)
+            binding.gold.text = x2.toString()
+            binding.total.text = Utils.getRupeesFormatted(x3)
         }
     }
 
@@ -51,7 +59,4 @@ class SalesActivity : AppCompatActivity() {
         return true
     }
 
-    private fun setUp() = lifecycleScope.launch {
-
-    }
 }

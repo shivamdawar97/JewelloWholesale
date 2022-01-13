@@ -194,8 +194,25 @@ class BillingActivity : AppCompatActivity() {
                 .setPositiveButton("Yes"){
                         di,_ ->
                     di.dismiss()
-                    viewModel.deleteBill()
-                    resetBill()
+
+                    val billDate = viewModel.loadedBill.value!!.date
+                    val thisDate = Date()
+                    val todayRange = atStartOfDay(thisDate).time..atEndOfDay(thisDate).time
+
+                    if(billDate !in todayRange)
+                        AlertDialog.Builder(this@BillingActivity)
+                            .setTitle("Old date bill")
+                            .setMessage("Bill of previous date are not allowed to be edit")
+                            .setPositiveButton("Ok"){
+                                    di2,_ ->
+                                di2.dismiss()
+                            }
+                            .show()
+                    else {
+                        viewModel.deleteBill()
+                        resetBill()
+                    }
+
                 }
                 .setNegativeButton("Cancel"){ di,_->
                     di.dismiss()
@@ -224,6 +241,10 @@ class BillingActivity : AppCompatActivity() {
                 viewModel.loadedBill.value = null
             }
             R.id.view_pending -> startActivity(Intent(this,PendingsActivity::class.java))
+            R.id.receipt -> {
+                val printBill = viewModel.generateSamplePrint()
+                lifecycleScope.launch { JewelloBluetoothSocket().printData(printBill,this@BillingActivity) }
+            }
         }
         return true
     }

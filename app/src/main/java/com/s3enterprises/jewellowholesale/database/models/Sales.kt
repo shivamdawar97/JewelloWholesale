@@ -3,20 +3,21 @@ package com.s3enterprises.jewellowholesale.database.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity
 data class Sales (
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo
-    val date:Long,
+    val date:Long=0,
 
     @ColumnInfo
-    val cash:Int,
+    var cash:Int=0,
 
     @ColumnInfo
-    val gold:Float,
+    var gold:Float=0f,
 
     @ColumnInfo
-    val total:Float
+    var total:Int=0
 
 )
