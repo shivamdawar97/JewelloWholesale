@@ -102,7 +102,7 @@
                         android:textAllCaps="false"
                         app:layout_constraintStart_toStartOf="@id/btn_save"
                         app:layout_constraintTop_toBottomOf="@id/btn_save"
-                        android:visibility="@{model.loadedBill!=null?View.VISIBLE:View.INVISIBLE}"
+                        android:visibility="@{model.isBillSaved?View.VISIBLE:View.INVISIBLE}"
                         />
 
                     <Button
@@ -113,7 +113,7 @@
                         app:layout_constraintTop_toTopOf="@id/btn_print"
                         android:text="@string/delete"
                         android:textAllCaps="false"
-                        android:visibility="@{model.loadedBill!=null?View.VISIBLE:View.INVISIBLE}"
+                        android:visibility="@{model.isBillSaved?View.VISIBLE:View.INVISIBLE}"
                         android:backgroundTint="@android:color/holo_red_light"
                         />
 

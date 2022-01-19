@@ -1,5 +1,7 @@
 package com.s3enterprises.jewellowholesale.billing
 
+import android.text.Html
+import androidx.core.text.HtmlCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,8 +31,10 @@ class BillingViewModel @Inject constructor(
     private val salesRepository: SalesRepository
 ):ViewModel() {
 
+    private var det4 = 0
     var listenChangeEvents = true
     val loadedBill = MutableLiveData<Bill?>()
+    val isBillSaved = MutableLiveData<Boolean>().apply { value = false }
     val items:LiveData<List<Item>>
     get() = itemsRepository.items
     val parties: LiveData<List<Party>>
@@ -59,6 +63,7 @@ class BillingViewModel @Inject constructor(
     val cashDU = MutableLiveData<Int>().apply { value = 0 }
     var goldBhav = 0
     var billCounter = 0
+
 
     fun calculate(){
         var grossGs = 0f; var fineGs = 0f ;var grossGr = 0f; var fineGr = 0f
@@ -94,6 +99,7 @@ class BillingViewModel @Inject constructor(
         fineDU.value = fineDu
         cashDU.value = cashDu
 
+        isBillSaved.value = false
     }
 
     fun clearAll() {
@@ -117,6 +123,7 @@ class BillingViewModel @Inject constructor(
             RxBus.publish(RxEvent.PreferencesUpdated())
             loadedBill.value = newBill
             isLoading.value = false
+            isBillSaved.value = true
             updateSales()
         }
         else if(!isBillNotFound.value!!) viewModelScope.launch {
@@ -126,6 +133,7 @@ class BillingViewModel @Inject constructor(
             updateSales(updatedBill)
             loadedBill.value = updatedBill
             isLoading.value = false
+            isBillSaved.value = true
         }
     }
 
@@ -158,91 +166,116 @@ class BillingViewModel @Inject constructor(
         billItemList.forEach { i ->
             var det = 0
             stringBuilder.append(i.name.apply { det+=length })
-                .append(tab(14-det).apply { det+=length })
-                .append("${i.weight}  x  ${i.rate}".apply { det+=length })
-                .append(tab(32-det))
+                .append(tab(16-det).apply { det+=length })
+                .append("${i.weight}".apply { det+=length })
+                .append(tab(23-det).apply { det+=length })
+                .append("x".apply { det+=length })
+                .append(tab(25-det).apply { det+=length })
+                .append("${i.rate}".apply { det+=length })
+                .append(tab(31-det).apply { det+=length })
+                .append("=".apply { det+=length })
+                .append(tab(34-det))
                 .append("${i.fine}\n")
         }
         stringBuilder.append("----------------------------------------\n")
         var det1 = 0
-        stringBuilder.append("GS".apply { det1+=length })
-            .append(tab(14-det1).apply { det1+=length })
+        stringBuilder.append("Total".apply { det1+=length })
+            .append(tab(16-det1).apply { det1+=length })
             .append("${grossGS.value}".apply { det1+=length })
-            .append(tab(32-det1))
+            .append(tab(34-det1))
             .append("${fineGS.value}\n\n\n\n")
+
         return stringBuilder.toString()
     }
 
-    fun generateBillPrint2() = loadedBill.value?.let{
+    fun generateBillPrint1() = loadedBill.value?.let{
         val stringBuilder = StringBuilder()
             .append(tab(14))
-            .append("Estimation\n")
+            .append("Estimate\n")
             .append("Bill no: ${it.billNo}${tab(12)}${Utils.getDate(it.date)}\n")
             .append("Party: ${it.partyName}\n")
             .append("----------------------------------------\n")
         billItemList.forEach { i ->
-                var det = 0
-                stringBuilder.append(i.name.apply { det+=length })
-                .append(tab(14-det).apply { det+=length })
-                .append("${i.weight}  x  ${i.rate}".apply { det+=length })
-                .append(tab(30-det).apply { det+=length })
+            var det = 0
+            stringBuilder.append(i.name.apply { det+=length })
+                .append(tab(16-det).apply { det+=length })
+                .append("${i.weight}".apply { det+=length })
+                .append(tab(23-det).apply { det+=length })
+                .append("x".apply { det+=length })
+                .append(tab(25-det).apply { det+=length })
+                .append("${i.rate}".apply { det+=length })
+                .append(tab(31-det).apply { det+=length })
                 .append("=".apply { det+=length })
-                .append(tab(32-det))
+                .append(tab(34-det))
                 .append("${i.fine}\n")
-            }
+        }
         stringBuilder.append("----------------------------------------\n")
 
         var det1 = 0
-        stringBuilder.append("GS".apply { det1+=length })
-            .append(tab(14-det1).apply { det1+=length })
+        stringBuilder.append("Total".apply { det1+=length })
+            .append(tab(16-det1).apply { det1+=length })
             .append("${grossGS.value}".apply { det1+=length })
-            .append(tab(30-det1))
+            .append(tab(34-det1))
             .append("${fineGS.value}\n\n")
 
         goldItemList.forEachIndexed  { pos, i ->
             var det = 0
-            if(pos==0) stringBuilder.append("GR".apply { det+=length })
-            stringBuilder.append(tab(14-det).apply { det+=length })
-                .append("${i.weight} x ${i.purity}".apply { det+=length })
-                .append(tab(30-det).apply { det+=length })
+            if(pos==0) stringBuilder.append("Gold Received".apply { det+=length })
+            stringBuilder.append(tab(16-det).apply { det+=length })
+                .append("${i.weight}".apply { det+=length })
+                .append(tab(23-det).apply { det+=length })
+                .append("x".apply { det+=length })
+                .append(tab(25-det).apply { det+=length })
+                .append("${i.purity}".apply { det+=length })
+                .append(tab(31-det).apply { det+=length })
                 .append("=".apply { det+=length })
-                .append(tab(32-det))
+                .append(tab(34-det))
                 .append("${i.fine}\n")
         }
         stringBuilder.append("----------------------------------------\n")
         if(goldItemList.size>1) {
             var det = 0
-            stringBuilder.append("GRT".apply { det+=length })
-//                .append(tab(14-det).apply { det+=length })
-//                .append("${grossGR.value}".apply { det+=length })
-                .append(tab(32-det))
+            stringBuilder.append("Total".apply { det+=length })
+                .append(tab(34-det))
                 .append("${fineGR.value}\n")
         }
-
-        var det2 = 0
-        stringBuilder.append("BHAV ${it.bhav}".apply { det2+=length })
-            .append(tab(14-det2).apply { det2+=length })
-            .append(Utils.getRupeesFormatted(cashBH.value?:0).apply { det2+=length })
-            .append(tab(32-det2))
-            .append("${fineBH.value ?: 0f}\n")
-
-        var det3 = 0
-        stringBuilder.append("CR".apply { det3+=length })
-            .append(tab(14-det3).apply { det3+=length })
-            .append(Utils.getRupeesFormatted(it.cashReceived).apply { det3+=length })
-            .append(tab(32-det3))
-            .append("${fineCR.value ?: 0f}\n")
-
-        var det4 = 0
-        stringBuilder.append("DU".apply { det4+=length })
-            .append(tab(14-det4).apply { det4+=length })
-            .append(Utils.getRupeesFormatted(cashDU.value?:0).apply { det4+=length })
-            .append(tab(32-det4))
-            .append("${fineDU.value ?: 0f}\n\n\n")
-            .append("Gross Weight:\n\n\n")
-        .append("_________________Thank you________________\n\n\n\n").toString()
+        return@let stringBuilder.toString()
     }
 
+    fun generateBillPrint2() = loadedBill.value?.let {
+        return@let "BHAV ${it.bhav}"
+    }
+
+    fun generateBillPrint3() = loadedBill.value?.let{
+        var det2 = "BHAV ${it.bhav}".length
+        val stringBuilder = StringBuilder()
+            .append(tab(16-det2).apply { det2+=length })
+            .append(Utils.getRupeesFormatted(cashBH.value?:0).apply { det2+=length })
+            .append(tab(34-det2))
+            .append("${fineBH.value ?: 0f}\n\n")
+
+        var det3 = 0
+        stringBuilder.append("Cash Received".apply { det3+=length })
+            .append(tab(16-det3).apply { det3+=length })
+            .append(Utils.getRupeesFormatted(it.cashReceived).apply { det3+=length })
+            .append(tab(34-det3))
+            .append("${fineCR.value ?: 0f}\n\n")
+
+        det4 = 0
+        stringBuilder.append("Due".apply { det4+=length })
+            .append(tab(16-det4).apply { det4+=length }).toString()
+    }
+
+    fun generateBillPrint4() = loadedBill.value?.let {
+        StringBuilder().append(Utils.getRupeesFormatted(it.cashDu).apply { det4+=length })
+        .append(tab(34-det4))
+        .append("${fineDU.value ?: 0f}\n\n\n").toString()
+    }
+
+    fun generateBillPrint5() = loadedBill.value?.let {
+        StringBuilder().append("Gross Weight:\n\n\n")
+        .append("_________________Thank you________________\n\n\n\n").toString()
+    }
 
     fun generateBill(oldBill: Bill?=null):Bill {
         val bill = oldBill?:Bill(
@@ -297,6 +330,7 @@ class BillingViewModel @Inject constructor(
         party.value = Party(name=bill.partyName, phoneNumber = bill.partyNumber)
         calculate()
         loadedBill.value = bill
+        isBillSaved.value = true
     }
 
     fun updateItemsPositions(updatedList: List<Item>) = viewModelScope.launch {

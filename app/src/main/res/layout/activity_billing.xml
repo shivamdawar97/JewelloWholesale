@@ -66,21 +66,7 @@
                 android:scaleY="0.9"
                 android:textAllCaps="false"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btn_print"
-                />
-
-            <Button
-                android:id="@+id/btn_print"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="@string/print"
-                android:scaleX="0.9"
-                android:scaleY="0.9"
-                android:textAllCaps="false"
-                android:onClick="@{()->model.calculate()}"
-                app:layout_constraintStart_toEndOf="@id/btn_save"
                 app:layout_constraintEnd_toStartOf="@id/btn_calculate"
-                android:visibility="@{model.loadedBill!=null?View.VISIBLE:View.INVISIBLE}"
                 />
 
 
@@ -92,9 +78,23 @@
                 android:scaleX="0.9"
                 android:scaleY="0.9"
                 android:textAllCaps="false"
-                app:layout_constraintStart_toEndOf="@id/btn_print"
-                app:layout_constraintEnd_toStartOf="@id/btn_delete"
+                app:layout_constraintStart_toEndOf="@id/btn_save"
+                app:layout_constraintEnd_toStartOf="@id/btn_print"
                 android:onClick="@{()->model.calculate()}"
+                />
+
+
+            <Button
+                android:id="@+id/btn_print"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="@string/print"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toEndOf="@id/btn_calculate"
+                app:layout_constraintEnd_toStartOf="@id/btn_delete"
+                android:visibility="@{model.loadedBill!=null?View.VISIBLE:View.INVISIBLE}"
                 />
 
 
@@ -106,7 +106,7 @@
                 android:textAllCaps="false"
                 android:scaleX="0.9"
                 android:scaleY="0.9"
-                app:layout_constraintStart_toEndOf="@id/btn_calculate"
+                app:layout_constraintStart_toEndOf="@id/btn_print"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:visibility="@{model.loadedBill!=null?View.VISIBLE:View.INVISIBLE}"
                 android:backgroundTint="@android:color/holo_red_light"

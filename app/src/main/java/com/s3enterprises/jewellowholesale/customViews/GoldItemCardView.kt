@@ -41,6 +41,12 @@ class GoldItemCardView(context: Context, private val item: GoldItem): LinearLayo
 
     }
 
+    fun removeFocus(){
+        findViewById<FloatEditText>(R.id.gold_rcv).apply {
+            clearFocus() ; isCursorVisible = false
+        }
+    }
+
     private fun calculate() {
         val c = item.weight * item.purity
         item.fine = (c/100).roundOff(3)

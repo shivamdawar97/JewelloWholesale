@@ -46,4 +46,8 @@
     <string name="delete">Delete</string>
     <string name="empty_list">No Data Found!</string>
     <string name="total">Total</string>
+    <string name="bold">Bold</string>
+    <string name="width">Width</string>
+    <string name="height">Height</string>
+    <string name="text">Text</string>
 </resources>

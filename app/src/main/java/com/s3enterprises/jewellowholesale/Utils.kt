@@ -3,7 +3,9 @@ package com.s3enterprises.jewellowholesale
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.text.format.DateFormat
 import android.view.LayoutInflater
@@ -117,6 +119,11 @@ object Utils {
     ) : RecyclerView.ViewHolder(mView) {
         fun populate(item: T,position:Int) = onBind(item, mView,position)
     }
+
+    @SuppressWarnings("deprecation")
+    fun fromHtml(str: String) =
+        if(Build.VERSION.SDK_INT >= 24) Html.fromHtml(str,Html.FROM_HTML_MODE_LEGACY)
+        else Html.fromHtml(str)
 
     fun <T> generatedAdapter(list: List<T>, resource: Int, onBind: (T,View,Int) -> Unit) =
         object : RecyclerView.Adapter<GeneralViewHolder<T>>() {

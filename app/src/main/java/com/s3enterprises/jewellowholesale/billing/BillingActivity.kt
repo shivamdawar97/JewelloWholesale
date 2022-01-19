@@ -7,8 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -181,9 +183,15 @@ class BillingActivity : AppCompatActivity() {
         }
 
         btnPrint.setOnClickListener {
-            val printBill = viewModel.generateBillPrint2()
-            if(printBill!=null) lifecycleScope.launch {
-                JewelloBluetoothSocket().printData(printBill,this@BillingActivity)
+            lifecycleScope.launch {
+                val socket = JewelloBluetoothSocket()
+                socket.findDeviceAndConnect(this@BillingActivity)
+                socket.printData(viewModel.generateBillPrint1()!!)
+                socket.printBoldData(viewModel.generateBillPrint2()!!)
+                socket.printData(viewModel.generateBillPrint3()!!)
+                socket.printBoldData(viewModel.generateBillPrint4()!!)
+                socket.printData(viewModel.generateBillPrint5()!!)
+                socket.disconnectBT()
             }
         }
 
@@ -241,10 +249,13 @@ class BillingActivity : AppCompatActivity() {
                 viewModel.loadedBill.value = null
             }
             R.id.view_pending -> startActivity(Intent(this,PendingsActivity::class.java))
-            R.id.receipt -> {
+            R.id.receipt -> lifecycleScope.launch {
                 val printBill = viewModel.generateSamplePrint()
-                lifecycleScope.launch { JewelloBluetoothSocket().printData(printBill,this@BillingActivity) }
+                val socket = JewelloBluetoothSocket().apply { findDeviceAndConnect(this@BillingActivity) }
+                socket.printData(printBill)
+                socket.disconnectBT()
             }
+
         }
         return true
     }
@@ -254,6 +265,8 @@ class BillingActivity : AppCompatActivity() {
         binding.billingPanel.binding.goldsContainer.removeAllViews()
         viewModel.clearAll()
         binding.billingPanel.clear()
+        binding.billingPanel.binding.addGoldLabel.callOnClick()
+        (binding.billingPanel.binding.goldsContainer[0] as GoldItemCardView).removeFocus()
         viewModel.goldBhav = preferences.getInt("bhav",0)
     }
 

@@ -40,7 +40,7 @@ class FloatEditText:AppCompatEditText {
 
     private fun getFloat():Float{
         val value = text.toString()
-        return if (value.isBlank() || value == "-" || value == ".") 0f else value.toFloat()
+        return if (value.isBlank() || value == "-" || value == "." || value == "-.") 0f else value.toFloat()
     }
 
 

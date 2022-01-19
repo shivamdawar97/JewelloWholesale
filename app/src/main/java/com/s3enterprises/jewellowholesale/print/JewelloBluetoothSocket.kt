@@ -45,16 +45,10 @@ class JewelloBluetoothSocket {
     private val boldPrintFormat = byteArrayOf(27, 33, 0).apply {
         this[2] = this[2]
             .or(0x8) // bold
-    }
-    private val customPrintFormat = byteArrayOf(27, 33, 0).apply {
-        this[2] = this[2]
-            .or(0x4) // bold
-            .or(0x4) // height
-            .or(0x16) // width
-
+            .or(0x16) // bold
     }
 
-    private suspend fun findDeviceAndConnect(context: Context) {
+    suspend fun findDeviceAndConnect(context: Context) {
         if (Utils.printerName == "") return
         val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         try {
@@ -146,23 +140,29 @@ class JewelloBluetoothSocket {
         e.printStackTrace()
     }
 
-    suspend fun printData(text: String,context: Context) = try {
-        findDeviceAndConnect(context)
+    fun printData(text: String) = try {
         val buffer = text.toByteArray()
         outputStream?.let {
-          //  it.write(customPrintFormat)
-//            it.write(defaultPrintFormat)
+            it.write(defaultPrintFormat)
             it.write(buffer, 0, buffer.size)
         }
-        delay(1000)
-        disconnectBT()
     } catch (ex: Exception) {
         ex.printStackTrace()
     }
 
+    fun printBoldData(text: String) = try {
+        val buffer = text.toByteArray()
+        outputStream?.let {
+            it.write(boldPrintFormat)
+            it.write(buffer, 0, buffer.size)
+        }
+    } catch (ex: Exception) {
+        ex.printStackTrace()
+    }
 
-    private fun disconnectBT() {
+    suspend fun disconnectBT() {
         try {
+            delay(1000)
             stopWorker = true
             outputStream!!.close()
             inputStream!!.close()
@@ -171,6 +171,23 @@ class JewelloBluetoothSocket {
             ex.printStackTrace()
         }
 
+    }
+
+    fun printCustomData(bold: Int, width: Int, height: Int, text: String) = try {
+        val customPrintFormat = byteArrayOf(27, 33, 0).apply {
+            this[2] = this[2]
+                .or(bold.toByte()) // bold
+                .or(width.toByte()) // height
+                .or(height.toByte()) // width
+        }
+
+        val buffer = text.toByteArray()
+        outputStream?.let {
+            it.write(customPrintFormat)
+            it.write(buffer, 0, buffer.size)
+        }
+    } catch (ex: Exception) {
+        ex.printStackTrace()
     }
 
 }

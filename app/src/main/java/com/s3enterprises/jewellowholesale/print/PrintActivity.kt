@@ -1,6 +1,5 @@
 package com.s3enterprises.jewellowholesale.print
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -39,7 +38,13 @@ class PrintActivity : AppCompatActivity() {
         testPrint.setOnClickListener {
             if(!printerName.isNullOrBlank())
                 lifecycleScope.launch {
-                    JewelloBluetoothSocket().printData("Test print....\n\n\n",this@PrintActivity)
+                    val socket = JewelloBluetoothSocket()
+                    val bold = with(bold.text.toString()) { if(isNullOrBlank()) 0 else toInt() }
+                    val width = with(width.text.toString()) { if(isNullOrBlank()) 0 else toInt() }
+                    val height = with(height.text.toString()) { if(isNullOrBlank()) 0 else toInt() }
+                    socket.findDeviceAndConnect(this@PrintActivity)
+                    socket.printCustomData(bold,width,height,"${text.text}\n${bold} ${width} ${height}\n")
+                    socket.disconnectBT()
                 }
             else Toast.makeText(this@PrintActivity,"Please enter printer name",Toast.LENGTH_LONG).show()
         }
