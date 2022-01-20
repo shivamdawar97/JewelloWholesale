@@ -6,8 +6,8 @@ import com.s3enterprises.jewellowholesale.database.models.GoldItem
 
 class RxEvent {
     class EventBillItemChanged
-    data class EventBillItemRemoved(val item:BillItem)
-    data class EventGoldItemRemoved(val item:GoldItem)
+    data class EventBillItemRemoved(val id: Int)
+    data class EventGoldItemRemoved(val id: Int)
     class PreferencesUpdated
     class PreviousBillSelected(val bill: Bill)
 }

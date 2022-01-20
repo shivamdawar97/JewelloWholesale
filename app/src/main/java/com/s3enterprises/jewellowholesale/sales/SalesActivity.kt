@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.Utils
+import com.s3enterprises.jewellowholesale.Utils.roundOff
 import com.s3enterprises.jewellowholesale.customViews.MonthYearPickerDialog
 import com.s3enterprises.jewellowholesale.databinding.ActivitySalesBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,7 +50,7 @@ class SalesActivity : AppCompatActivity() {
             }
             binding.salesRecycler.adapter = SalesRecyclerAdapter(it)
             binding.cash.text = Utils.getRupeesFormatted(x1)
-            binding.gold.text = x2.toString()
+            binding.gold.text = x2.roundOff(3).toString()
             binding.total.text = Utils.getRupeesFormatted(x3)
         }
     }

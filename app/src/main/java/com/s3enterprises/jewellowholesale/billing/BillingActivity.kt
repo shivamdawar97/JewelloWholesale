@@ -44,7 +44,6 @@ class BillingActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityBillingBinding
     private val viewModel by viewModels<BillingViewModel>()
-
     private lateinit var rxBillItemValuesChanged: Disposable
     private lateinit var rxBillItemRemoved: Disposable
     private lateinit var rxGoldItemRemoved: Disposable
@@ -52,6 +51,7 @@ class BillingActivity : AppCompatActivity() {
     private lateinit var rxOldBillSelected: Disposable
     @Inject lateinit var preferences: SharedPreferences
     private var touchHelper: ItemTouchHelper? = null
+    private var billAndGoldIds = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,13 +76,13 @@ class BillingActivity : AppCompatActivity() {
         }
 
         rxBillItemRemoved =  RxBus.listen(RxEvent.EventBillItemRemoved::class.java)!!.subscribe { event ->
-            val newList = viewModel.billItemList.filter { it!= event.item }
+            val newList = viewModel.billItemList.filter { it.iId != event.id }
             viewModel.billItemList.clear()
             viewModel.billItemList.addAll(newList)
             viewModel.calculate()
         }
         rxGoldItemRemoved =  RxBus.listen(RxEvent.EventGoldItemRemoved::class.java)!!.subscribe { event ->
-            val newList = viewModel.goldItemList.filter { it != event.item }
+            val newList = viewModel.goldItemList.filter { it.id != event.id }
             viewModel.goldItemList.clear()
             viewModel.goldItemList.addAll(newList)
             viewModel.calculate()
@@ -140,7 +140,7 @@ class BillingActivity : AppCompatActivity() {
         }
 
         billingPanel.binding.addGoldLabel.setOnClickListener {
-            val goldItem = GoldItem()
+            val goldItem = GoldItem(billAndGoldIds++)
             viewModel.goldItemList.add(goldItem)
             val view = GoldItemCardView(this@BillingActivity,goldItem)
             billingPanel.binding.goldsContainer.addView(view)
@@ -153,7 +153,7 @@ class BillingActivity : AppCompatActivity() {
                 if(i.position == 0)
                     startActivity(Intent(this@BillingActivity,AddItem::class.java))
                 else {
-                    val billItem = BillItem(i.iId, i.name, rate = i.rate)
+                    val billItem = BillItem(billAndGoldIds++, i.name, rate = i.rate)
                     viewModel.billItemList.add(billItem)
                     val view = BillItemCardView(this@BillingActivity, billItem)
                     billingPanel.binding.itemsContainer.addView(view)
@@ -265,6 +265,7 @@ class BillingActivity : AppCompatActivity() {
         binding.billingPanel.binding.goldsContainer.removeAllViews()
         viewModel.clearAll()
         binding.billingPanel.clear()
+        billAndGoldIds = 0
         binding.billingPanel.binding.addGoldLabel.callOnClick()
         (binding.billingPanel.binding.goldsContainer[0] as GoldItemCardView).removeFocus()
         viewModel.goldBhav = preferences.getInt("bhav",0)

@@ -35,7 +35,7 @@ class GoldItemCardView(context: Context, private val item: GoldItem): LinearLayo
         }
 
         findViewById<TextView>(R.id.item_remove).setOnClickListener {
-            RxBus.publish(RxEvent.EventGoldItemRemoved(item))
+            RxBus.publish(RxEvent.EventGoldItemRemoved(item.id))
             (parent as ViewGroup).removeView(this)
         }
 
@@ -43,7 +43,7 @@ class GoldItemCardView(context: Context, private val item: GoldItem): LinearLayo
 
     fun removeFocus(){
         findViewById<FloatEditText>(R.id.gold_rcv).apply {
-            clearFocus() ; isCursorVisible = false
+            clearFocus()
         }
     }
 

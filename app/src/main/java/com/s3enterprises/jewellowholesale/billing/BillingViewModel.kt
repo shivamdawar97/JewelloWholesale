@@ -1,6 +1,7 @@
 package com.s3enterprises.jewellowholesale.billing
 
 import android.text.Html
+import android.util.Log
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -117,7 +118,7 @@ class BillingViewModel @Inject constructor(
         calculate()
         if(loadedBill.value == null || loadedBill.value?.billNo?:0 == 0) viewModelScope.launch {
             isLoading.value = true
-            billCounter = if(billCounter!=2000) billCounter+1 else 1
+            billCounter = if(billCounter!=10000) billCounter+1 else 1
             val newBill = generateBill()
             billRepository.insert(newBill)
             RxBus.publish(RxEvent.PreferencesUpdated())
@@ -141,21 +142,35 @@ class BillingViewModel @Inject constructor(
         when {
             updatedBill!=null -> {
                 val cash = (updatedBill.cashReceived + updatedBill.cashDu) - (it.cashReceived+it.cashDu)
-                val fine = (updatedBill.fineGs - it.fineGs).roundOff(3)
-                val total = (fine * updatedBill.bhav + cash) - (it.fineGs * it.bhav + it.cashReceived + it.cashDu )
-                salesRepository.updateTodaySale(cash,fine,total.toInt())
+                var gold = 0f
+                Converters().fromString1(updatedBill.golds)?.forEach { gIt ->
+                    if(gIt.purity>=99f) gold+=gIt.weight
+                }
+                goldItemList.forEach { gIt ->
+                    if(gIt.purity>=99f) gold-=gIt.weight
+                }
+                val total = (updatedBill.fineGs * updatedBill.bhav) - (it.fineGs * it.bhav)
+                Log.i("Sales Update","$cash $gold ${total.toInt()}")
+                salesRepository.updateTodaySale(cash,gold,total.toInt())
             }
             isDelete -> {
                 val cash =  it.cashReceived + it.cashDu
-                val fine =  it.fineGs.roundOff(3)
-                val total = fine * it.bhav + cash
-                salesRepository.updateTodaySale(-cash,-fine,-total.toInt())
+                var gold = 0f
+                goldItemList.forEach { gIt ->
+                    if(gIt.purity>=99f) gold+=gIt.weight
+                }
+                val total = it.fineGs * it.bhav
+                salesRepository.updateTodaySale(-cash,-gold,-total.toInt())
             }
             else -> {
                 val cash =  it.cashReceived + it.cashDu
-                val fine =  it.fineGs.roundOff(3)
-                val total = fine * it.bhav + cash
-                salesRepository.updateTodaySale(cash,fine,total.toInt())
+                var gold = 0f
+                goldItemList.forEach { gIt ->
+                    if(gIt.purity>=99f) gold+=gIt.weight
+                }
+                val total = it.fineGs * it.bhav
+                Log.i("Sales Update","$cash $gold ${total.toInt()}")
+                salesRepository.updateTodaySale(cash,gold,total.toInt())
             }
         }
 
@@ -252,14 +267,14 @@ class BillingViewModel @Inject constructor(
             .append(tab(16-det2).apply { det2+=length })
             .append(Utils.getRupeesFormatted(cashBH.value?:0).apply { det2+=length })
             .append(tab(34-det2))
-            .append("${fineBH.value ?: 0f}\n\n")
+            .append("${fineBH.value ?: 0f}\n")
 
         var det3 = 0
         stringBuilder.append("Cash Received".apply { det3+=length })
             .append(tab(16-det3).apply { det3+=length })
             .append(Utils.getRupeesFormatted(it.cashReceived).apply { det3+=length })
             .append(tab(34-det3))
-            .append("${fineCR.value ?: 0f}\n\n")
+            .append("${fineCR.value ?: 0f}\n")
 
         det4 = 0
         stringBuilder.append("Due".apply { det4+=length })

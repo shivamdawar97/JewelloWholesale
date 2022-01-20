@@ -45,7 +45,7 @@ class BillItemCardView(context: Context,private val item:BillItem):LinearLayout(
         }
 
         findViewById<TextView>(R.id.item_remove).setOnClickListener {
-            RxBus.publish(RxEvent.EventBillItemRemoved(item))
+            RxBus.publish(RxEvent.EventBillItemRemoved(item.iId))
             (parent as ViewGroup).removeView(this)
         }
 

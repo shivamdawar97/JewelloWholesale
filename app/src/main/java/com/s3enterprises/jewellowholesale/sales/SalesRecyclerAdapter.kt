@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.s3enterprises.jewellowholesale.R
+import com.s3enterprises.jewellowholesale.Utils
+import com.s3enterprises.jewellowholesale.Utils.roundOff
 import com.s3enterprises.jewellowholesale.database.models.Sales
 import java.util.*
 
@@ -16,9 +18,9 @@ class SalesRecyclerAdapter(private val sales:List<Sales>) :RecyclerView.Adapter<
         fun populate(sale:Sales){
             val day = DateFormat.format("dd MMM,yyyy", Date(sale.date)) as String
             mView.findViewById<TextView>(R.id.date).text = day
-            mView.findViewById<TextView>(R.id.gold).text = sale.gold.toString()
-            mView.findViewById<TextView>(R.id.cash).text = sale.cash.toString()
-            mView.findViewById<TextView>(R.id.total).text = sale.total.toString()
+            mView.findViewById<TextView>(R.id.gold).text = sale.gold.roundOff(3).toString()
+            mView.findViewById<TextView>(R.id.cash).text = Utils.getRupeesFormatted(sale.cash)
+            mView.findViewById<TextView>(R.id.total).text = Utils.getRupeesFormatted(sale.total)
         }
     }
 
