@@ -10,8 +10,11 @@ import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
 import android.widget.AutoCompleteTextView
 import android.widget.LinearLayout
+import androidx.core.view.get
+import androidx.core.view.size
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.Utils
+import com.s3enterprises.jewellowholesale.Utils.INPUT_CONNECTION
 import com.s3enterprises.jewellowholesale.Utils.onTextChanged
 import com.s3enterprises.jewellowholesale.billing.AutoCompleteAdapter
 import com.s3enterprises.jewellowholesale.billing.BillingActivity
@@ -123,9 +126,12 @@ class BillingPanelView: LinearLayout {
         model?.goldItemList?.forEach { goldItem ->
             val view = GoldItemCardView(context,goldItem)
             goldsContainer.addView(view)
+            if(goldItem.fine == 0f) view.removeFocus()
         }
         bhavEdit.setText(bill.bhav.toString())
         cashRcv.setText(bill.cashReceived.toString())
+
+        INPUT_CONNECTION = null
     }
 
 

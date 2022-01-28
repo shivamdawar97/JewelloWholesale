@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="20dp"
+    >
+
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        tools:text="Item Name"
+        android:textSize="18sp"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/item_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            tools:text="19.240"
+            android:textSize="18sp"
+            />
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".3"
+            android:text="+"
+            android:textStyle="bold"
+            android:textSize="26sp"
+            android:gravity="center"
+            android:scaleX="1.2"
+            android:textColor="@android:color/black"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:selectableItemBackground"
+            android:layout_marginStart="20dp"
+            />
+
+        <com.s3enterprises.jewellowholesale.customViews.FloatEditText
+            android:id="@+id/add_weight_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:ems="4"
+            android:inputType="numberSigned|numberDecimal"
+            />
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".3"
+            android:text="="
+            android:textStyle="bold"
+            android:textSize="26sp"
+            android:gravity="center"
+            android:scaleX="1.2"
+            android:textColor="@android:color/black"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:selectableItemBackground"
+            android:layout_marginStart="20dp"
+            />
+
+        <TextView
+            android:id="@+id/item_final_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            tools:text="19.240"
+            android:textSize="18sp"
+            android:layout_marginStart="20dp"
+            />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

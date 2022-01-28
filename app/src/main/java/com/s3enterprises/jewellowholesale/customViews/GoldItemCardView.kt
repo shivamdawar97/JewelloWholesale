@@ -1,10 +1,13 @@
 package com.s3enterprises.jewellowholesale.customViews
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.s3enterprises.jewellowholesale.R
+import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.Utils.onTextChanged
 import com.s3enterprises.jewellowholesale.Utils.roundOff
 import com.s3enterprises.jewellowholesale.database.models.GoldItem
@@ -44,6 +47,9 @@ class GoldItemCardView(context: Context, private val item: GoldItem): LinearLayo
     fun removeFocus(){
         findViewById<FloatEditText>(R.id.gold_rcv).apply {
             clearFocus()
+            Handler(Looper.getMainLooper()).postDelayed({
+                Utils.INPUT_CONNECTION = null
+            },150)
         }
     }
 

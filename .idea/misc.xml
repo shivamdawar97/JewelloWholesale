@@ -45,6 +45,7 @@
         <entry key="app/src/main/res/layout/card_party.xml" value="0.22864583333333333" />
         <entry key="app/src/main/res/layout/card_pending.xml" value="0.15855263157894736" />
         <entry key="app/src/main/res/layout/card_selection_list.xml" value="0.15855263157894736" />
+        <entry key="app/src/main/res/layout/dialog_add_weight.xml" value="0.25104166666666666" />
         <entry key="app/src/main/res/layout/dialog_month_year_picker.xml" value="0.25104166666666666" />
         <entry key="app/src/main/res/layout/dialog_otp.xml" value="0.25104166666666666" />
         <entry key="app/src/main/res/layout/list_item.xml" value="0.15164473684210528" />

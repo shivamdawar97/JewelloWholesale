@@ -78,7 +78,7 @@ object Utils {
     @JvmStatic
     fun getRupeesFormatted(amount:Int):String {
         val once = amount%10
-        val oAmount = if(once>7) amount+10-once else amount-once
+        val oAmount = if(once>5) amount+10-once else amount-once
         return rupeesFormat.format(oAmount)
     }
 
