@@ -82,12 +82,13 @@ class BillItemCardView(context: Context,private val item:BillItem):LinearLayout(
         }
         dialog.setPositiveButton("Ok") { d1,_ ->
             itemWeightView.setText(finalWeightView.text.toString())
-            Utils.hideKeyboard(this)
             d1.dismiss()
         }
         dialog.setCancelable(false).setNegativeButton("Cancel") { d1, _ ->
-            Utils.hideKeyboard(this)
             d1.dismiss()
+        }
+        dialog.setOnDismissListener {
+            Utils.hideKeyboard(view)
         }
         dialog.create().show()
     }

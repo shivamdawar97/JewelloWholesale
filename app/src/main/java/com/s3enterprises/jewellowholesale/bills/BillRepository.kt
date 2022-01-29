@@ -21,4 +21,8 @@ class BillRepository @Inject constructor (private val billDao: BillDao) {
         billDao.delete(value)
     }
 
+    suspend fun getBillsByPartyName(pName: String) =
+        billDao.getBillsByPartyName(pName)
+
+
 }

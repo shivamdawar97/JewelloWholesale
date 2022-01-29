@@ -67,7 +67,7 @@ object Utils {
     fun Float.roundOff(place:Int) = "%.${place}f".format(this).toFloat()
 
     @JvmStatic
-    fun getDate(date: Date): String = DATE_FORMAT_FOR_HEADING.format(date)
+    fun getDate(date: Date?): String = if(date!=null) DATE_FORMAT_FOR_HEADING.format(date) else ""
 
     @JvmStatic
     fun getMonthDate(date: Date): String = DATE_FORMAT_FOR_SALES.format(date)

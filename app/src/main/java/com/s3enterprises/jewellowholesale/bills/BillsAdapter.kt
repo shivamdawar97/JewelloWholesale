@@ -1,5 +1,6 @@
 package com.s3enterprises.jewellowholesale.bills
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.Utils
+import com.s3enterprises.jewellowholesale.billing.BillingActivity
 import com.s3enterprises.jewellowholesale.database.models.Bill
 import com.s3enterprises.jewellowholesale.rx.RxBus
 import com.s3enterprises.jewellowholesale.rx.RxEvent
@@ -25,8 +27,13 @@ class BillsAdapter(private val bills:List<Bill>) : RecyclerView.Adapter<BillsAda
              partyNameView.text = partyName
              dateView.text = Utils.getDate(date)
              mView.setOnClickListener {
-                 RxBus.publish(RxEvent.PreviousBillSelected(bill))
-                 (mView.context as BillsActivity).finish()
+                 val intent = Intent(mView.context,BillingActivity::class.java)
+                 intent.putExtra("bill",bill)
+                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                 mView.context.startActivity(intent)
+
+                 /*RxBus.publish(RxEvent.PreviousBillSelected(bill))
+                 (mView.context as BillsActivity).finish()*/
              }
          }
 

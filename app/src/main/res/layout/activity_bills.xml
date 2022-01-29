@@ -15,18 +15,23 @@
         <variable
             name="isListEmpty"
             type="Boolean" />
+        <variable
+            name="isPartyBills"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".bills.BillsActivity">
+        tools:context=".bills.BillsActivity"
+        >
 
         <FrameLayout
             android:id="@+id/bills_header"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="44dp"
@@ -37,6 +42,7 @@
                 app:srcCompat="@drawable/ic_chevron_left"
                 android:tint="@android:color/black"
                 android:onClick="@{()->viewModel.goToPreviousDate()}"
+                android:visibility="@{isPartyBills?View.GONE:View.VISIBLE}"
                 />
 
             <Button
@@ -46,6 +52,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:text="@{Utils.getDate(viewModel.date)}"
+                android:visibility="@{isPartyBills?View.GONE:View.VISIBLE}"
                 android:textColor="@android:color/white"
                 tools:text="10 january 2014"
                 android:backgroundTint="@color/purple_500"
@@ -60,7 +67,22 @@
                 android:layout_gravity="end|center"
                 android:tint="@android:color/black"
                 android:onClick="@{()->viewModel.goToNextDate()}"
+                android:visibility="@{isPartyBills?View.GONE:View.VISIBLE}"
                 />
+
+            <TextView
+                android:id="@+id/party_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:visibility="@{!isPartyBills?View.GONE:View.VISIBLE}"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                tools:text="Mukesh Kumar"
+                />
+
 
         </FrameLayout>
 

@@ -35,11 +35,20 @@ class BillsActivity : AppCompatActivity() {
             binding.billsRecycler.adapter = BillsAdapter(it)
             binding.isListEmpty = it.isNullOrEmpty()
         }
-        setUpDatePicker()
+
+        val pName = intent.getStringExtra("pName")
+        binding.isPartyBills = pName!=null
+        if(binding.isPartyBills!!) {
+            viewModel.getBillsByPId(pName!!)
+            binding.partyName.text = pName
+        }
+        else setUpDatePicker()
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun setUpDatePicker() {
+        viewModel.date.value = Date()
         datePicker.addOnPositiveButtonClickListener {
             viewModel.date.value = Date(it)
         }

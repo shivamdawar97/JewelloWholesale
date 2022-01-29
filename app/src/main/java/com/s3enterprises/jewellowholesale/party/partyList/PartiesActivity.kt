@@ -14,7 +14,10 @@ import com.s3enterprises.jewellowholesale.party.PartyRepository
 import com.s3enterprises.jewellowholesale.party.addParty.AddParty
 import com.s3enterprises.jewellowholesale.Utils.onTextChanged
 import com.s3enterprises.jewellowholesale.items.ItemsRepository
+import com.s3enterprises.jewellowholesale.rx.RxBus
+import com.s3enterprises.jewellowholesale.rx.RxEvent
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,6 +27,8 @@ class PartiesActivity : AppCompatActivity() {
     @Inject
     lateinit var partiesRepository: PartyRepository
     private lateinit var binding: ActivityPartiesBinding
+    private lateinit var rxOldBillSelected: Disposable
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +37,10 @@ class PartiesActivity : AppCompatActivity() {
         binding.isLoading = true
         setUpRecyclerView()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        rxOldBillSelected = RxBus.listen(RxEvent.PreviousBillSelected::class.java)!!.subscribe{
+            finish()
+        }
     }
 
     private fun setUpRecyclerView()  = partiesRepository.parties.observeForever { parties ->
@@ -54,5 +63,11 @@ class PartiesActivity : AppCompatActivity() {
             return true
         }
         return false
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        rxOldBillSelected.dispose()
     }
 }

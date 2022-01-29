@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.s3enterprises.jewellowholesale.R
+import com.s3enterprises.jewellowholesale.bills.BillsActivity
 import com.s3enterprises.jewellowholesale.database.models.Party
 import com.s3enterprises.jewellowholesale.party.addParty.AddParty
 
@@ -23,13 +24,18 @@ class PartiesAdapter(private val parties: List<Party>) :
     class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         private val nameView = view.findViewById<TextView>(R.id.party_name)!!
         private val numberView = view.findViewById<TextView>(R.id.party_number)!!
+        private val viewBillsView = view.findViewById<TextView>(R.id.party_view_bills)!!
         fun populateCard(party: Party) = with(party){
             nameView.text = name
             numberView.text = phoneNumber
             view.setOnClickListener {
-                Log.i("Party","click")
                 val intent = Intent(view.context, AddParty::class.java)
                 intent.putExtra("party",party)
+                view.context.startActivity(intent)
+            }
+            viewBillsView.setOnClickListener {
+                val intent = Intent(view.context, BillsActivity::class.java)
+                intent.putExtra("pName",party.name)
                 view.context.startActivity(intent)
             }
         }

@@ -22,6 +22,7 @@ import com.s3enterprises.jewellowholesale.Utils.atStartOfDay
 import com.s3enterprises.jewellowholesale.customViews.BillItemCardView
 import com.s3enterprises.jewellowholesale.customViews.GoldItemCardView
 import com.s3enterprises.jewellowholesale.database.Converters
+import com.s3enterprises.jewellowholesale.database.models.Bill
 import com.s3enterprises.jewellowholesale.database.models.BillItem
 import com.s3enterprises.jewellowholesale.database.models.GoldItem
 import com.s3enterprises.jewellowholesale.database.models.Item
@@ -92,6 +93,11 @@ class BillingActivity : AppCompatActivity() {
             viewModel.setUpBill(event.bill)
         }
 
+        val previousBill = intent.getSerializableExtra("bill") as? Bill
+        if(previousBill != null) viewModel.setUpBill(previousBill)
+
+        binding.billingPanel.binding.addGoldLabel.callOnClick()
+        (binding.billingPanel.binding.goldsContainer[0] as GoldItemCardView).removeFocus()
     }
 
     @SuppressLint("ClickableViewAccessibility")

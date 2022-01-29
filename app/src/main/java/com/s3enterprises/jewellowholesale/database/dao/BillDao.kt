@@ -26,4 +26,7 @@ interface BillDao {
     @Query("select  * from Bill where billNo = :billNo")
     suspend fun getBill(billNo: Int):Bill?
 
+    @Query("select  * from Bill where partyName = :pName")
+    suspend fun getBillsByPartyName(pName: String): List<Bill>
+
 }
