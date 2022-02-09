@@ -98,11 +98,13 @@ class BillingPanelView: LinearLayout {
         autoCompleteTextView.setText("")
     }
 
-    fun clear() {
+    fun clear() = with(binding) {
         autoCompleteTextView.setText("")
-        autoCompleteTextView.isEnabled = true
-        binding.cashRcv.setText("")
-        binding.billChanger.setBillNo(0)
+        cashRcv.setText(""); billChanger.setBillNo(0)
+        bhavEdit.setText(binding.model!!.goldBhav.toString())
+        itemsContainer.removeAllViews(); goldsContainer.removeAllViews()
+        addGoldLabel.callOnClick()
+        (goldsContainer[0] as GoldItemCardView).removeFocus()
     }
 
     fun setUpBill(bill: Bill) = with(binding) {
@@ -111,7 +113,6 @@ class BillingPanelView: LinearLayout {
 
         if(model!!.isBillNotFound.value == true) return@with
 
-        autoCompleteTextView.isEnabled = false
         autoCompleteTextView.setText(bill.partyName)
         autoCompleteTextView.dismissDropDown()
 

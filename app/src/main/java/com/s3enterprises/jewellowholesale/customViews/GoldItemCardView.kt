@@ -21,6 +21,7 @@ class GoldItemCardView(context: Context, private val item: GoldItem): LinearLayo
         if(item.fine!=0f) findViewById<TextView>(R.id.gold_rcv_fine).text = item.fine.toString()
 
         findViewById<FloatEditText>(R.id.gold_rcv).apply {
+            hint = item.id.toString()
             if(item.weight!=0f) setText(item.weight.toString())
             else requestFocus()
             onTextChanged {

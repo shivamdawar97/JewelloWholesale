@@ -64,12 +64,12 @@ class BillingViewModel @Inject constructor(
     val cashDU = MutableLiveData<Int>().apply { value = 0 }
     var goldBhav = 0
     var billCounter = 0
-
+    var billAndGoldIds = 0
 
     fun calculate(){
         var grossGs = 0f; var fineGs = 0f ;var grossGr = 0f; var fineGr = 0f
         billItemList.forEach {
-            grossGs+=it.weight
+            if(it.weight>0) grossGs+=it.weight
             fineGs+=it.fine
         }
 
@@ -107,6 +107,7 @@ class BillingViewModel @Inject constructor(
         isBillNotFound.value = false
         billItemList.clear(); goldItemList.clear()
         cashReceived = 0 ; party.value = null
+        billAndGoldIds = 0
         calculate()
     }
 
@@ -150,7 +151,7 @@ class BillingViewModel @Inject constructor(
                     if(gIt.purity>=99f) gold-=gIt.weight
                 }
                 val total = (updatedBill.fineGs * updatedBill.bhav) - (it.fineGs * it.bhav)
-                Log.i("Sales Update","$cash $gold ${total.toInt()}")
+                Log.i("Sales_Update","$cash $gold ${total.toInt()}")
                 salesRepository.updateTodaySale(cash,gold,total.toInt())
             }
             isDelete -> {
@@ -160,6 +161,7 @@ class BillingViewModel @Inject constructor(
                     if(gIt.purity>=99f) gold+=gIt.weight
                 }
                 val total = it.fineGs * it.bhav
+                Log.i("Sales_Update","$cash $gold ${total.toInt()}")
                 salesRepository.updateTodaySale(-cash,-gold,-total.toInt())
             }
             else -> {
@@ -169,7 +171,7 @@ class BillingViewModel @Inject constructor(
                     if(gIt.purity>=99f) gold+=gIt.weight
                 }
                 val total = it.fineGs * it.bhav
-                Log.i("Sales Update","$cash $gold ${total.toInt()}")
+                Log.i("Sales_Update","$cash $gold ${total.toInt()}")
                 salesRepository.updateTodaySale(cash,gold,total.toInt())
             }
         }
@@ -192,7 +194,7 @@ class BillingViewModel @Inject constructor(
                 .append(tab(34-det))
                 .append("${i.fine}\n")
         }
-        stringBuilder.append("----------------------------------------\n")
+        stringBuilder.append("-----------------------------------------------\n")
         var det1 = 0
         stringBuilder.append("Total".apply { det1+=length })
             .append(tab(16-det1).apply { det1+=length })
@@ -209,10 +211,10 @@ class BillingViewModel @Inject constructor(
             .append("Estimate\n")
             .append("Bill no: ${it.billNo}${tab(12)}${Utils.getDate(it.date)}\n")
             .append("Party: ${it.partyName}\n")
-            .append("----------------------------------------\n")
+            .append("-----------------------------------------------\n")
         billItemList.forEach { i ->
             var det = 0
-            stringBuilder.append(i.name.apply { det+=length })
+            if(i.weight>0) stringBuilder.append(i.name.apply { det+=length })
                 .append(tab(16-det).apply { det+=length })
                 .append("${i.weight}".apply { det+=length })
                 .append(tab(23-det).apply { det+=length })
@@ -224,7 +226,28 @@ class BillingViewModel @Inject constructor(
                 .append(tab(34-det))
                 .append("${i.fine}\n")
         }
-        stringBuilder.append("----------------------------------------\n")
+        stringBuilder.append("-----------------------------------------------\n")
+
+        val returns = billItemList.filter { i -> i.weight<0 }
+        if(returns.isNotEmpty()) {
+            stringBuilder.append("Return/Wapasi\n")
+            returns.forEach { i ->
+                var det = 0
+                stringBuilder.append(i.name.apply { det+=length })
+                    .append(tab(15-det).apply { det+=length })
+                    .append("${i.weight}".apply { det+=length })
+                    .append(tab(23-det).apply { det+=length })
+                    .append("x".apply { det+=length })
+                    .append(tab(25-det).apply { det+=length })
+                    .append("${i.rate}".apply { det+=length })
+                    .append(tab(31-det).apply { det+=length })
+                    .append("=".apply { det+=length })
+                    .append(tab(33-det))
+                    .append("${i.fine}\n")
+            }
+            stringBuilder.append("-----------------------------------------------\n")
+        }
+
 
         var det1 = 0
         stringBuilder.append("Total".apply { det1+=length })
@@ -247,7 +270,7 @@ class BillingViewModel @Inject constructor(
                 .append(tab(34-det))
                 .append("${i.fine}\n")
         }
-        stringBuilder.append("----------------------------------------\n")
+        stringBuilder.append("-----------------------------------------------\n")
         if(goldItemList.size>1) {
             var det = 0
             stringBuilder.append("Total".apply { det+=length })
@@ -339,7 +362,10 @@ class BillingViewModel @Inject constructor(
 
         billItemList.clear(); billItemList.addAll(Converters().fromString(bill.items)!!)
         goldItemList.clear(); goldItemList.addAll(Converters().fromString1(bill.golds)!!)
-        isBillNotFound.value = false
+        billAndGoldIds = billItemList[0].iId
+        billItemList.forEach { if(it.iId>billAndGoldIds) billAndGoldIds = it.iId }
+        goldItemList.forEach { if(it.id>billAndGoldIds) billAndGoldIds = it.id }
+        billAndGoldIds++; isBillNotFound.value = false
         goldBhav = bill.bhav
         cashReceived = bill.cashReceived
         party.value = Party(name=bill.partyName, phoneNumber = bill.partyNumber)

@@ -52,7 +52,7 @@ class BillingActivity : AppCompatActivity() {
     private lateinit var rxOldBillSelected: Disposable
     @Inject lateinit var preferences: SharedPreferences
     private var touchHelper: ItemTouchHelper? = null
-    private var billAndGoldIds = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,7 +146,7 @@ class BillingActivity : AppCompatActivity() {
         }
 
         billingPanel.binding.addGoldLabel.setOnClickListener {
-            val goldItem = GoldItem(billAndGoldIds++)
+            val goldItem = GoldItem(viewModel.billAndGoldIds++)
             viewModel.goldItemList.add(goldItem)
             val view = GoldItemCardView(this@BillingActivity,goldItem)
             billingPanel.binding.goldsContainer.addView(view)
@@ -159,7 +159,7 @@ class BillingActivity : AppCompatActivity() {
                 if(i.position == 0)
                     startActivity(Intent(this@BillingActivity,AddItem::class.java))
                 else {
-                    val billItem = BillItem(billAndGoldIds++, i.name, rate = i.rate)
+                    val billItem = BillItem(viewModel.billAndGoldIds++, i.name, rate = i.rate)
                     viewModel.billItemList.add(billItem)
                     val view = BillItemCardView(this@BillingActivity, billItem)
                     billingPanel.binding.itemsContainer.addView(view)
@@ -267,14 +267,9 @@ class BillingActivity : AppCompatActivity() {
     }
 
     private fun resetBill(){
-        binding.billingPanel.binding.itemsContainer.removeAllViews()
-        binding.billingPanel.binding.goldsContainer.removeAllViews()
         viewModel.clearAll()
-        binding.billingPanel.clear()
-        billAndGoldIds = 0
-        binding.billingPanel.binding.addGoldLabel.callOnClick()
-        (binding.billingPanel.binding.goldsContainer[0] as GoldItemCardView).removeFocus()
         viewModel.goldBhav = preferences.getInt("bhav",0)
+        binding.billingPanel.clear()
     }
 
     override fun onDestroy() {

@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.s3enterprises.jewellowholesale.R
+import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.database.models.Party
 import com.s3enterprises.jewellowholesale.databinding.ActivityAddPartyBinding
 import com.s3enterprises.jewellowholesale.party.PartyRepository
@@ -57,6 +58,7 @@ class AddParty : AppCompatActivity() {
                     partiesRepository.insert(newParty)
                     isLoading = false
                     Toast.makeText(this@AddParty,"Party added ${newParty.name}",Toast.LENGTH_LONG).show()
+                    Utils.hideKeyboard(it)
                     finish()
                 }catch (e:Exception){
                     Toast.makeText(this@AddParty,e.message,Toast.LENGTH_LONG).show()
@@ -70,6 +72,7 @@ class AddParty : AppCompatActivity() {
                 partiesRepository.update(party)
                 isLoading = true
                 Toast.makeText(this@AddParty,"Party updated ${party.name}",Toast.LENGTH_LONG).show()
+                Utils.hideKeyboard(it)
                 finish()
             }
         }
