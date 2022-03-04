@@ -51,4 +51,10 @@
     <string name="height">Height</string>
     <string name="text">Text</string>
     <string name="view_bill">View Bills</string>
+    <string name="gold_received">Gold Received</string>
+    <string name="total_gold_received">Total Gold Received</string>
+    <string name="last_balance">Fine Balance</string>
+    <string name="last_balance2">Cash Balance</string>
+    <string name="zero">0</string>
+    <string name="expanded">Expanded</string>
 </resources>

@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.get
@@ -87,6 +89,7 @@ class BillingActivity : AppCompatActivity() {
             viewModel.goldItemList.clear()
             viewModel.goldItemList.addAll(newList)
             viewModel.calculate()
+            if(newList.size == 1) binding.billingPanel.binding.totalGoldContainer.visibility = View.GONE
         }
 
         rxOldBillSelected = RxBus.listen(RxEvent.PreviousBillSelected::class.java)!!.subscribe{ event ->
@@ -96,8 +99,8 @@ class BillingActivity : AppCompatActivity() {
         val previousBill = intent.getSerializableExtra("bill") as? Bill
         if(previousBill != null) viewModel.setUpBill(previousBill)
 
-        binding.billingPanel.binding.addGoldLabel.callOnClick()
-        (binding.billingPanel.binding.goldsContainer[0] as GoldItemCardView).removeFocus()
+//        binding.billingPanel.binding.addGoldLabel.callOnClick()
+//        (binding.billingPanel.binding.goldsContainer[0] as GoldItemCardView).removeFocus()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -145,12 +148,6 @@ class BillingActivity : AppCompatActivity() {
             }
         }
 
-        billingPanel.binding.addGoldLabel.setOnClickListener {
-            val goldItem = GoldItem(viewModel.billAndGoldIds++)
-            viewModel.goldItemList.add(goldItem)
-            val view = GoldItemCardView(this@BillingActivity,goldItem)
-            billingPanel.binding.goldsContainer.addView(view)
-        }
 
         viewModel.items.observeForever { items ->
             val buttonList = arrayListOf(Item(0,"Add Item")).apply { addAll(items) }
@@ -260,6 +257,10 @@ class BillingActivity : AppCompatActivity() {
                 val socket = JewelloBluetoothSocket().apply { findDeviceAndConnect(this@BillingActivity) }
                 socket.printData(printBill)
                 socket.disconnectBT()
+            }
+            R.id.expanded -> {
+                item.isChecked = !item.isChecked
+                viewModel.expanded.value = item.isChecked
             }
 
         }

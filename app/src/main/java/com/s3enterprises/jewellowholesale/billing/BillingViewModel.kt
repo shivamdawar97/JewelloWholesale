@@ -32,6 +32,8 @@ class BillingViewModel @Inject constructor(
     private val salesRepository: SalesRepository
 ):ViewModel() {
 
+    val expanded = MutableLiveData<Boolean>().apply { value = false }
+    var billAndGoldIds = 0
     private var det4 = 0
     var listenChangeEvents = true
     val loadedBill = MutableLiveData<Bill?>()
@@ -50,21 +52,28 @@ class BillingViewModel @Inject constructor(
     val grossGS = MutableLiveData<Float>().apply { value = 0f }
     val fineGS = MutableLiveData<Float>().apply { value = 0f }
 
-    val goldItemList = ArrayList<GoldItem>()
+    val goldItemList = ArrayList<GoldItem>().apply {
+        val goldItem = GoldItem(billAndGoldIds++)
+        add(goldItem)
+    }
     val grossGR = MutableLiveData<Float>().apply { value = 0f }
     val fineGR = MutableLiveData<Float>().apply { value = 0f }
 
     val fineBH = MutableLiveData<Float>().apply { value = 0f }
     val fineCR = MutableLiveData<Float>().apply { value = 0f }
 
+    val fineCB = MutableLiveData<Float>().apply { value = 0f }
+    val fineFB = MutableLiveData<Float>().apply { value = 0f }
+
     val cashBH = MutableLiveData<Int>().apply { value = 0 }
 
     var cashReceived = 0
+    var cashBalance = 0; var fineBalance = 0f
     val fineDU = MutableLiveData<Float>().apply { value = 0f }
     val cashDU = MutableLiveData<Int>().apply { value = 0 }
     var goldBhav = 0
     var billCounter = 0
-    var billAndGoldIds = 0
+
 
     fun calculate(){
         var grossGs = 0f; var fineGs = 0f ;var grossGr = 0f; var fineGr = 0f
@@ -77,15 +86,17 @@ class BillingViewModel @Inject constructor(
             grossGr+=it.weight
             fineGr+=it.fine
         }
+        val fineFb = fineGs + fineBalance
 
-        val fineBh = fineGs - fineGr
+        val fineBh = fineFb - fineGr
         val cashBh = (fineBh * goldBhav).toInt()
 
+        val fineCb = if(goldBhav<1) 0f else cashBalance.toFloat() / goldBhav
         val fineCr = if(goldBhav<1) 0f else cashReceived.toFloat() / goldBhav
 
-        val fineDu = (fineBh-fineCr).roundOff(3)
+        val fineDu = (fineBh+fineCb-fineCr).roundOff(3)
 
-        val cashDu = cashBh - cashReceived
+        val cashDu = cashBh + cashBalance - cashReceived
 
         grossGS.value =  grossGs.roundOff(3)
         fineGS.value = fineGs.roundOff(3)
@@ -97,6 +108,8 @@ class BillingViewModel @Inject constructor(
 
         fineBH.value = fineBh.roundOff(3)
         fineCR.value = fineCr.roundOff(3)
+        fineCB.value = fineCb.roundOff(3)
+        fineFB.value = fineFb.roundOff(3)
         fineDU.value = fineDu
         cashDU.value = cashDu
 
@@ -107,7 +120,10 @@ class BillingViewModel @Inject constructor(
         isBillNotFound.value = false
         billItemList.clear(); goldItemList.clear()
         cashReceived = 0 ; party.value = null
+        cashBalance = 0; fineBalance = 0f
         billAndGoldIds = 0
+        val goldItem = GoldItem(billAndGoldIds++)
+        goldItemList.add(goldItem)
         calculate()
     }
 
@@ -256,6 +272,11 @@ class BillingViewModel @Inject constructor(
             .append(tab(34-det1))
             .append("${fineGS.value}\n\n")
 
+        var det2 = 0
+        stringBuilder.append("Last Balance".apply { det2+=length })
+            .append(tab(34-det2).apply { det2+=length })
+            .append("$fineBalance")
+
         goldItemList.forEachIndexed  { pos, i ->
             var det = 0
             if(pos==0) stringBuilder.append("Gold Received".apply { det+=length })
@@ -362,7 +383,7 @@ class BillingViewModel @Inject constructor(
 
         billItemList.clear(); billItemList.addAll(Converters().fromString(bill.items)!!)
         goldItemList.clear(); goldItemList.addAll(Converters().fromString1(bill.golds)!!)
-        billAndGoldIds = billItemList[0].iId
+        billAndGoldIds = if(billItemList.isNotEmpty()) billItemList[0].iId else 0
         billItemList.forEach { if(it.iId>billAndGoldIds) billAndGoldIds = it.iId }
         goldItemList.forEach { if(it.id>billAndGoldIds) billAndGoldIds = it.id }
         billAndGoldIds++; isBillNotFound.value = false

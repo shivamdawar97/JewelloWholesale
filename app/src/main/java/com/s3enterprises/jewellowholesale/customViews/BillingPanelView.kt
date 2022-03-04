@@ -2,11 +2,13 @@ package com.s3enterprises.jewellowholesale.customViews
 
 import android.content.Context
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.AutoCompleteTextView
 import android.widget.LinearLayout
@@ -20,6 +22,7 @@ import com.s3enterprises.jewellowholesale.billing.AutoCompleteAdapter
 import com.s3enterprises.jewellowholesale.billing.BillingActivity
 import com.s3enterprises.jewellowholesale.billing.BillingViewModel
 import com.s3enterprises.jewellowholesale.database.models.Bill
+import com.s3enterprises.jewellowholesale.database.models.GoldItem
 import com.s3enterprises.jewellowholesale.database.models.Party
 import com.s3enterprises.jewellowholesale.databinding.ViewBillingPanelBinding
 import com.s3enterprises.jewellowholesale.party.addParty.AddParty
@@ -83,6 +86,24 @@ class BillingPanelView: LinearLayout {
             viewModel.calculate()
         }
 
+        balanceCash.onTextChanged { if(!viewModel.listenChangeEvents) return@onTextChanged
+            viewModel.cashBalance = balanceCash.floatValue.toInt()
+            viewModel.calculate()
+        }
+
+        balanceFine.onTextChanged { if(!viewModel.listenChangeEvents) return@onTextChanged
+            viewModel.fineBalance = balanceFine.floatValue
+            viewModel.calculate()
+        }
+
+        addGoldLabel.setOnClickListener {
+            val goldItem = GoldItem(viewModel.billAndGoldIds++)
+            viewModel.goldItemList.add(goldItem)
+            val view = GoldItemCardView(context,goldItem)
+            goldsContainer.addView(view)
+            totalGoldContainer.visibility = View.VISIBLE
+        }
+
     }
 
     fun setPartiesAdapter(parties: List<Party>) {
@@ -101,10 +122,10 @@ class BillingPanelView: LinearLayout {
     fun clear() = with(binding) {
         autoCompleteTextView.setText("")
         cashRcv.setText(""); billChanger.setBillNo(0)
-        bhavEdit.setText(binding.model!!.goldBhav.toString())
+        balanceCash.setText(""); balanceFine.setText("")
+        bhavEdit.setText(model!!.goldBhav.toString())
         itemsContainer.removeAllViews(); goldsContainer.removeAllViews()
-        addGoldLabel.callOnClick()
-        (goldsContainer[0] as GoldItemCardView).removeFocus()
+        Unit
     }
 
     fun setUpBill(bill: Bill) = with(binding) {
