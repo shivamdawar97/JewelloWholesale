@@ -409,6 +409,7 @@ class BillingViewModel @Inject constructor(
         calculate()
         loadedBill.value = bill
         isBillSaved.value = true
+        expanded.value = cashBalance!=0 || fineBalance!=0f
     }
 
     fun updateItemsPositions(updatedList: List<Item>) = viewModelScope.launch {

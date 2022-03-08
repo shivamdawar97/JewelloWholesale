@@ -106,16 +106,16 @@ class BillingPanelView: LinearLayout {
             totalGoldContainer.visibility = View.VISIBLE
         }
 
-        goldRcv1.onTextChanged {
+        goldRcv1.onTextChanged { if(!viewModel.listenChangeEvents) return@onTextChanged
             viewModel.goldItemList[0].weight = goldRcv1.floatValue
             calculateForFirstGoldItem()
         }
 
-        goldRcvRate1.onTextChanged {
+        goldRcvRate1.onTextChanged { if(!viewModel.listenChangeEvents) return@onTextChanged
             viewModel.goldItemList[0].purity = goldRcvRate1.floatValue
             calculateForFirstGoldItem()
         }
-
+        goldRcvRate1.setText(99.5f.toString())
     }
 
     private fun calculateForFirstGoldItem() {
@@ -131,9 +131,9 @@ class BillingPanelView: LinearLayout {
         autoCompleteTextView.setAdapter(adapter)
         autoCompleteTextView.setOnFocusChangeListener { _, hasFocus ->
             if(hasFocus) Handler(Looper.getMainLooper()).postDelayed({
-                Utils.INPUT_CONNECTION = ic
+                INPUT_CONNECTION = ic
             },100)
-            else Utils.INPUT_CONNECTION = null
+            else INPUT_CONNECTION = null
         }
         autoCompleteTextView.setText(" ")
         autoCompleteTextView.setText("")
@@ -145,7 +145,8 @@ class BillingPanelView: LinearLayout {
         balanceCash.setText(""); balanceFine.setText("")
         bhavEdit.setText(model!!.goldBhav.toString())
         itemsContainer.removeAllViews(); goldsContainer.removeAllViews()
-
+        goldRcv1.setText(""); goldRcvRate1.setText("")
+        goldRcvFine1.text = ""
     }
 
     fun setUpBill(bill: Bill) = with(binding) {
@@ -185,5 +186,8 @@ class BillingPanelView: LinearLayout {
         INPUT_CONNECTION = null
     }
 
+    fun removeBalances() {
+        binding.balanceCash.setText(""); binding.balanceFine.setText("")
+    }
 
 }

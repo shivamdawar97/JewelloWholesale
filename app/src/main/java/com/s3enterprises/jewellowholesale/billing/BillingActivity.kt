@@ -99,6 +99,10 @@ class BillingActivity : AppCompatActivity() {
         val previousBill = intent.getSerializableExtra("bill") as? Bill
         if(previousBill != null) viewModel.setUpBill(previousBill)
 
+        viewModel.expanded.observeForever {
+            if(!it) binding.billingPanel.removeBalances()
+        }
+
 //        binding.billingPanel.binding.addGoldLabel.callOnClick()
 //        (binding.billingPanel.binding.goldsContainer[0] as GoldItemCardView).removeFocus()
     }
