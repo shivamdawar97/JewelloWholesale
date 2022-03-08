@@ -8,7 +8,7 @@
         android:id="@+id/expanded"
         app:showAsAction="always"
         android:checkable="true"
-        android:icon="@drawable/ic_radio"
+        android:icon="@drawable/ic_expanded"
         />
 
     <item

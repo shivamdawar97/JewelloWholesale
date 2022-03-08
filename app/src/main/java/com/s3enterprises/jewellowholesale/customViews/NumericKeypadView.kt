@@ -81,7 +81,7 @@ class NumericKeypadView : ConstraintLayout, View.OnClickListener {
                     val currentText = ic.getExtractedText(ExtractedTextRequest(),0).text
                     val beforeCursorText = ic.getTextBeforeCursor(currentText.length,0)
                     val afterCursorText = ic.getTextAfterCursor(currentText.length,0)
-                    ic.deleteSurroundingText(beforeCursorText.length,afterCursorText.length)
+                    ic.deleteSurroundingText(beforeCursorText!!.length,afterCursorText!!.length)
                 }
 
                 else -> ic.commitText(keyValue.get(view.id),1)

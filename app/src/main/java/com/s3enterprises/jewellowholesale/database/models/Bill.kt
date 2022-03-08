@@ -13,9 +13,9 @@ data class Bill(
     @ColumnInfo
     val date:Long =0,
     @ColumnInfo
-    val partyName:String="N/A",
+    var partyName:String="N/A",
     @ColumnInfo
-    val partyNumber:String="N/A",
+    var partyNumber:String="N/A",
     @ColumnInfo
     var items:String="N/A",
     @ColumnInfo
@@ -24,8 +24,14 @@ data class Bill(
     var bhav:Int=0,
     @ColumnInfo
     var cashReceived:Int=0,
+    @ColumnInfo
+    var cashBalance:Int=0,
     @ColumnInfo(name = "cash_du")
     var cashDu:Int=0,
     @ColumnInfo(name = "fine_gs")
-    var fineGs:Float=0f
+    var fineGs:Float=0f,
+    @ColumnInfo(name = "fine_fb")
+    var fineBalance:Float=0f,
+    @ColumnInfo
+    var billString: String = ""
 ):Serializable

@@ -12,12 +12,14 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.AutoCompleteTextView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.view.get
 import androidx.core.view.size
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.Utils.INPUT_CONNECTION
 import com.s3enterprises.jewellowholesale.Utils.onTextChanged
+import com.s3enterprises.jewellowholesale.Utils.roundOff
 import com.s3enterprises.jewellowholesale.billing.AutoCompleteAdapter
 import com.s3enterprises.jewellowholesale.billing.BillingActivity
 import com.s3enterprises.jewellowholesale.billing.BillingViewModel
@@ -104,6 +106,24 @@ class BillingPanelView: LinearLayout {
             totalGoldContainer.visibility = View.VISIBLE
         }
 
+        goldRcv1.onTextChanged {
+            viewModel.goldItemList[0].weight = goldRcv1.floatValue
+            calculateForFirstGoldItem()
+        }
+
+        goldRcvRate1.onTextChanged {
+            viewModel.goldItemList[0].purity = goldRcvRate1.floatValue
+            calculateForFirstGoldItem()
+        }
+
+    }
+
+    private fun calculateForFirstGoldItem() {
+        val item = binding.model!!.goldItemList[0]
+        val c = item.weight * item.purity
+        item.fine = (c/100).roundOff(3)
+        binding.goldRcvFine1.text = item.fine.toString()
+        RxBus.publish(RxEvent.EventBillItemChanged())
     }
 
     fun setPartiesAdapter(parties: List<Party>) {
@@ -125,7 +145,7 @@ class BillingPanelView: LinearLayout {
         balanceCash.setText(""); balanceFine.setText("")
         bhavEdit.setText(model!!.goldBhav.toString())
         itemsContainer.removeAllViews(); goldsContainer.removeAllViews()
-        Unit
+
     }
 
     fun setUpBill(bill: Bill) = with(binding) {
@@ -145,13 +165,22 @@ class BillingPanelView: LinearLayout {
             itemsContainer.addView(view)
         }
 
-        model?.goldItemList?.forEach { goldItem ->
-            val view = GoldItemCardView(context,goldItem)
-            goldsContainer.addView(view)
-            if(goldItem.fine == 0f) view.removeFocus()
+        model?.goldItemList?.forEachIndexed { index, goldItem ->
+            if(index==0) {
+                goldRcv1.setText(goldItem.weight.toString())
+                goldRcvRate1.setText(goldItem.purity.toString())
+                goldRcvFine1.text = goldItem.fine.toString()
+            }
+            else {
+                val view = GoldItemCardView(context,goldItem)
+                goldsContainer.addView(view)
+                if(goldItem.fine == 0f) view.removeFocus()
+            }
         }
         bhavEdit.setText(bill.bhav.toString())
         cashRcv.setText(bill.cashReceived.toString())
+        balanceFine.setText(bill.fineBalance.toString())
+        balanceCash.setText(bill.cashBalance.toString())
 
         INPUT_CONNECTION = null
     }

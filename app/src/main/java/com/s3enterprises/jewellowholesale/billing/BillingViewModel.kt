@@ -264,18 +264,19 @@ class BillingViewModel @Inject constructor(
             stringBuilder.append("-----------------------------------------------\n")
         }
 
-
         var det1 = 0
         stringBuilder.append("Total".apply { det1+=length })
             .append(tab(16-det1).apply { det1+=length })
             .append("${grossGS.value}".apply { det1+=length })
             .append(tab(34-det1))
-            .append("${fineGS.value}\n\n")
+            .append("${fineGS.value}\n")
 
         var det2 = 0
         stringBuilder.append("Last Balance".apply { det2+=length })
-            .append(tab(34-det2).apply { det2+=length })
+            .append(tab(16-det2).apply { det2+=length })
             .append("$fineBalance")
+            .append(tab(34-det2).apply { det2+=length })
+            .append("${fineFB.value}\n")
 
         goldItemList.forEachIndexed  { pos, i ->
             var det = 0
@@ -313,6 +314,13 @@ class BillingViewModel @Inject constructor(
             .append(tab(34-det2))
             .append("${fineBH.value ?: 0f}\n")
 
+        var det5 = 0
+        stringBuilder.append("Cash Balance".apply { det5+=length })
+            .append(tab(16-det5).apply { det5+=length })
+            .append(Utils.getRupeesFormatted(cashBalance).apply { det5+=length })
+            .append(tab(34-det5))
+            .append("${fineCB.value ?: 0f}\n")
+
         var det3 = 0
         stringBuilder.append("Cash Received".apply { det3+=length })
             .append(tab(16-det3).apply { det3+=length })
@@ -340,16 +348,23 @@ class BillingViewModel @Inject constructor(
         val bill = oldBill?:Bill(
             billNo = billCounter,
             date = Date().time,
-            partyName = if(party.value==null) "N/A" else party.value!!.name,
-            partyNumber = if(party.value==null) "N/A" else party.value!!.phoneNumber ,
         )
         with(bill){
+            partyName = if(party.value==null) "N/A" else party.value!!.name
+            partyNumber = if(party.value==null) "N/A" else party.value!!.phoneNumber
             items = Converters().fromList(billItemList)
             golds = Converters().fromList(goldItemList)
             bhav = goldBhav
             cashReceived = this@BillingViewModel.cashReceived
+            cashBalance = this@BillingViewModel.cashBalance
             cashDu = cashDU.value!!
             fineGs = fineGS.value!!
+            fineBalance = fineBalance
+            billString = generateBillPrint1()+
+                    generateBillPrint2()+
+                    generateBillPrint3()+
+                    generateBillPrint4()+
+                    generateBillPrint5()
         }
         return bill
     }
@@ -380,7 +395,6 @@ class BillingViewModel @Inject constructor(
     }
 
     fun setUpBill(bill: Bill)  {
-
         billItemList.clear(); billItemList.addAll(Converters().fromString(bill.items)!!)
         goldItemList.clear(); goldItemList.addAll(Converters().fromString1(bill.golds)!!)
         billAndGoldIds = if(billItemList.isNotEmpty()) billItemList[0].iId else 0
@@ -389,6 +403,8 @@ class BillingViewModel @Inject constructor(
         billAndGoldIds++; isBillNotFound.value = false
         goldBhav = bill.bhav
         cashReceived = bill.cashReceived
+        cashBalance = bill.cashBalance
+        fineBalance = bill.fineBalance
         party.value = Party(name=bill.partyName, phoneNumber = bill.partyNumber)
         calculate()
         loadedBill.value = bill

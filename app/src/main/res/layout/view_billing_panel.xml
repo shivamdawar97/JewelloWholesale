@@ -291,7 +291,7 @@
 
 
                     <com.s3enterprises.jewellowholesale.customViews.FloatEditText
-                        android:id="@+id/gold_rcv"
+                        android:id="@+id/gold_rcv1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.7"
@@ -310,7 +310,7 @@
                         />
 
                     <com.s3enterprises.jewellowholesale.customViews.FloatEditText
-                        android:id="@+id/gold_rcv_rate"
+                        android:id="@+id/gold_rcv_rate1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
@@ -329,7 +329,7 @@
                         />
 
                     <TextView
-                        android:id="@+id/gold_rcv_fine"
+                        android:id="@+id/gold_rcv_fine1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         tools:text="20.732"
@@ -464,6 +464,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:visibility="@{model.expanded?View.VISIBLE:View.GONE}"
                     >
                     <TextView
                         android:layout_width="0dp"
@@ -512,6 +513,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:visibility="@{model.expanded?View.VISIBLE:View.GONE}"
                     >
                     <TextView
                         android:layout_width="0dp"
