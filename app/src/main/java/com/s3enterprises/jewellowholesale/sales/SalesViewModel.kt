@@ -14,7 +14,7 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class SalesViewModel @Inject  constructor(private val salesRepository: SalesRepository):ViewModel() {
+class SalesViewModel @Inject constructor(private val salesRepository: SalesRepository):ViewModel() {
 
     val saleRange = MutableLiveData<String>()
     var month:Int=0; var year:Int=0

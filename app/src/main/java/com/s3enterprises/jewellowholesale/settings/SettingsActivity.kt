@@ -21,16 +21,12 @@ import io.reactivex.disposables.Disposable
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var rxOldBillSelected: Disposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_settings)
         title = "Settings"
         setUpListView()
-        rxOldBillSelected = RxBus.listen(RxEvent.PreviousBillSelected::class.java)!!.subscribe{
-           finish()
-        }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -56,8 +52,4 @@ class SettingsActivity : AppCompatActivity() {
         return false
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        rxOldBillSelected.dispose()
-    }
 }

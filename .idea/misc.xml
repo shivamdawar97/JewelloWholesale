@@ -39,8 +39,9 @@
         <entry key="app/src/main/res/layout/activity_print.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_sales.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.24010416666666667" />
+        <entry key="app/src/main/res/layout/bill_preview_dailog.xml" value="0.22192028985507245" />
         <entry key="app/src/main/res/layout/card_bill_item.xml" value="0.23958333333333334" />
-        <entry key="app/src/main/res/layout/card_bill_record.xml" value="0.21721496169445698" />
+        <entry key="app/src/main/res/layout/card_bill_record.xml" value="0.5" />
         <entry key="app/src/main/res/layout/card_gold_recv.xml" value="0.25" />
         <entry key="app/src/main/res/layout/card_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/card_month_wise.xml" value="0.25" />

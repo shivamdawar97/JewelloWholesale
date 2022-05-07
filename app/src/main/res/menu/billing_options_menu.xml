@@ -20,7 +20,7 @@
     </item>
     <item
         android:id="@+id/reset"
-        android:title="@string/reset"
+        android:title="@string/print_sample"
         android:icon="@drawable/ic_refresh"
         app:showAsAction="always"
         >
@@ -32,16 +32,6 @@
         app:showAsAction="ifRoom"
         >
     </item>
-
-    <item
-        android:id="@+id/send_pending"
-        android:title="@string/send_pending"
-        />
-
-    <item
-        android:id="@+id/view_pending"
-        android:title="@string/view_pending"
-        />
 
 
 </menu>

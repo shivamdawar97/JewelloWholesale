@@ -30,7 +30,6 @@ import com.s3enterprises.jewellowholesale.database.models.GoldItem
 import com.s3enterprises.jewellowholesale.database.models.Item
 import com.s3enterprises.jewellowholesale.databinding.ActivityBillingBinding
 import com.s3enterprises.jewellowholesale.items.addItem.AddItem
-import com.s3enterprises.jewellowholesale.pendings.PendingsActivity
 import com.s3enterprises.jewellowholesale.print.JewelloBluetoothSocket
 import com.s3enterprises.jewellowholesale.rx.RxBus
 import com.s3enterprises.jewellowholesale.rx.RxEvent
@@ -96,15 +95,10 @@ class BillingActivity : AppCompatActivity() {
             viewModel.setUpBill(event.bill)
         }
 
-        val previousBill = intent.getSerializableExtra("bill") as? Bill
-        if(previousBill != null) viewModel.setUpBill(previousBill)
-
         viewModel.expanded.observeForever {
             if(!it) binding.billingPanel.removeBalances()
         }
 
-//        binding.billingPanel.binding.addGoldLabel.callOnClick()
-//        (binding.billingPanel.binding.goldsContainer[0] as GoldItemCardView).removeFocus()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -197,7 +191,7 @@ class BillingActivity : AppCompatActivity() {
                 socket.printBoldData(viewModel.generateBillPrint2()!!)
                 socket.printData(viewModel.generateBillPrint3()!!)
                 socket.printBoldData(viewModel.generateBillPrint4()!!)
-                socket.printData(viewModel.generateBillPrint5()!!)
+                socket.printData(viewModel.generateBillPrint5())
                 socket.disconnectBT()
             }
         }
@@ -245,17 +239,6 @@ class BillingActivity : AppCompatActivity() {
         when (item.itemId){
             R.id.reset -> viewModel.loadedBill.value = null
             R.id.settings -> startActivity(Intent(this,SettingsActivity::class.java))
-            R.id.send_pending -> {
-                val converter = Converters()
-                val listInString = preferences.getString("pending","")
-                val list = if(listInString.isNullOrBlank()) ArrayList() else converter.fromStringToBills(listInString)
-                val bill = viewModel.generateBill().apply { billNo = 0 }
-                list?.add(bill)
-                val stringOfList = converter.fromListToString(list)
-                preferences.edit().putString("pending",stringOfList).apply()
-                viewModel.loadedBill.value = null
-            }
-            R.id.view_pending -> startActivity(Intent(this,PendingsActivity::class.java))
             R.id.receipt -> lifecycleScope.launch {
                 val printBill = viewModel.generateSamplePrint()
                 val socket = JewelloBluetoothSocket().apply { findDeviceAndConnect(this@BillingActivity) }

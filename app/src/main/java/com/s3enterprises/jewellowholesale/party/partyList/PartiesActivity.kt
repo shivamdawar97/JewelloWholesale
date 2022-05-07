@@ -27,7 +27,6 @@ class PartiesActivity : AppCompatActivity() {
     @Inject
     lateinit var partiesRepository: PartyRepository
     private lateinit var binding: ActivityPartiesBinding
-    private lateinit var rxOldBillSelected: Disposable
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,9 +37,6 @@ class PartiesActivity : AppCompatActivity() {
         setUpRecyclerView()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        rxOldBillSelected = RxBus.listen(RxEvent.PreviousBillSelected::class.java)!!.subscribe{
-            finish()
-        }
     }
 
     private fun setUpRecyclerView()  = partiesRepository.parties.observeForever { parties ->
@@ -65,9 +61,4 @@ class PartiesActivity : AppCompatActivity() {
         return false
     }
 
-
-    override fun onDestroy() {
-        super.onDestroy()
-        rxOldBillSelected.dispose()
-    }
 }

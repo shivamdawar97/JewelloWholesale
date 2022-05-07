@@ -44,7 +44,9 @@ class JewelloBluetoothSocket {
     }
     private val boldPrintFormat = byteArrayOf(27, 33, 0).apply {
         this[2] = this[2]
-            .or(0x12) // bold
+            .or(0x32) // bold
+            .or(0x16)
+            .or(0x13)
     }
 
     suspend fun findDeviceAndConnect(context: Context) {

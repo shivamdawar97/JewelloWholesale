@@ -13,6 +13,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.AutoCompleteTextView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.get
 import androidx.core.view.size
 import com.s3enterprises.jewellowholesale.R
@@ -146,7 +147,8 @@ class BillingPanelView: LinearLayout {
         bhavEdit.setText(model!!.goldBhav.toString())
         itemsContainer.removeAllViews(); goldsContainer.removeAllViews()
         goldRcv1.setText(""); goldRcvRate1.setText("")
-        goldRcvFine1.text = ""
+        goldRcvRate1.setText(99.5f.toString())
+        model!!.expanded.value = false
     }
 
     fun setUpBill(bill: Bill) = with(binding) {
@@ -182,12 +184,13 @@ class BillingPanelView: LinearLayout {
         cashRcv.setText(bill.cashReceived.toString())
         balanceFine.setText(bill.fineBalance.toString())
         balanceCash.setText(bill.cashBalance.toString())
-
+        binding.model!!.expanded.value = bill.cashBalance!=0 || bill.fineBalance!=0f
         INPUT_CONNECTION = null
     }
 
-    fun removeBalances() {
-        binding.balanceCash.setText(""); binding.balanceFine.setText("")
+    fun removeBalances() = with(binding) {
+        balanceCash.setText("")
+        balanceFine.setText("")
     }
 
 }
