@@ -99,14 +99,14 @@ object Utils {
         sharedPreferences.edit().putString("printer_name", name).apply()
     }
 
-    fun atEndOfDay(date: Date) = with(Calendar.getInstance()) {
+    fun atEndOfDay(date: Date): Date = with(Calendar.getInstance()) {
         time = date
         set(Calendar.HOUR_OF_DAY, 23);set(Calendar.MINUTE, 59)
         set(Calendar.SECOND, 59);set(Calendar.MILLISECOND, 999)
         time
     }
 
-    fun atStartOfDay(date: Date) = with(Calendar.getInstance()) {
+    fun atStartOfDay(date: Date): Date = with(Calendar.getInstance()) {
         time = date
         set(Calendar.HOUR_OF_DAY, 0);set(Calendar.MINUTE, 0)
         set(Calendar.SECOND, 0);set(Calendar.MILLISECOND, 0)
@@ -138,6 +138,10 @@ object Utils {
 
             override fun getItemCount() = list.size
         }
+
+
+    fun Long.getMonth() = DateFormat.format("MM",this).toString().toInt()
+    fun Long.getYear() = DateFormat.format("yyyy",this).toString().toInt()
 
 
 }

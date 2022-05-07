@@ -23,6 +23,7 @@
         <entry key="app/src/main/res/drawable/ic_receipt.xml" value="0.2671875" />
         <entry key="app/src/main/res/drawable/ic_refresh.xml" value="0.25625" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.25625" />
+        <entry key="app/src/main/res/drawable/ic_stock.xml" value="0.197" />
         <entry key="app/src/main/res/drawable/ic_total_sale.xml" value="0.16151315789473683" />
         <entry key="app/src/main/res/layout-land/activity_billing.xml" value="0.25" />
         <entry key="app/src/main/res/layout-land/ic_chevron_left.xml" value="0.29863945578231293" />
@@ -44,7 +45,7 @@
         <entry key="app/src/main/res/layout/card_bill_record.xml" value="0.5" />
         <entry key="app/src/main/res/layout/card_gold_recv.xml" value="0.25" />
         <entry key="app/src/main/res/layout/card_item.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/card_month_wise.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/card_month_wise.xml" value="0.33" />
         <entry key="app/src/main/res/layout/card_party.xml" value="0.33" />
         <entry key="app/src/main/res/layout/card_pending.xml" value="0.15855263157894736" />
         <entry key="app/src/main/res/layout/card_selection_list.xml" value="0.33" />

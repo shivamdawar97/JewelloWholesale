@@ -18,6 +18,6 @@ data class Sales (
     var gold:Float=0f,
 
     @ColumnInfo
-    var total:Int=0
+    var stock:Float=0f
 
 )

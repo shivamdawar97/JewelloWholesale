@@ -15,8 +15,8 @@ interface SalesDao {
     @Query("select * from Sales")
     suspend fun getAll(): List<Sales>
 
-    @Delete
-    suspend fun delete(sales: Sales)
+    @Query("delete from Sales where date=:date")
+    suspend fun delete(date: Long)
 
     @Query("delete from Sales")
     fun clear()

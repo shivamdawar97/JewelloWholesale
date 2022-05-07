@@ -128,7 +128,7 @@ class BillingActivity : AppCompatActivity() {
                             .show()
                     else viewModel.saveBill()
                 }
-                viewModel.party.value==null -> {
+                viewModel.party.value == null -> {
                     AlertDialog.Builder(this@BillingActivity)
                         .setTitle("Party not defined")
                         .setMessage("Party name is not provided, Continue as unknown")

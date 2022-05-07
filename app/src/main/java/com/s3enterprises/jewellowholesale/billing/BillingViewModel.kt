@@ -166,9 +166,17 @@ class BillingViewModel @Inject constructor(
                 goldItemList.forEach { gIt ->
                     if(gIt.purity>=99f) gold-=gIt.weight
                 }
-                val total = (updatedBill.fineGs * updatedBill.bhav) - (it.fineGs * it.bhav)
-                Log.i("Sales_Update","$cash $gold ${total.toInt()}")
-                salesRepository.updateTodaySale(cash,gold,total.toInt())
+
+                var stock= 0f
+                Converters().fromString(updatedBill.items)?.forEach { bIt->
+                    stock += bIt.weight
+                }
+                billItemList.forEach { bIt ->
+                    stock -= bIt.weight
+                }
+
+                Log.i("Sales_Update","$cash $gold $stock")
+                salesRepository.updateTodaySale(cash,gold,stock)
             }
             isDelete -> {
                 val cash =  it.cashReceived + it.cashDu
@@ -176,19 +184,26 @@ class BillingViewModel @Inject constructor(
                 goldItemList.forEach { gIt ->
                     if(gIt.purity>=99f) gold+=gIt.weight
                 }
+                var stock = 0f
+                billItemList.forEach { bIt ->
+                    stock += bIt.weight
+                }
+
                 val total = it.fineGs * it.bhav
-                Log.i("Sales_Update","$cash $gold ${total.toInt()}")
-                salesRepository.updateTodaySale(-cash,-gold,-total.toInt())
+                Log.i("Sales_Update","$cash $gold $stock")
+                salesRepository.updateTodaySale(-cash,-gold,-stock)
             }
             else -> {
                 val cash =  it.cashReceived + it.cashDu
                 var gold = 0f
-                goldItemList.forEach { gIt ->
-                    if(gIt.purity>=99f) gold+=gIt.weight
+                goldItemList.forEach { goldItem ->
+                    if(goldItem.purity>=99f) gold+=goldItem.weight
                 }
-                val total = it.fineGs * it.bhav
-
-                salesRepository.updateTodaySale(cash,gold,total.toInt())
+                var stock = 0f
+                billItemList.forEach { billItem ->
+                    stock += billItem.weight
+                }
+                salesRepository.updateTodaySale(cash,gold,stock)
             }
         }
 

@@ -8,12 +8,12 @@ import javax.inject.Inject
 
 class SalesRepository @Inject constructor(private val salesDao: SalesDao) {
 
-    suspend fun updateTodaySale(cash:Int,gold:Float,total:Int){
+    suspend fun updateTodaySale(cash:Int,gold:Float,stock:Float) {
         val atDayStart = Utils.atStartOfDay(Date()).time
         val todaySale = getSale(atDayStart)?: Sales(atDayStart)
         todaySale.cash = todaySale.cash + cash
         todaySale.gold = todaySale.gold + gold
-        todaySale.total = todaySale.total + total
+        todaySale.stock = todaySale.stock + stock
         return insert(todaySale)
     }
 
@@ -21,12 +21,10 @@ class SalesRepository @Inject constructor(private val salesDao: SalesDao) {
 
     suspend fun update(newSales:Sales)=salesDao.update(newSales)
 
-    suspend fun getSale(date:Long) = salesDao.getSale(date)
-
-    suspend fun getAll() = salesDao.getAll()
+    private suspend fun getSale(date:Long) = salesDao.getSale(date)
 
     suspend fun getSales(monthStart:Long,monthEnd:Long) =
         salesDao.getSalesByRange(monthStart,monthEnd)
 
-    suspend fun deleteSale(sales: Sales) = salesDao.delete(sales)
+    suspend fun deleteSale(date: Long) = salesDao.delete(date)
 }

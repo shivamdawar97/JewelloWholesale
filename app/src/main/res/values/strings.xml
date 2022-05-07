@@ -59,4 +59,6 @@
     <string name="expanded">Expanded</string>
     <string name="print_sample">Print Sample</string>
     <string name="edit_bill">Edit Bill</string>
+    <string name="fine_gold">Fine Gold</string>
+    <string name="stock_sold">Stock Sold</string>
 </resources>

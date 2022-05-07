@@ -42,97 +42,107 @@
             android:text="@{viewModel.saleRange}"
             />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/range_label"
             tools:context=".sales.SalesActivity"
-            android:layout_marginStart="30dp"
+            android:orientation="horizontal"
             >
 
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="0.8"
+                />
+
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/gold_ic"
-                android:layout_width="50dp"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toStartOf="@id/cash_ic"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_weight="1"
                 app:srcCompat="@drawable/ic_gold" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/cash_ic"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toStartOf="@id/total_ic"
-                app:layout_constraintStart_toEndOf="@id/gold_ic"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 app:srcCompat="@drawable/ic_cash" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/total_ic"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/cash_ic"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_total_sale" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:tint="@color/black"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_stock" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/header2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/header"
+            >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="0.8"
+                />
 
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
                 android:layout_marginTop="4dp"
                 android:text="@string/gold"
                 android:textColor="@color/black"
                 android:textSize="@dimen/medium"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@id/gold_ic"
-                app:layout_constraintStart_toStartOf="@id/gold_ic"
-                app:layout_constraintTop_toBottomOf="@id/gold_ic" />
+                android:layout_weight="1"
+                android:gravity="center"
+                />
 
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
                 android:layout_marginTop="4dp"
                 android:text="@string/cash"
                 android:textColor="@color/black"
                 android:textSize="@dimen/medium"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@id/cash_ic"
-                app:layout_constraintStart_toStartOf="@id/cash_ic"
-                app:layout_constraintTop_toBottomOf="@id/cash_ic" />
+                android:gravity="center"
+                android:layout_weight="1" />
 
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
                 android:layout_marginTop="4dp"
-                android:text="@string/total_sale"
+                android:text="@string/stock_sold"
                 android:textColor="@color/black"
                 android:textSize="@dimen/medium"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@id/total_ic"
-                app:layout_constraintStart_toStartOf="@id/total_ic"
-                app:layout_constraintTop_toBottomOf="@id/total_ic" />
+                android:gravity="center"
+                android:layout_weight="1" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/total_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/header"
+            app:layout_constraintTop_toBottomOf="@id/header2"
             android:orientation="horizontal"
             android:layout_marginTop="5dp"
             >
@@ -153,11 +163,12 @@
                 android:id="@+id/gold"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                tools:text="100.21"
+                tools:text="100.210"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/medium"
                 android:layout_weight="1"
                 android:textStyle="bold"
+                android:gravity="center"
                 />
 
             <TextView
@@ -169,17 +180,19 @@
                 android:textSize="@dimen/medium"
                 android:layout_weight="1"
                 android:textStyle="bold"
+                android:gravity="center"
                 />
 
             <TextView
-                android:id="@+id/total"
+                android:id="@+id/stock"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                tools:text="1000000"
+                tools:text="111.220"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/medium"
                 android:layout_weight="1"
                 android:textStyle="bold"
+                android:gravity="center"
                 />
 
         </LinearLayout>
@@ -194,7 +207,5 @@
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 </layout>

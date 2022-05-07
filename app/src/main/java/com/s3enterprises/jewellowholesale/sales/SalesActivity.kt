@@ -39,19 +39,23 @@ class SalesActivity : AppCompatActivity() {
                 }
             }
         }
+
         binding.monthPicker.setOnClickListener {
             monthPicker.show(supportFragmentManager,"MonthYearPicker")
         }
+
         binding.salesRecycler.layoutManager = LinearLayoutManager(this)
-        viewModel.sales.observeForever {
-            var x1 = 0; var x2=0f; var x3=0
+        viewModel.sales.observe(this) {
+            var x1 = 0; var x2 = 0f; var x3 = 0f
             it.forEach { sale ->
-                x1+=sale.cash ; x2+=sale.gold ; x3+=sale.total
+                x1 += sale.cash ; x2 += sale.gold ; x3 += sale.stock
             }
-            binding.salesRecycler.adapter = SalesRecyclerAdapter(it)
+            binding.salesRecycler.adapter = SalesRecyclerAdapter(it) { date ->
+                viewModel.deleteSale(date)
+            }
             binding.cash.text = Utils.getRupeesFormatted(x1)
             binding.gold.text = x2.roundOff(3).toString()
-            binding.total.text = Utils.getRupeesFormatted(x3)
+            binding.stock.text = x3.roundOff(3).toString()
         }
     }
 
