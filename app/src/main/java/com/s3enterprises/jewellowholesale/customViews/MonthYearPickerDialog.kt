@@ -21,6 +21,10 @@ class MonthYearPickerDialog(val date: Date = Date()) : DialogFragment()  {
         this.listener = listener
     }
 
+    private fun callOnClick() {
+        listener?.onDateSet(null, binding.pickerYear.value, binding.pickerMonth.value, 1)
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DialogMonthYearPickerBinding.inflate(requireActivity().layoutInflater)
         val cal: Calendar = Calendar.getInstance().apply { time = date }
@@ -43,7 +47,7 @@ class MonthYearPickerDialog(val date: Date = Date()) : DialogFragment()  {
         return AlertDialog.Builder(requireContext())
             .setTitle("Please Select View Month")
             .setView(binding.root)
-            .setPositiveButton("Ok") { _, _ -> listener?.onDateSet(null, binding.pickerYear.value, binding.pickerMonth.value, 1) }
+            .setPositiveButton("Ok") { _, _ -> callOnClick() }
             .setNegativeButton("Cancel") { _, _ -> dialog?.cancel() }
             .create()
     }

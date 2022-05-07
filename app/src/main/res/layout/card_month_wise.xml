@@ -5,6 +5,10 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:background="@color/white"
+    android:elevation="3dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="2dp"
     >
 
     <LinearLayout
@@ -71,7 +75,7 @@
         android:textColor="@color/black"
         android:layout_marginEnd="20dp"
         android:background="@color/white"
-        android:elevation="5dp"
+        android:elevation="3dp"
         android:layout_marginBottom="5dp"
         />
 

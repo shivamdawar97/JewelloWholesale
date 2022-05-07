@@ -184,7 +184,7 @@ class BillingPanelView: LinearLayout {
         cashRcv.setText(bill.cashReceived.toString())
         balanceFine.setText(bill.fineBalance.toString())
         balanceCash.setText(bill.cashBalance.toString())
-        binding.model!!.expanded.value = bill.cashBalance!=0 || bill.fineBalance!=0f
+        binding.model!!.expanded.value = bill.cashBalance!=0 || bill.fineBalance!=0f || bill.cashReceived!=0
         INPUT_CONNECTION = null
     }
 

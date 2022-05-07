@@ -161,11 +161,16 @@ class BillingViewModel @Inject constructor(
                 val cash = (updatedBill.cashReceived + updatedBill.cashDu) - (it.cashReceived+it.cashDu)
                 var gold = 0f
                 Converters().fromString1(updatedBill.golds)?.forEach { gIt ->
+                    Log.i("SALE_UPDATE", "OLD GIT $gIt")
                     if(gIt.purity>=99f) gold+=gIt.weight
                 }
+
                 goldItemList.forEach { gIt ->
+                    Log.i("SALE_UPDATE", "NEW GIT $gIt")
                     if(gIt.purity>=99f) gold-=gIt.weight
                 }
+
+                Log.i("SALE_UPDATE", "FINAL GIT $gold")
 
                 var stock= 0f
                 Converters().fromString(updatedBill.items)?.forEach { bIt->

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.Utils
@@ -15,9 +16,7 @@ import com.s3enterprises.jewellowholesale.database.models.Bill
 import com.s3enterprises.jewellowholesale.print.JewelloBluetoothSocket
 import com.s3enterprises.jewellowholesale.rx.RxBus
 import com.s3enterprises.jewellowholesale.rx.RxEvent
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 class BillsAdapter(private val bills:List<Bill>) : RecyclerView.Adapter<BillsAdapter.ViewHolder>()  {
 
@@ -30,9 +29,9 @@ class BillsAdapter(private val bills:List<Bill>) : RecyclerView.Adapter<BillsAda
          private lateinit var previewDialog: Dialog
 
          fun setData(bill: Bill) = with(bill){
-
+             mView.findViewById<AppCompatImageView>(R.id.delete_item).visibility = View.GONE
              billNoView.text = billNo.toString()
-             amount.text = "₹ $fineGs"
+             amount.text = "₹ ${cashDu + cashReceived}"
              partyNameView.text = partyName
              dateView.text = Utils.getDate(date)
              mView.setOnClickListener {

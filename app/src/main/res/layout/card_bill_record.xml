@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toStartOf="@id/delete_item"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="₹ 40,000"
+            tools:text="40,000"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="@dimen/large"

@@ -51,5 +51,6 @@ class SalesViewModel @Inject constructor(private val salesRepository: SalesRepos
 
     fun deleteSale(date:Long) = viewModelScope.launch {
         salesRepository.deleteSale(date)
+        calculateMonthStartAndEndTime()
     }
 }
