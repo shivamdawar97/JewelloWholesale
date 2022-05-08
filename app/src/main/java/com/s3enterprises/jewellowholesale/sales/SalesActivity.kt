@@ -2,10 +2,9 @@ package com.s3enterprises.jewellowholesale.sales
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.Utils
@@ -13,7 +12,6 @@ import com.s3enterprises.jewellowholesale.Utils.roundOff
 import com.s3enterprises.jewellowholesale.customViews.MonthYearPickerDialog
 import com.s3enterprises.jewellowholesale.databinding.ActivitySalesBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
@@ -51,12 +49,24 @@ class SalesActivity : AppCompatActivity() {
                 x1 += sale.cash ; x2 += sale.gold ; x3 += sale.stock
             }
             binding.salesRecycler.adapter = SalesRecyclerAdapter(it) { date ->
-                viewModel.deleteSale(date)
+                showAlertDialog(date)
             }
             binding.cash.text = Utils.getRupeesFormatted(x1)
             binding.gold.text = x2.roundOff(3).toString()
             binding.stock.text = x3.roundOff(3).toString()
         }
+    }
+
+    private fun showAlertDialog(date:Long) {
+        AlertDialog.Builder(this)
+            .setTitle("Delete this sale")
+            .setNegativeButton("Cancel"){ d,_->
+                d.dismiss()
+            }
+            .setPositiveButton("Yes") { d,_ ->
+                viewModel.deleteSale(date)
+                d.dismiss()
+            }.show()
     }
 
     override fun onSupportNavigateUp(): Boolean {

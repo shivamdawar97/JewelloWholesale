@@ -33,5 +33,9 @@ data class Bill(
     @ColumnInfo(name = "fine_fb")
     var fineBalance:Float=0f,
     @ColumnInfo
-    var billString: String = ""
+    var billString: String = "",
+    @ColumnInfo
+    var totalStockSold: Float = 0f,
+    @ColumnInfo
+    var totalGoldReceived:Float = 0f
 ):Serializable

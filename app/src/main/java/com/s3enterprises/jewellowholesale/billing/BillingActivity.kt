@@ -8,11 +8,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -22,11 +19,7 @@ import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.Utils.atEndOfDay
 import com.s3enterprises.jewellowholesale.Utils.atStartOfDay
 import com.s3enterprises.jewellowholesale.customViews.BillItemCardView
-import com.s3enterprises.jewellowholesale.customViews.GoldItemCardView
-import com.s3enterprises.jewellowholesale.database.Converters
-import com.s3enterprises.jewellowholesale.database.models.Bill
 import com.s3enterprises.jewellowholesale.database.models.BillItem
-import com.s3enterprises.jewellowholesale.database.models.GoldItem
 import com.s3enterprises.jewellowholesale.database.models.Item
 import com.s3enterprises.jewellowholesale.databinding.ActivityBillingBinding
 import com.s3enterprises.jewellowholesale.items.addItem.AddItem
@@ -39,7 +32,6 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class BillingActivity : AppCompatActivity() {
@@ -172,7 +164,7 @@ class BillingActivity : AppCompatActivity() {
             billingPanel.setPartiesAdapter(it)
         }
 
-        viewModel.loadedBill.observeForever { bill ->
+        viewModel.loadedBill.observe(this@BillingActivity) { bill ->
             if(bill!=null) {
                 viewModel.listenChangeEvents = false
 

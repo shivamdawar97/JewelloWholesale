@@ -54,7 +54,7 @@ class BillingViewModel @Inject constructor(
         val goldItem = GoldItem(billAndGoldIds++)
         add(goldItem)
     }
-    val grossGR = MutableLiveData<Float>().apply { value = 0f }
+    private val grossGR = MutableLiveData<Float>().apply { value = 0f }
     val fineGR = MutableLiveData<Float>().apply { value = 0f }
 
     val fineBH = MutableLiveData<Float>().apply { value = 0f }
@@ -81,7 +81,7 @@ class BillingViewModel @Inject constructor(
         }
 
         goldItemList.forEach {
-            grossGr+=it.weight
+            if(it.purity>99f) grossGr+=it.weight
             fineGr+=it.fine
         }
         val fineFb = fineGs + fineBalance
@@ -145,73 +145,33 @@ class BillingViewModel @Inject constructor(
         }
         else if(!isBillNotFound.value!!) viewModelScope.launch {
             isLoading.value = true
-            val updatedBill = generateBill(loadedBill.value!!)
-            loadedBill.value = updatedBill
+            val updatedBill = generateBill(loadedBill.value!!.copy())
             isLoading.value = false
             isBillSaved.value = true
             saveBillString(updatedBill)
             billRepository.update(updatedBill)
             updateSales(updatedBill)
+            loadedBill.value = updatedBill
         }
     }
 
     private suspend fun updateSales(updatedBill:Bill?=null,isDelete:Boolean=false) = loadedBill.value!!.let {
         when {
-            updatedBill!=null -> {
-                val cash = (updatedBill.cashReceived + updatedBill.cashDu) - (it.cashReceived+it.cashDu)
-                var gold = 0f
-                Converters().fromString1(updatedBill.golds)?.forEach { gIt ->
-                    Log.i("SALE_UPDATE", "OLD GIT $gIt")
-                    if(gIt.purity>=99f) gold+=gIt.weight
-                }
-
-                goldItemList.forEach { gIt ->
-                    Log.i("SALE_UPDATE", "NEW GIT $gIt")
-                    if(gIt.purity>=99f) gold-=gIt.weight
-                }
-
-                Log.i("SALE_UPDATE", "FINAL GIT $gold")
-
-                var stock= 0f
-                Converters().fromString(updatedBill.items)?.forEach { bIt->
-                    stock += bIt.weight
-                }
-                billItemList.forEach { bIt ->
-                    stock -= bIt.weight
-                }
-
-                Log.i("Sales_Update","$cash $gold $stock")
-                salesRepository.updateTodaySale(cash,gold,stock)
-            }
             isDelete -> {
                 val cash =  it.cashReceived + it.cashDu
-                var gold = 0f
-                goldItemList.forEach { gIt ->
-                    if(gIt.purity>=99f) gold+=gIt.weight
-                }
-                var stock = 0f
-                billItemList.forEach { bIt ->
-                    stock += bIt.weight
-                }
-
-                val total = it.fineGs * it.bhav
-                Log.i("Sales_Update","$cash $gold $stock")
-                salesRepository.updateTodaySale(-cash,-gold,-stock)
+                salesRepository.updateTodaySale(-cash,-it.totalGoldReceived,-it.totalStockSold)
+            }
+            updatedBill!=null -> {
+                val cash = (updatedBill.cashReceived + updatedBill.cashDu) - (it.cashReceived+it.cashDu)
+                val gold = updatedBill.totalGoldReceived - it.totalGoldReceived
+                val stock= updatedBill.totalStockSold - it.totalStockSold
+                salesRepository.updateTodaySale(cash,gold,stock)
             }
             else -> {
                 val cash =  it.cashReceived + it.cashDu
-                var gold = 0f
-                goldItemList.forEach { goldItem ->
-                    if(goldItem.purity>=99f) gold+=goldItem.weight
-                }
-                var stock = 0f
-                billItemList.forEach { billItem ->
-                    stock += billItem.weight
-                }
-                salesRepository.updateTodaySale(cash,gold,stock)
+                salesRepository.updateTodaySale(cash,grossGR.value?:0f,grossGS.value?:0f)
             }
         }
-
     }
 
     fun generateSamplePrint():String {
@@ -383,6 +343,8 @@ class BillingViewModel @Inject constructor(
             cashDu = cashDU.value!!
             fineGs = fineGS.value!!
             fineBalance = this@BillingViewModel.fineBalance
+            totalStockSold = grossGS.value?:0f
+            totalGoldReceived = grossGR.value?:0f
         }
         return bill
     }
@@ -441,7 +403,7 @@ class BillingViewModel @Inject constructor(
     fun deleteBill() = viewModelScope.launch {
         isLoading.value = true
         billRepository.deleteBill(loadedBill.value!!)
-        updateSales(isDelete = true)
+        updateSales(loadedBill.value, isDelete = true)
         loadedBill.value = null
         isLoading.value = false
     }
