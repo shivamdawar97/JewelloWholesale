@@ -3,17 +3,15 @@ plugins {
     id 'kotlin-android'
     id 'com.google.gms.google-services'
     id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
-    compileSdk 31
-    buildToolsVersion "30.0.3"
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.s3enterprises.jewellowholesale"
-        minSdk 21
-        targetSdk 30
+        minSdk 26
         versionCode 1
         versionName "1.0"
 
@@ -41,13 +39,13 @@ android {
 
 dependencies {
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation "androidx.activity:activity-ktx:1.4.0"
-    implementation "androidx.collection:collection-ktx:1.2.0"
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.0"
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation "androidx.activity:activity-ktx:1.8.0"
+    implementation "androidx.collection:collection-ktx:1.3.0"
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.6.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     testImplementation 'junit:junit:4.13.2'
@@ -60,35 +58,34 @@ dependencies {
 
     //ViewModel and LiveData
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
-    kapt "android.arch.lifecycle:compiler:1.1.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.6.2"
 
     //Swipe to refresh
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     // Room components
-    implementation "android.arch.persistence.room:runtime:1.1.1"
+    implementation("androidx.room:room-runtime:2.6.0")
+    kapt "androidx.room:room-compiler:2.6.0"
     // Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:2.4.2"
-    //kapt "android.arch.persistence.room:compiler:1.1.1"
-    kapt "androidx.room:room-compiler:2.4.2"
+    implementation "androidx.room:room-ktx:2.6.0"
 
 
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
 
     //coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
 
     //GSON
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.9.0'
 
     //Rx
     implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
 
     //Hilt
-    implementation("com.google.dagger:hilt-android:2.38.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.38.1")
+    implementation "com.google.dagger:hilt-android:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

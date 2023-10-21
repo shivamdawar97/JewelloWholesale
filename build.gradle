@@ -1,20 +1,33 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
 
+    ext {
+        agp_version = '8.1.2'
+        agp_version1 = '7.4.2'
+        agp_version2 = '7.0.0'
+        agp_version3 = '4.2.0'
+        agp_version4 = '7.4.2'
+        agp_version5 = '7.1.0'
+        agp_version6 = '7.0.4'
+    }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10'
+        classpath "com.android.tools.build:gradle:$agp_version5"
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0'
         classpath 'com.google.gms:google-services:4.3.10'
-        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.38.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
+
+plugins {
+    id 'com.google.dagger.hilt.android' version '2.44' apply false
+}
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir

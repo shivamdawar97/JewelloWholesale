@@ -56,7 +56,7 @@ class OTPView : AppCompatEditText {
         throw RuntimeException("setCustomSelectionActionModeCallback() not supported.")
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         val availableWidth = width - paddingRight - paddingLeft
         val mCharSize = (if(mSpace<0) availableWidth/(mNumChars * 2 -1)
         else (availableWidth - (mSpace * (mNumChars-1)))/mNumChars).toFloat()
