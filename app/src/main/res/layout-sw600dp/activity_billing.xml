@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="model"
+            type="com.s3enterprises.jewellowholesale.billing.BillingViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".billing.BillingActivity"
+        android:focusableInTouchMode="false"
+        >
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/items_list"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".3"
+            android:scaleY="1.1"
+            android:scaleX="1.1"
+            android:layout_marginTop="30dp"
+            />
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+            <com.s3enterprises.jewellowholesale.customViews.BillingPanelView
+                android:id="@+id/billing_panel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </ScrollView>
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_weight="0.7"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+
+                <com.s3enterprises.jewellowholesale.customViews.NumericKeypadView
+                    android:id="@+id/keyboard_view"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:scaleX="1.2"
+                    android:scaleY="1.2"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/buttons_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="40dp"
+                    android:scaleX="1.2"
+                    android:scaleY="1.2"
+                    android:visibility="@{model.isBillNotFound?View.INVISIBLE:View.VISIBLE}"
+                    >
+
+                    <Button
+                        android:id="@+id/btn_save"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/save"
+                        android:textAllCaps="false"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/btn_calculate"
+                        android:onClick="@{()->model.saveBill()}"
+                        android:enabled="@{!model.isLoading}"
+                        />
+
+                    <Button
+                        android:id="@+id/btn_calculate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/btn_save"
+                        android:text="@string/calculate"
+                        android:textAllCaps="false"
+                        android:onClick="@{()->model.calculate()}"
+                        />
+
+                    <Button
+                        android:id="@+id/btn_print"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/print"
+                        android:textAllCaps="false"
+                        app:layout_constraintStart_toStartOf="@id/btn_save"
+                        app:layout_constraintTop_toBottomOf="@id/btn_save"
+                        android:visibility="@{model.isBillSaved?View.VISIBLE:View.INVISIBLE}"
+                        />
+
+                    <Button
+                        android:id="@+id/btn_delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="@id/btn_calculate"
+                        app:layout_constraintTop_toTopOf="@id/btn_print"
+                        android:text="@string/delete"
+                        android:textAllCaps="false"
+                        android:visibility="@{model.isBillSaved?View.VISIBLE:View.INVISIBLE}"
+                        android:backgroundTint="@android:color/holo_red_light"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+    </LinearLayout>
+
+</layout>
