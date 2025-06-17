@@ -57,7 +57,7 @@ class PartiesAdapter(private val parties: List<Party>) :
             filteredParties = if(cs.isEmpty()) parties else {
                 val filteredList = ArrayList<Party>()
                 parties.forEach {
-                    if(it.name.toLowerCase().contains(cs.toLowerCase()) || it.phoneNumber.contains(cs))
+                    if(it.name.lowercase().contains(cs.lowercase()) || it.phoneNumber.contains(cs))
                         filteredList.add(it)
                 }
                 filteredList

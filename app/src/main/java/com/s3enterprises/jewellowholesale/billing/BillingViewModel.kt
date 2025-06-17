@@ -41,7 +41,7 @@ class BillingViewModel @Inject constructor(
     val parties: LiveData<List<Party>>
     get() = partyRepository.parties
 
-    val party = MutableLiveData<Party>()
+    val party = MutableLiveData<Party?>()
 
     val isLoading = MutableLiveData<Boolean>().apply { value = false }
     val isBillNotFound = MutableLiveData<Boolean>().apply { value = false }
@@ -58,18 +58,21 @@ class BillingViewModel @Inject constructor(
     val fineGR = MutableLiveData<Float>().apply { value = 0f }
 
     val fineBH = MutableLiveData<Float>().apply { value = 0f }
+    val fineBH2 = MutableLiveData<Float>().apply { value = 0f }
     val fineCR = MutableLiveData<Float>().apply { value = 0f }
 
     val fineCB = MutableLiveData<Float>().apply { value = 0f }
     val fineFB = MutableLiveData<Float>().apply { value = 0f }
 
     val cashBH = MutableLiveData<Int>().apply { value = 0 }
+    val cashBH2 = MutableLiveData<Int>().apply { value = 0 }
 
     var cashReceived = 0
     var cashBalance = 0; var fineBalance = 0f
     val fineDU = MutableLiveData<Float>().apply { value = 0f }
     val cashDU = MutableLiveData<Int>().apply { value = 0 }
     var goldBhav = 0
+    var goldBhav2 = 0
     var billCounter = 0
 
 
@@ -93,6 +96,11 @@ class BillingViewModel @Inject constructor(
         val fineCr = if(goldBhav<1) 0f else cashReceived.toFloat() / goldBhav
 
         val fineDu = (fineBh+fineCb-fineCr).roundOff(3)
+
+        if (goldBhav2 != 0) {
+            val cashBH2 = (fineBh * goldBhav2).toInt()
+
+        }
 
         val cashDu = cashBh + cashBalance - cashReceived
 

@@ -1,7 +1,6 @@
 package com.s3enterprises.jewellowholesale
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.text.Editable
@@ -11,22 +10,16 @@ import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.InverseMethod
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.tabs.TabLayout
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import java.lang.NumberFormatException
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 object Utils {
 
@@ -119,26 +112,6 @@ object Utils {
     ) : RecyclerView.ViewHolder(mView) {
         fun populate(item: T,position:Int) = onBind(item, mView,position)
     }
-
-    @SuppressWarnings("deprecation")
-    fun fromHtml(str: String) =
-        if(Build.VERSION.SDK_INT >= 24) Html.fromHtml(str,Html.FROM_HTML_MODE_LEGACY)
-        else Html.fromHtml(str)
-
-    fun <T> generatedAdapter(list: List<T>, resource: Int, onBind: (T,View,Int) -> Unit) =
-        object : RecyclerView.Adapter<GeneralViewHolder<T>>() {
-
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-                GeneralViewHolder(
-                    LayoutInflater.from(parent.context).inflate(resource, parent, false), onBind
-                )
-
-            override fun onBindViewHolder(holder: GeneralViewHolder<T>, position: Int) =
-                holder.populate(list[position],position)
-
-            override fun getItemCount() = list.size
-        }
-
 
     fun Long.getMonth() = DateFormat.format("MM",this).toString().toInt()
     fun Long.getYear() = DateFormat.format("yyyy",this).toString().toInt()

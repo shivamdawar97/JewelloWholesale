@@ -28,10 +28,10 @@ abstract class JewelloDatabase:RoomDatabase() {
 
         fun getInstance(context: Context) : JewelloDatabase = synchronized(this) {
                 return@synchronized INSTANCE ?: Room.databaseBuilder(
-                        context.applicationContext,
-                        JewelloDatabase::class.java,
-                        "jewello_wholesale_db"
-                    ).fallbackToDestructiveMigration().build().also {
+                                    context.applicationContext,
+                                    JewelloDatabase::class.java,
+                                    "jewello_wholesale_db"
+                                ).fallbackToDestructiveMigration(false).build().also {
                         INSTANCE = it
                 }
         }
