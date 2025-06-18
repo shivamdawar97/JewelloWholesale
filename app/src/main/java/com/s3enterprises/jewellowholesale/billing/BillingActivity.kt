@@ -142,16 +142,19 @@ class BillingActivity : AppCompatActivity() {
         viewModel.items.observeForever { items ->
             val buttonList = arrayListOf(Item(0,"Add Item")).apply { addAll(items) }
             touchHelper?.attachToRecyclerView(null)
-            val adapter = ItemsDraggableAdapter(buttonList,{ i ->
+            val adapter = ItemsDraggableAdapter(
+                list =  buttonList,
+                onSelected =  { i ->
                 if(i.position == 0)
                     startActivity(Intent(this@BillingActivity,AddItem::class.java))
                 else {
-                    val billItem = BillItem(viewModel.billAndGoldIds++, i.name, rate = i.rate)
+                    val billItem = BillItem(viewModel.billAndGoldIds++,
+                        i.name, rate = i.rate, isStone = i.isStone)
                     viewModel.billItemList.add(billItem)
                     val view = BillItemCardView(this@BillingActivity, billItem)
                     billingPanel.binding.itemsContainer.addView(view)
-                }
-            },{ positionsChangedList ->
+                }},
+                onItemPositionsChanged =  { positionsChangedList ->
                 viewModel.updateItemsPositions(positionsChangedList)
             })
             itemsList.adapter = adapter

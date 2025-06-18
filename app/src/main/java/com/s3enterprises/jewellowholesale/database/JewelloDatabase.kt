@@ -12,7 +12,7 @@ import com.s3enterprises.jewellowholesale.database.models.Party
 import com.s3enterprises.jewellowholesale.database.models.Sales
 
 @Database(entities = [Bill::class,Item::class, Party::class,Sales::class],
-    version = 5,
+    version = 6,
     exportSchema = false)
 abstract class JewelloDatabase:RoomDatabase() {
 

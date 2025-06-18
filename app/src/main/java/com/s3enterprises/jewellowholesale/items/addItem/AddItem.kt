@@ -59,7 +59,8 @@ class AddItem : AppCompatActivity() {
                 isLoading = true
                 if(!isUpdate!!) {
                     val pos = itemsRepository.getCount()+1
-                    item = Item(name = itemName!!,rate = binding.rate!!, position = pos)
+                    val isStone = binding.checkboxStoneItem.isChecked
+                    item = Item(name = itemName!!,rate = binding.rate!!, position = pos, isStone = isStone)
                     itemsRepository.insert(item)
                     Toast.makeText(this@AddItem,"Item Added ${item.name}",Toast.LENGTH_LONG).show()
                 }

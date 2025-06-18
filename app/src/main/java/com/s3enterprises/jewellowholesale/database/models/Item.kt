@@ -14,5 +14,7 @@ data class Item(
     @ColumnInfo
     var rate:Float=0f,
     @ColumnInfo
-    var position:Int = 0
+    var position:Int = 0,
+    @ColumnInfo
+    var isStone: Boolean = false
 ):Serializable
