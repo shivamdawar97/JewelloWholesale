@@ -61,6 +61,6 @@
     <string name="edit_bill">Edit Bill</string>
     <string name="fine_gold">Fine Gold</string>
     <string name="stock_sold">Stock Sold</string>
-    <string name="stone">Stone</string>
+    <string name="stone">Less</string>
     <string name="stone_item">Stone Item</string>
 </resources>

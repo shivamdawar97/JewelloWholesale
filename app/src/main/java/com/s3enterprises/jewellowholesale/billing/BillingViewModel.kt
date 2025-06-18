@@ -127,7 +127,7 @@ class BillingViewModel @Inject constructor(
         billItemList.clear(); goldItemList.clear()
         cashReceived = 0 ; party.value = null
         cashBalance = 0; fineBalance = 0f
-        billAndGoldIds = 0
+        billAndGoldIds = 0; goldBhav2 = 0
         val goldItem = GoldItem(billAndGoldIds++)
         goldItemList.add(goldItem)
         calculate()
@@ -223,21 +223,21 @@ class BillingViewModel @Inject constructor(
                     stringBuilder.append(i.name.apply { det+=length })
                         .append(tab(16-det).apply { det+=length })
                         .append("${i.weight}".apply { det+=length })
-                        .append(tab(25-det).apply { det+=length })
+                        .append(tab(23-det).apply { det+=length })
                         .append("-".apply { det += length })
-                        .append(tab(34-det))
+                        .append(tab(25-det).apply { det += length })
                         .append("${ i.stone }\n")
                     var det2 = 0
                     val netWeight = i.weight - i.stone
-                    stringBuilder.append(tab(22).apply { det2+=length })
+                    stringBuilder.append(tab(16).apply { det2+=length })
                         .append(netWeight.roundOff(3).toString().apply { det2 += length })
-                        .append(tab(29-det2).apply { det2+=length })
+                        .append(tab(23-det2).apply { det2+=length })
                         .append("x".apply { det2+=length })
-                        .append(tab(31-det2).apply { det2+=length })
+                        .append(tab(25-det2).apply { det2+=length })
                         .append("${i.rate}".apply { det2+=length })
-                        .append(tab(37-det2).apply { det2+=length })
+                        .append(tab(31-det2).apply { det2+=length })
                         .append("=".apply { det2+=length })
-                        .append(tab(39-det2))
+                        .append(tab(34-det2))
                         .append("${i.fine}\n")
                 } else {
                     var det = 0
@@ -349,7 +349,7 @@ class BillingViewModel @Inject constructor(
             var det6 = 0
             stringBuilder.append("Bhav2 ${it.bhav2}".apply { det6 += length })
                 .append(tab(16-det6).apply { det6 += length })
-                .append(Utils.getRupeesFormatted(it.cashDu).apply { det4+=length })
+                .append(Utils.getRupeesFormatted(it.cashDu).apply { det6+=length })
                 .append(tab(34-det6))
                 .append("${fineDU.value ?: 0f}\n").toString()
         }

@@ -150,6 +150,7 @@ class BillingPanelView: LinearLayout {
         cashRcv.setText(""); billChanger.setBillNo(0)
         balanceCash.setText(""); balanceFine.setText("")
         bhavEdit.setText(model!!.goldBhav.toString())
+        bhavEdit2.setText("0")
         itemsContainer.removeAllViews(); goldsContainer.removeAllViews()
         goldRcv1.setText(""); goldRcvRate1.setText("")
         goldRcvRate1.setText(99.5f.toString())

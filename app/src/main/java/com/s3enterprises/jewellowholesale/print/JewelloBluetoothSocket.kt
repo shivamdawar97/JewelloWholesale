@@ -1,5 +1,7 @@
 package com.s3enterprises.jewellowholesale.print
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
@@ -20,6 +22,10 @@ import java.io.OutputStream
 import java.nio.charset.Charset
 import java.util.*
 import kotlin.experimental.or
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 class JewelloBluetoothSocket {
 
@@ -49,23 +55,51 @@ class JewelloBluetoothSocket {
             .or(0x13)
     }
 
-    suspend fun findDeviceAndConnect(context: Context) {
+    suspend fun findDeviceAndConnect(context: Activity) {
         if (Utils.printerName == "") return
         val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         try {
             if (!bluetoothAdapter.isEnabled) {
                 val enableBluetooth = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                (context as Activity).startActivityForResult(enableBluetooth, 0)
+                context.startActivityForResult(enableBluetooth, 0)
                 return
             }
+            if (!requestBluetoothConnectPermission(context)) return
             val pairedDevices = bluetoothAdapter.bondedDevices
-            if (pairedDevices.size > 0) startConnection(pairedDevices, bluetoothAdapter)
+            if (pairedDevices.isNotEmpty()) {
+                requestBluetoothScanPermission(context)
+                startConnection(pairedDevices, bluetoothAdapter)
+            }
             else Toast.makeText(context, "No Devices found", Toast.LENGTH_LONG).show()
 
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
 
+    }
+
+    fun requestBluetoothConnectPermission(activity: Activity): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val bluetoothPermission = Manifest.permission.BLUETOOTH_CONNECT
+            if (ContextCompat.checkSelfPermission(activity, bluetoothPermission) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, arrayOf(bluetoothPermission), 1100)
+                return false
+            }
+
+        }
+        return true
+    }
+
+    fun requestBluetoothScanPermission(activity: Activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.BLUETOOTH_SCAN), 1101)
+            } else {
+                // Permission already granted
+            }
+        } else {
+            // No runtime request needed for Android 11 and below
+        }
     }
 
     private suspend fun startConnection(
@@ -76,13 +110,13 @@ class JewelloBluetoothSocket {
             bluetoothDevice = device
             break
         }
-        val uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB") //Standard SerialPortService ID
-        if (socket == null) socket = withContext(Dispatchers.Default){
+        val uuid =
+            UUID.fromString("00001101-0000-1000-8000-00805F9B34FB") //Standard SerialPortService ID
+        if (socket == null) socket = withContext(Dispatchers.Default) {
             bluetoothDevice!!.createRfcommSocketToServiceRecord(uuid)
         }
-
         bluetoothAdapter.cancelDiscovery()
-        withContext(Dispatchers.Default){
+        withContext(Dispatchers.Default) {
             socket?.connect()
         }
 

@@ -41,7 +41,7 @@ class BillsAdapter(private val bills:List<Bill>) : RecyclerView.Adapter<BillsAda
                  previewDialog.findViewById<Button>(R.id.print_preview).setOnClickListener {
                      runBlocking {
                          val socket = JewelloBluetoothSocket()
-                         socket.findDeviceAndConnect(mView.context)
+                         socket.findDeviceAndConnect(mView.context as BillsActivity)
                          socket.printData(bill.billString)
                          socket.disconnectBT()
                      }
