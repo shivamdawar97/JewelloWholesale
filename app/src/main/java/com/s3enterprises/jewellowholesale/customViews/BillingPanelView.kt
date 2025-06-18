@@ -87,7 +87,6 @@ class BillingPanelView: LinearLayout {
         bhavEdit2.onTextChanged { if(!viewModel.listenChangeEvents) return@onTextChanged
             viewModel.goldBhav2 = bhavEdit2.floatValue.toInt()
             viewModel.calculate()
-            if(viewModel.loadedBill.value == null) RxBus.publish(RxEvent.PreferencesUpdated())
         }
 
         cashRcv.onTextChanged { if(!viewModel.listenChangeEvents) return@onTextChanged

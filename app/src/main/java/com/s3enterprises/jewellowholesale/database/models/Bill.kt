@@ -23,6 +23,8 @@ data class Bill(
     @ColumnInfo
     var bhav:Int=0,
     @ColumnInfo
+    var bhav2:Int=0,
+    @ColumnInfo
     var cashReceived:Int=0,
     @ColumnInfo
     var cashBalance:Int=0,

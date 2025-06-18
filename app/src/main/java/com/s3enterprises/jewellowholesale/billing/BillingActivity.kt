@@ -182,7 +182,7 @@ class BillingActivity : AppCompatActivity() {
                 socket.printData(viewModel.generateBillPrint1()!!)
                 socket.printBoldData(viewModel.generateBillPrint2()!!)
                 socket.printData(viewModel.generateBillPrint3()!!)
-                socket.printBoldData(viewModel.generateBillPrint4()!!)
+                socket.printBoldData(viewModel.generateBillPrint4())
                 socket.printData(viewModel.generateBillPrint5())
                 socket.disconnectBT()
             }
