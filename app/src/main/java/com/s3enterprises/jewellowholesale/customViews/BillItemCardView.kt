@@ -62,7 +62,7 @@ class BillItemCardView(context: Context,private val item:BillItem):LinearLayout(
         item.fine = (c/100).roundOff(3)
         fineView.text = item.fine.toString()
         if (item.isStone) {
-            findViewById<TextView>(R.id.item_net_weight)?.text = netWeight.toString()
+            findViewById<TextView>(R.id.item_net_weight)?.text = netWeight.roundOff(3).toString()
         }
         RxBus.publish(RxEvent.EventBillItemChanged())
     }
