@@ -217,18 +217,43 @@ class BillingViewModel @Inject constructor(
             .append("Party: ${it.partyName}\n")
             .append("-----------------------------------------------\n")
         billItemList.forEach { i ->
-            var det = 0
-            if(i.weight>0) stringBuilder.append(i.name.apply { det+=length })
-                .append(tab(16-det).apply { det+=length })
-                .append("${i.weight}".apply { det+=length })
-                .append(tab(23-det).apply { det+=length })
-                .append("x".apply { det+=length })
-                .append(tab(25-det).apply { det+=length })
-                .append("${i.rate}".apply { det+=length })
-                .append(tab(31-det).apply { det+=length })
-                .append("=".apply { det+=length })
-                .append(tab(34-det))
-                .append("${i.fine}\n")
+            if (i.weight>0) {
+                if (i.isStone) {
+                    var det = 0
+                    stringBuilder.append(i.name.apply { det+=length })
+                        .append(tab(16-det).apply { det+=length })
+                        .append("${i.weight}".apply { det+=length })
+                        .append(tab(25-det).apply { det+=length })
+                        .append("-".apply { det += length })
+                        .append(tab(34-det))
+                        .append("${ i.stone }\n")
+                    var det2 = 0
+                    val netWeight = i.weight - i.stone
+                    stringBuilder.append(tab(22).apply { det2+=length })
+                        .append(netWeight.roundOff(3).toString().apply { det2 += length })
+                        .append(tab(29-det2).apply { det2+=length })
+                        .append("x".apply { det2+=length })
+                        .append(tab(31-det2).apply { det2+=length })
+                        .append("${i.rate}".apply { det2+=length })
+                        .append(tab(37-det2).apply { det2+=length })
+                        .append("=".apply { det2+=length })
+                        .append(tab(39-det2))
+                        .append("${i.fine}\n")
+                } else {
+                    var det = 0
+                    stringBuilder.append(i.name.apply { det+=length })
+                        .append(tab(16-det).apply { det+=length })
+                        .append("${i.weight}".apply { det+=length })
+                        .append(tab(23-det).apply { det+=length })
+                        .append("x".apply { det+=length })
+                        .append(tab(25-det).apply { det+=length })
+                        .append("${i.rate}".apply { det+=length })
+                        .append(tab(31-det).apply { det+=length })
+                        .append("=".apply { det+=length })
+                        .append(tab(34-det))
+                        .append("${i.fine}\n")
+                }
+            }
         }
         stringBuilder.append("-----------------------------------------------\n")
 
@@ -429,7 +454,7 @@ class BillingViewModel @Inject constructor(
 
     private fun tab(size:Int) :String {
         val s = StringBuilder()
-        for(i in 0..size) s.append(" ")
+        (0..size).forEach { s.append(" ") }
         return s.toString()
     }
 

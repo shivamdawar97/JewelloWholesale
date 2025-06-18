@@ -22,8 +22,12 @@ class BillItemCardView(context: Context,private val item:BillItem):LinearLayout(
         findViewById<TextView>(R.id.item_name).text = item.name
         if(item.fine!=0f) fineView.text = item.fine.toString()
 
+        if (item.isStone) {
+            val netWeight = item.weight - item.stone
+            findViewById<TextView>(R.id.item_net_weight)?.text = netWeight.roundOff(3).toString()
+        }
         itemWeightView.apply {
-            if(item.weight!=0f) setText(item.weight.toString())
+            if (item.weight!=0f) setText(item.weight.toString())
 
             else requestFocus()
 

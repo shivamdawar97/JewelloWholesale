@@ -186,6 +186,7 @@ class BillingPanelView: LinearLayout {
             }
         }
         bhavEdit.setText(bill.bhav.toString())
+        bhavEdit2.setText(bill.bhav2.toString())
         cashRcv.setText(bill.cashReceived.toString())
         balanceFine.setText(bill.fineBalance.toString())
         balanceCash.setText(bill.cashBalance.toString())
