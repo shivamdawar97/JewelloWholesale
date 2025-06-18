@@ -18,11 +18,14 @@ import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.Utils.atEndOfDay
 import com.s3enterprises.jewellowholesale.Utils.atStartOfDay
+import com.s3enterprises.jewellowholesale.Utils.getTextOr
 import com.s3enterprises.jewellowholesale.customViews.BillItemCardView
 import com.s3enterprises.jewellowholesale.database.models.BillItem
 import com.s3enterprises.jewellowholesale.database.models.Item
+import com.s3enterprises.jewellowholesale.database.models.Party
 import com.s3enterprises.jewellowholesale.databinding.ActivityBillingBinding
 import com.s3enterprises.jewellowholesale.items.addItem.AddItem
+import com.s3enterprises.jewellowholesale.party.PartyRepository
 import com.s3enterprises.jewellowholesale.print.JewelloBluetoothSocket
 import com.s3enterprises.jewellowholesale.rx.RxBus
 import com.s3enterprises.jewellowholesale.rx.RxEvent
@@ -44,6 +47,7 @@ class BillingActivity : AppCompatActivity() {
     private lateinit var rxBhavChanged: Disposable
     private lateinit var rxOldBillSelected: Disposable
     @Inject lateinit var preferences: SharedPreferences
+    @Inject lateinit var partiesRepository: PartyRepository
     private var touchHelper: ItemTouchHelper? = null
 
 
@@ -120,19 +124,13 @@ class BillingActivity : AppCompatActivity() {
                             .show()
                     else viewModel.saveBill()
                 }
-                viewModel.party.value == null -> {
-                    AlertDialog.Builder(this@BillingActivity)
-                        .setTitle("Party not defined")
-                        .setMessage("Party name is not provided, Continue as unknown")
-                        .setPositiveButton("Yes"){
-                                di,_ ->
-                            di.dismiss()
-                            viewModel.saveBill()
-                        }
-                        .setNegativeButton("Cancel"){ di,_->
-                            di.dismiss()
-                        }
-                        .show()
+                viewModel.party.value == null -> lifecycleScope.launch {
+                    val newParty = Party(
+                        name = billingPanel.binding.nameField.editText.getTextOr("N/A"),
+                        phoneNumber = billingPanel.binding.partyNumber.getTextOr("N/A")
+                    )
+                    partiesRepository.insert(newParty)
+                    viewModel.saveBill()
                 }
                 else -> viewModel.saveBill()
             }

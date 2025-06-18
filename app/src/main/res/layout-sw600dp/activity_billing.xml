@@ -88,7 +88,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/btn_calculate"
-                        android:onClick="@{()->model.saveBill()}"
                         android:enabled="@{!model.isLoading}"
                         />
 

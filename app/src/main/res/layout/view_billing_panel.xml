@@ -130,9 +130,7 @@
                     <FrameLayout
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="match_parent"
-                        android:visibility="@{model.party==null?View.INVISIBLE:View.VISIBLE}"
-                        >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -142,7 +140,8 @@
                             android:textColor="@color/purple_700"
                             />
 
-                        <TextView
+                        <EditText
+                            android:id="@+id/party_number"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{model.party.phoneNumber}"

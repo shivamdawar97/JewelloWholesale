@@ -53,6 +53,11 @@ object Utils {
         if (it.isNotBlank()) it.toInt() else 0
     }
 
+    fun EditText?.getTextOr(fallback: String) : String {
+        val text = this?.text?.toString()
+        return if (text.isNullOrBlank()) fallback else text
+    }
+
     fun EditText.getTextToLong() = this.text.toString().let {
         if (it.isNotBlank()) it.toLong() else 0
     }

@@ -2,20 +2,14 @@ package com.s3enterprises.jewellowholesale.customViews
 
 import android.content.Context
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.AutoCompleteTextView
 import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
-import androidx.core.view.get
-import androidx.core.view.size
 import com.s3enterprises.jewellowholesale.R
 import com.s3enterprises.jewellowholesale.Utils
 import com.s3enterprises.jewellowholesale.Utils.INPUT_CONNECTION
@@ -57,14 +51,15 @@ class BillingPanelView: LinearLayout {
 
     }
 
-
     fun setViewModel(viewModel:BillingViewModel) = with(binding){
         model = viewModel
         bhavEdit.setText(viewModel.goldBhav.toString())
 
         autoCompleteTextView.onTextChanged { if(!viewModel.listenChangeEvents) return@onTextChanged
-            if(viewModel.loadedBill.value==null) model!!.findParty(it.toString())
-            if(viewModel.party.value!=null) Utils.hideKeyboard(autoCompleteTextView).also { autoCompleteTextView.clearFocus() }
+            if(viewModel.loadedBill.value==null) model?.findParty(it.toString())
+            if(viewModel.party.value!=null && viewModel.party.value?.name != "N/A") {
+                Utils.hideKeyboard(autoCompleteTextView).also { autoCompleteTextView.clearFocus() }
+            }
         }
 
         billChanger.setOnPreviousListener{
@@ -165,6 +160,8 @@ class BillingPanelView: LinearLayout {
 
         autoCompleteTextView.setText(bill.partyName)
         autoCompleteTextView.dismissDropDown()
+
+        partyNumber.setText(bill.partyNumber)
 
         itemsContainer.removeAllViews()
         goldsContainer.removeAllViews()
