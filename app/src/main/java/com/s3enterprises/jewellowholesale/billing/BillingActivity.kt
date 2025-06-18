@@ -130,6 +130,7 @@ class BillingActivity : AppCompatActivity() {
                         phoneNumber = billingPanel.binding.partyNumber.getTextOr("N/A")
                     )
                     partiesRepository.insert(newParty)
+                    viewModel.setParty(newParty)
                     viewModel.saveBill()
                 }
                 else -> viewModel.saveBill()

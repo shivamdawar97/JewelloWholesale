@@ -135,6 +135,10 @@ class BillingViewModel @Inject constructor(
         party.value = parties.value?.find { it.name == typedName }
     }
 
+    fun setParty(newParty: Party) {
+        party.value = newParty
+    }
+
     fun saveBill() { // Or update bill
         calculate()
         if(loadedBill.value == null || (loadedBill.value?.billNo ?: 0) == 0) viewModelScope.launch {

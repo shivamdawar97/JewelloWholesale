@@ -7,7 +7,7 @@ import com.s3enterprises.jewellowholesale.database.models.Party
 @Dao
 interface PartyDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(party: Party)
 
     @Update
