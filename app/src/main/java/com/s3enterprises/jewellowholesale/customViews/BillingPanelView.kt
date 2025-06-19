@@ -136,8 +136,6 @@ class BillingPanelView: LinearLayout {
             },100)
             else INPUT_CONNECTION = null
         }
-        autoCompleteTextView.setText(" ")
-        autoCompleteTextView.setText("")
     }
 
     fun clear() = with(binding) {
