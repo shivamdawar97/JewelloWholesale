@@ -156,9 +156,12 @@ class BillingPanelView: LinearLayout {
 
         if(model!!.isBillNotFound.value == true) return@with
 
-        autoCompleteTextView.setText(bill.partyName)
-        autoCompleteTextView.dismissDropDown()
-
+        if (bill.partyName != "N/A") {
+            autoCompleteTextView.setText(bill.partyName)
+            autoCompleteTextView.dismissDropDown()
+        } else {
+            autoCompleteTextView.setText("")
+        }
         partyNumber.setText(bill.partyNumber)
 
         itemsContainer.removeAllViews()

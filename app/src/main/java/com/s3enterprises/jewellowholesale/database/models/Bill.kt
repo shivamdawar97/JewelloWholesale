@@ -15,7 +15,7 @@ data class Bill(
     @ColumnInfo
     var partyName:String="N/A",
     @ColumnInfo
-    var partyNumber:String="N/A",
+    var partyNumber:String="",
     @ColumnInfo
     var items:String="N/A",
     @ColumnInfo

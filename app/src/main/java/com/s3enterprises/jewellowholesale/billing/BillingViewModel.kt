@@ -377,8 +377,8 @@ class BillingViewModel @Inject constructor(
             date = Date().time,
         )
         with(bill) {
-            partyName = if(party.value==null) "N/A" else party.value!!.name
-            partyNumber = if(party.value==null) "N/A" else party.value!!.phoneNumber
+            partyName = party.value?.name ?: "N/A"
+            partyNumber = party.value?.phoneNumber ?: ""
             items = Converters().fromList(billItemList)
             golds = Converters().fromList(goldItemList)
             bhav = goldBhav
@@ -436,7 +436,7 @@ class BillingViewModel @Inject constructor(
         cashReceived = bill.cashReceived
         cashBalance = bill.cashBalance
         fineBalance = bill.fineBalance
-        party.value = Party(name=bill.partyName, phoneNumber = bill.partyNumber)
+        party.value = if (bill.partyName != "N/A") Party(name=bill.partyName, phoneNumber = bill.partyNumber) else null
         loadedBill.value = bill
         calculate()
         isBillSaved.value = true

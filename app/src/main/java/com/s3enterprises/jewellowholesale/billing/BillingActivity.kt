@@ -97,6 +97,23 @@ class BillingActivity : AppCompatActivity() {
 
     }
 
+    private fun checkPartyAndSaveBill() = lifecycleScope.launch {
+        if (viewModel.party.value == null) {
+            val name = binding.billingPanel.binding.nameField.editText?.text?.toString()
+            val phoneNumber = binding.billingPanel.binding.partyNumber.text?.toString()
+            if (name.isNullOrBlank()) {
+                viewModel.saveBill(); return@launch
+            }
+            val newParty = Party(
+                name = name,
+                phoneNumber = phoneNumber ?: ""
+            )
+            partiesRepository.insert(newParty)
+            viewModel.setParty(newParty)
+        }
+        viewModel.saveBill()
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun initializeSetup() = with(binding){
         lifecycleOwner = this@BillingActivity
@@ -122,18 +139,10 @@ class BillingActivity : AppCompatActivity() {
                                 di.dismiss()
                             }
                             .show()
-                    else viewModel.saveBill()
+                    else checkPartyAndSaveBill()
                 }
-                viewModel.party.value == null -> lifecycleScope.launch {
-                    val newParty = Party(
-                        name = billingPanel.binding.nameField.editText.getTextOr("N/A"),
-                        phoneNumber = billingPanel.binding.partyNumber.getTextOr("N/A")
-                    )
-                    partiesRepository.insert(newParty)
-                    viewModel.setParty(newParty)
-                    viewModel.saveBill()
-                }
-                else -> viewModel.saveBill()
+
+                else -> checkPartyAndSaveBill()
             }
         }
 
@@ -205,7 +214,7 @@ class BillingActivity : AppCompatActivity() {
                     if(billDate !in todayRange)
                         AlertDialog.Builder(this@BillingActivity)
                             .setTitle("Old date bill")
-                            .setMessage("Bill of previous date are not allowed to be edit")
+                            .setMessage("Bill of previous date are not allowed to be deleted")
                             .setPositiveButton("Ok"){
                                     di2,_ ->
                                 di2.dismiss()
