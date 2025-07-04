@@ -3,11 +3,14 @@ package com.s3enterprises.jewellowholesale.billing
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -29,6 +32,7 @@ import com.s3enterprises.jewellowholesale.party.PartyRepository
 import com.s3enterprises.jewellowholesale.print.JewelloBluetoothSocket
 import com.s3enterprises.jewellowholesale.rx.RxBus
 import com.s3enterprises.jewellowholesale.rx.RxEvent
+import com.s3enterprises.jewellowholesale.sales.SalesActivity
 import com.s3enterprises.jewellowholesale.settings.SettingsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.disposables.Disposable
@@ -201,7 +205,12 @@ class BillingActivity : AppCompatActivity() {
 
         btnDelete.setOnClickListener {
             AlertDialog.Builder(this@BillingActivity)
-                .setTitle("Delete Bill")
+                .setCustomTitle(TextView(this@BillingActivity).apply {
+                    text = "Delete Bill"
+                    setTextColor(Color.RED)
+                    textSize = 60f
+                    setTypeface(null, Typeface.BOLD)
+                })
                 .setMessage("Are you sure, you want to delete this bill")
                 .setPositiveButton("Yes"){
                         di,_ ->
@@ -251,6 +260,9 @@ class BillingActivity : AppCompatActivity() {
             R.id.expanded -> {
                 item.isChecked = !item.isChecked
                 viewModel.expanded.value = item.isChecked
+            }
+            R.id.sales -> {
+                startActivity(Intent(this, SalesActivity::class.java))
             }
 
         }

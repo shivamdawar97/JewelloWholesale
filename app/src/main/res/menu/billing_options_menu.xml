@@ -4,11 +4,20 @@
 
 
     <item
+        android:title="@string/today_sale"
+        android:id="@+id/sales"
+        app:showAsAction="always"
+        android:checkable="true"
+        android:iconTint="@color/white"
+        android:icon="@drawable/ic_cash"
+        />
+
+    <item
         android:title="@string/expanded"
         android:id="@+id/expanded"
         app:showAsAction="always"
         android:checkable="true"
-        android:icon="@drawable/ic_expanded"
+        android:icon="@drawable/outline_expand_24"
         />
 
     <item

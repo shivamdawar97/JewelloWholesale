@@ -296,18 +296,20 @@ class BillingViewModel @Inject constructor(
         }
 
         goldItemList.forEachIndexed  { pos, i ->
-            var det = 0
-            if(pos==0) stringBuilder.append("Gold Received".apply { det+=length })
-            stringBuilder.append(tab(16-det).apply { det+=length })
-                .append("${i.weight}".apply { det+=length })
-                .append(tab(23-det).apply { det+=length })
-                .append("x".apply { det+=length })
-                .append(tab(25-det).apply { det+=length })
-                .append("${i.purity}".apply { det+=length })
-                .append(tab(31-det).apply { det+=length })
-                .append("=".apply { det+=length })
-                .append(tab(34-det))
-                .append("${i.fine}\n")
+            if (i.weight > 0) {
+                var det = 0
+                if(pos==0) stringBuilder.append("Gold Received".apply { det+=length })
+                stringBuilder.append(tab(16-det).apply { det+=length })
+                    .append("${i.weight}".apply { det+=length })
+                    .append(tab(23-det).apply { det+=length })
+                    .append("x".apply { det+=length })
+                    .append(tab(25-det).apply { det+=length })
+                    .append("${i.purity}".apply { det+=length })
+                    .append(tab(31-det).apply { det+=length })
+                    .append("=".apply { det+=length })
+                    .append(tab(34-det))
+                    .append("${i.fine}\n")
+            }
         }
         stringBuilder.append("-----------------------------------------------\n")
         if(goldItemList.size>1) {
